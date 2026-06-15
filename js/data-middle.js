@@ -63,7 +63,7 @@ const COURSE_MIDDLE = {
       riskLevel: 3,
       takeHome: "無字天書作品卡（硝酸鉀字跡紙）",
       status: "ready",
-      handout: null,
+      handout: "handouts/茲茲銜國中實驗2-特務密碼：無字天書解碼術.html",
       experiments: [
         "檸檬酸加熱顯字法",
         "碘酒 + 維生素C 氧化還原法",

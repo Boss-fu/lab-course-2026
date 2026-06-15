@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>茲茲銜接實驗2｜特務密碼：無字天書解碼術</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #C0C0C0; font-family: "PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+
+.a4-page {
+  width: 794px; min-height: 1123px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  margin: 2rem auto;
+  font-size: 13px; line-height: 1.55; color: #222;
+  position: relative;
+}
+
+/* Cover */
+.a4-cover {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  height: 1123px; padding: 80px;
+  position: relative; overflow: hidden;
+}
+.cover-stripe { position:absolute;left:0;right:0;height:10px;background:linear-gradient(to right,#C8A84B 65%,transparent); }
+.cover-stripe-mid { position:absolute;left:0;right:0;height:4px;background:linear-gradient(to right,#2C2010 45%,transparent); }
+.cover-tag  { font-size:13px;font-weight:700;color:#888;letter-spacing:0.1em;margin-top:5rem; }
+.cover-exp-num { font-size:40px;font-weight:800;color:#C8A84B;-webkit-text-stroke:2px #C8A84B;margin-top:0.8rem;font-style:italic; }
+.cover-title { font-size:24px;font-weight:800;color:#2C2010;margin-top:0.5rem; }
+.cover-sub   { font-size:14px;color:#888;margin-top:0.3rem; }
+.cover-meta  { margin-top:2.5rem;font-size:12px;color:#555;line-height:2.2; }
+.cover-bottom { position:absolute;bottom:60px;left:80px;font-size:11px;color:#aaa; }
+
+/* Content page */
+.a4-content { padding: 36px 48px; }
+.page-header { display:flex;align-items:center;margin-bottom:14px; }
+.page-header-org { font-size:11px;color:#888;margin-right:auto; }
+.page-header-title { background:#C8A84B;color:#fff;padding:5px 18px;font-size:11px;font-weight:600; }
+.page-header-icon  { background:#2C2010;color:#fff;padding:5px 10px;font-size:11px; }
+
+/* Sections */
+.hs { margin-bottom: 16px; }
+.hs-header { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+.hs-num { width:28px;height:28px;border-radius:50%;background:#C8A84B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0; }
+.hs-title { font-size:15px;font-weight:700;color:#2C2010; }
+.hs-body { padding-left:38px; font-size:12px; }
+
+/* Info box */
+.info-box { background:#FBF5E4;border-left:4px solid #C8A84B;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.7; }
+.info-box strong { color:#7A5C20; }
+
+/* Alert / Special notice */
+.alert-box {
+  background:#FFFDE7;border:2px solid #C8A84B;border-radius:8px;
+  padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.75;
+}
+.alert-box .alert-title { font-size:13px;font-weight:800;color:#7A5C20;margin-bottom:4px; }
+.warn-box {
+  background:#FFF3F3;border:2px solid #CC2222;border-radius:8px;
+  padding:9px 13px;margin-bottom:8px;font-size:12px;line-height:1.7;
+}
+.warn-box strong { color:#CC2222; }
+
+/* Table */
+.hs-table { width:100%;border-collapse:collapse;font-size:12px; }
+.hs-table th { background:#C8A84B;color:#fff;padding:6px 10px;text-align:left;font-weight:600; }
+.hs-table td { padding:6px 10px;border-bottom:1px solid #E8DCC0; }
+.hs-table tr:last-child td { border-bottom:none; }
+.hs-table .chk { width:20px;text-align:center; }
+.hs-table .method-tag {
+  display:inline-block;background:#E8DCC0;color:#7A5C20;
+  font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;
+}
+
+/* Method header in steps */
+.method-head {
+  display:flex;align-items:center;gap:8px;
+  margin:12px 0 5px;
+}
+.method-badge {
+  background:#C8A84B;color:#fff;font-size:11px;font-weight:700;
+  padding:2px 9px;border-radius:4px;letter-spacing:0.03em;
+}
+.method-badge.fire { background:#CC2222; }
+.method-title-text { font-size:13px;font-weight:700;color:#2C2010; }
+
+/* Steps */
+.step-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.step-n { color:#C8A84B;font-weight:800;font-size:13px;min-width:20px;flex-shrink:0; }
+.step-note { font-size:11px;color:#888;font-style:italic; }
+
+/* Observation */
+.obs-title { font-weight:700;font-size:12px;margin:10px 0 5px;color:#2C2010; }
+.obs-table { width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px; }
+.obs-table th { background:#C8A84B;color:#fff;padding:5px 8px;text-align:center; }
+.obs-table th:first-child { text-align:left; }
+.obs-table td { padding:7px 8px;border-bottom:1px solid #E8DCC0;text-align:center; }
+.obs-table td:first-child { text-align:left; }
+.obs-table tr:last-child td { border-bottom:none; }
+.obs-table .fire-row td { background:#FFF3F3; }
+.obs-table .fire-row td:first-child { font-weight:700; }
+
+/* Guess box */
+.guess-box { background:#FFF8F0;border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;font-size:12px;line-height:1.8;margin-top:6px; }
+.guess-box .g-label { font-weight:700;color:#C8A84B; }
+.guess-line { border-bottom:1px solid #C8A84B;margin-top:14px;height:18px; }
+
+.sci-note { background:#FBF5E4;border-radius:6px;padding:8px 12px;font-size:11.5px;line-height:1.7;margin-top:6px; }
+.sci-note strong { color:#7A5C20; }
+
+/* QA */
+.qa-item { border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;margin-bottom:8px;font-size:12px;min-height:52px; }
+.qa-q { font-weight:700;margin-bottom:4px; }
+.qa-tag { float:right;font-size:10px;background:#E8DCC0;color:#7A5C20;padding:1px 6px;border-radius:4px;font-weight:700; }
+
+/* Safety */
+.safety-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.safety-n { color:#CC2222;font-weight:700;min-width:20px;flex-shrink:0; }
+
+/* Divider */
+.divider { border:none;border-top:1.5px dashed #E8DCC0;margin:10px 0; }
+
+/* Print */
+@media print {
+  body { background:none; }
+  .a4-page { box-shadow:none;margin:0;page-break-after:always;width:100%; }
+  .print-btn { display:none !important; }
+}
+.print-btn {
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:#C8A84B;color:#fff;border:none;
+  padding:0.65rem 1.4rem;border-radius:8px;
+  font-size:0.9rem;font-weight:700;cursor:pointer;
+  box-shadow:0 3px 16px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+
+<!-- ═══════════════════════════════ 封面 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-cover">
+    <div class="cover-stripe" style="top:140px"></div>
+    <div class="cover-stripe-mid" style="top:155px"></div>
+    <div class="cover-stripe" style="bottom:140px"></div>
+    <div class="cover-stripe-mid" style="bottom:125px"></div>
+    <div class="cover-tag">茲茲實驗課 ｜ 國中銜接組</div>
+    <div class="cover-exp-num">Exp. 02</div>
+    <div class="cover-title">特務密碼：無字天書解碼術</div>
+    <div class="cover-sub">Invisible Ink — 用科學解開隱形密碼</div>
+    <div class="cover-meta">
+      分類：化學 ｜ 難度：⭐⭐ ｜ 風險：中高（含明火操作）<br>
+      核心概念：碳化顯色 · 氧化還原反應 · 酸鹼指示劑 · 助燃氧化<br>
+      帶回家：個人無字天書作品卡（火焰字跡版）
+    </div>
+    <div style="margin-top:2rem;font-size:12px;color:#555;line-height:2">
+      姓名：_______________　　組別：_______________
+    </div>
+    <div class="cover-bottom">茲茲實驗課 2026 ｜ 設計 / 授課：福大老師</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 2：引言 + 材料 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">特務密碼：無字天書解碼術</div>
+      <div class="page-header-icon">🔥</div>
+    </div>
+
+    <!-- 1 今天做什麼 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">1</div>
+        <div class="hs-title">今天我們要做什麼？</div>
+      </div>
+      <div class="hs-body">
+        <div class="info-box">
+          間諜傳遞秘密情報，不能讓敵人看到，所以他們使用「無字天書」——用肉眼看不見的墨水書寫，只有知道方法的人才能解讀。<br>
+          今天你將化身密碼特務，用<strong>四種不同原理的隱形墨水</strong>書寫秘密訊息，再用對應的方式將它們一一顯現。壓軸的終極大招是：用<strong>火焰</strong>沿著你的字跡燃燒，把密碼燒出來！
+        </div>
+        <div class="guess-box">
+          <div class="g-label">先猜猜看 🤔 （做實驗前，先憑感覺猜猜）</div>
+          <div style="margin-top:6px">Q1. 你覺得「加熱」為什麼可以讓隱形字跡出現？</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q2. 碘液噴到「維生素C寫的字跡」上，你猜會變什麼顏色？</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q3. 硝酸鉀字跡燃燒時，火焰會沿著字跡走嗎？你覺得為什麼？</div>
+          <div class="guess-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 材料 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">2</div>
+        <div class="hs-title">我的材料（打勾確認）</div>
+      </div>
+      <div class="hs-body">
+        <table class="hs-table">
+          <thead><tr><th class="chk">✓</th><th>材料名稱</th><th>數量</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td class="chk">□</td><td>棉花棒</td><td>約 30 支</td><td>四種方法書寫用</td></tr>
+            <tr><td class="chk">□</td><td>A4 白紙</td><td>8–10 張</td><td>每種方法各 2 張</td></tr>
+            <tr><td class="chk">□</td><td>15% 檸檬酸溶液</td><td>小杯 1 個</td><td><span class="method-tag">方法A</span> 書寫液</td></tr>
+            <tr><td class="chk">□</td><td>10% 維生素C 溶液</td><td>小杯 1 個</td><td><span class="method-tag">方法B</span> 書寫液</td></tr>
+            <tr><td class="chk">□</td><td>稀釋碘液（噴瓶）</td><td>1 個</td><td><span class="method-tag">方法B</span> 顯字用</td></tr>
+            <tr><td class="chk">□</td><td>10% 小蘇打溶液</td><td>小杯 1 個</td><td><span class="method-tag">方法C</span> 書寫液</td></tr>
+            <tr><td class="chk">□</td><td>紫甘藍汁（噴瓶）</td><td>1 個</td><td><span class="method-tag">方法C</span> 顯字用</td></tr>
+            <tr><td class="chk">□</td><td>硝酸鉀溶液（老師分裝）</td><td>小杯 1 個</td><td><span class="method-tag">方法D</span> 書寫液</td></tr>
+            <tr><td class="chk">□</td><td>吹風機</td><td>全班共用</td><td>加熱顯字 / 加速乾燥</td></tr>
+            <tr><td class="chk">□</td><td>防火板</td><td>1 塊</td><td><span class="method-tag">方法D</span> 墊在紙下</td></tr>
+            <tr><td class="chk">□</td><td>乳膠手套</td><td>1 副</td><td>全程佩戴</td></tr>
+            <tr><td class="chk">□</td><td>護目鏡</td><td>1 副</td><td>碘液噴灑 + 火焰操作時必戴</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Special notice -->
+    <div class="alert-box">
+      <div class="alert-title">⚡ 開場立即行動！</div>
+      老師會先帶大家用<strong>硝酸鉀溶液</strong>書寫秘密訊息，完成後放在旁邊吹乾。<br>
+      趁字跡乾燥的時間，我們先完成方法 A、B、C，最後再用火焰點燃硝酸鉀字跡——這樣節奏剛剛好！
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 3：實驗步驟 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">特務密碼：無字天書解碼術</div>
+      <div class="page-header-icon">🔥</div>
+    </div>
+
+    <!-- 3 Steps -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">3</div>
+        <div class="hs-title">實驗步驟</div>
+      </div>
+      <div class="hs-body">
+
+        <!-- Method A -->
+        <div class="method-head">
+          <span class="method-badge">方法 A</span>
+          <span class="method-title-text">檸檬酸加熱顯字法</span>
+        </div>
+        <div class="step-item"><div class="step-n">1.</div><div>用棉花棒沾 15% 檸檬酸溶液，在白紙上書寫文字或圖案（字要大一點、不要太細）。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>用吹風機<strong>低溫</strong>對著字跡吹乾（2–3 分鐘），或靜置晾乾。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>確認完全乾燥後，用吹風機切換<strong>中溫</strong>對準字跡加熱，緩慢移動。</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>觀察：字跡如何顯現？顏色是什麼？加熱停止後字跡還在嗎？</div></div>
+
+        <hr class="divider">
+
+        <!-- Method B -->
+        <div class="method-head">
+          <span class="method-badge">方法 B</span>
+          <span class="method-title-text">碘酒 + 維生素C 氧化還原法</span>
+        </div>
+        <div class="step-item"><div class="step-n">1.</div><div>用棉花棒沾 10% 維生素C 溶液，在白紙上書寫文字。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>吹乾或靜置晾乾（重要！不能有殘留水分）。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>戴上護目鏡，將稀釋碘液均勻噴灑在整張紙上，觀察字跡顯現。</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>進階挑戰：再噴一次 VC 溶液在字跡上，觀察有什麼變化？（可逆反應！）</div></div>
+
+        <hr class="divider">
+
+        <!-- Method C -->
+        <div class="method-head">
+          <span class="method-badge">方法 C</span>
+          <span class="method-title-text">小蘇打 + 紫甘藍汁酸鹼法</span>
+        </div>
+        <div class="step-item"><div class="step-n">1.</div><div>用棉花棒沾 10% 小蘇打溶液，在白紙上書寫文字。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>吹乾或靜置晾乾。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>戴上護目鏡，均勻噴上紫甘藍汁，觀察字跡顯現及顏色變化。</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>觀察：字跡出現什麼顏色？紫甘藍汁未噴到的地方又是什麼顏色？</div></div>
+
+        <hr class="divider">
+
+        <!-- Method D -->
+        <div class="method-head">
+          <span class="method-badge fire">方法 D 🔥</span>
+          <span class="method-title-text">硝酸鉀火焰顯字法（終極大招）</span>
+        </div>
+        <div class="warn-box">
+          <strong>⚠ 安全確認清單（老師與學生一起確認後才能點火）</strong><br>
+          □ 字跡已完全乾燥（摸起來無涼感）<br>
+          □ 紙下方防火板已就位，周圍無易燃物<br>
+          □ 護目鏡已佩戴<br>
+          □ 旁邊有備用水杯
+        </div>
+        <div class="step-item"><div class="step-n">1.</div><div>確認上方安全清單全部打勾。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>老師持線香靠近字跡的<strong>其中一端</strong>引燃。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>觀察：火焰是否沿著字跡軌跡蔓延？燃燒速度如何？燃燒後字跡是什麼樣子？</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>燃燒完畢靜置冷卻，不要立即觸碰。</div></div>
+        <div class="step-item"><div class="step-n">🏆</div><div><strong>恭喜你解開了所有密碼！</strong>對比四種方法，哪種最讓你印象深刻？</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 4：觀察 + 動動腦 + 注意事項 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">特務密碼：無字天書解碼術</div>
+      <div class="page-header-icon">🔥</div>
+    </div>
+
+    <!-- 4 觀察紀錄 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">4</div>
+        <div class="hs-title">觀察紀錄</div>
+      </div>
+      <div class="hs-body">
+
+        <div class="obs-title">① 四種隱形墨水方法大比較：</div>
+        <table class="obs-table">
+          <thead>
+            <tr>
+              <th style="width:22%">方法</th>
+              <th>顯字原理</th>
+              <th>字跡顏色</th>
+              <th>效果（★☆☆–★★★）</th>
+              <th>可逆？</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>A</strong> 檸檬酸加熱</td>
+              <td>碳化顯色</td>
+              <td></td>
+              <td></td>
+              <td>□ 可 □ 否</td>
+            </tr>
+            <tr>
+              <td><strong>B</strong> 碘酒＋VC</td>
+              <td>氧化還原</td>
+              <td></td>
+              <td></td>
+              <td>□ 可 □ 否</td>
+            </tr>
+            <tr>
+              <td><strong>C</strong> 小蘇打＋紫甘藍</td>
+              <td>酸鹼指示</td>
+              <td></td>
+              <td></td>
+              <td>□ 可 □ 否</td>
+            </tr>
+            <tr class="fire-row">
+              <td><strong>D 🔥</strong> 硝酸鉀火焰</td>
+              <td>助燃氧化</td>
+              <td></td>
+              <td></td>
+              <td>□ 可 □ 否</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="obs-title" style="margin-top:10px">② 方法 B 的進階觀察（氧化還原可逆反應）：</div>
+        <table class="obs-table">
+          <thead><tr><th>步驟</th><th>紙的顏色</th><th>字跡顏色</th></tr></thead>
+          <tbody>
+            <tr><td>噴碘液之前</td><td></td><td>（看不見）</td></tr>
+            <tr><td>噴碘液之後</td><td></td><td></td></tr>
+            <tr><td>再噴 VC 溶液後</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="sci-note">
+          <strong>科學家小筆記：</strong>方法 B 是今天唯一可以「讓字跡消失再出現」的方法。碘（I₂）遇到維生素C（還原劑）被還原成無色的碘離子（I⁻），所以字跡消失；再噴碘液又能讓字出現。這就是<strong>氧化還原反應的可逆性</strong>——國中理化的重要概念！
+        </div>
+
+        <div class="obs-title" style="margin-top:10px">③ 我最感興趣的方法是：___________，因為：</div>
+        <div style="border:1px solid #E8DCC0;border-radius:6px;height:36px;margin-top:4px;padding:6px 10px;font-size:12px;color:#bbb">（寫下你的想法）</div>
+      </div>
+    </div>
+
+    <!-- 5 動動腦 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">5</div>
+        <div class="hs-title">動動腦</div>
+      </div>
+      <div class="hs-body">
+        <div class="qa-item">
+          <div class="qa-q">問題 1｜方法A（檸檬酸加熱）和平常烤麵包會變棕色，原理上有什麼相似的地方？<span class="qa-tag">生活化學</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 2｜方法D中，硝酸鉀（KNO₃）為什麼能讓火沿著字跡走？它在燃燒中扮演什麼角色？<span class="qa-tag">國九理化</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 3｜紫甘藍汁遇到小蘇打（鹼性）變藍綠色，那如果遇到醋（酸性）會變什麼顏色？你能推論出紫甘藍汁的用途嗎？<span class="qa-tag">酸鹼指示劑</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 注意事項 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">6</div>
+        <div class="hs-title">注意事項</div>
+      </div>
+      <div class="hs-body">
+        <div class="safety-item"><div class="safety-n">⚠</div><div>硝酸鉀是氧化劑，全程佩戴手套，書寫完畢立刻洗手，不可大量吸入粉末。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>方法D點火時，護目鏡必戴，且由老師執行點火動作，學生觀察即可。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>碘液有染色性，噴灑時對準紙面，避免噴到衣物或皮膚；若沾到皮膚，流水沖洗。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>吹風機加熱時不要對著人臉或手，設定中溫即可，不需高溫。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>所有溶液不可飲用。實驗結束後，廢液倒入老師指定容器，不要直接倒入水槽。</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
