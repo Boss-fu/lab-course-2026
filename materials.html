@@ -96,6 +96,7 @@
 .cat-文具       { background: #FFF0E0; color: #996620; }
 .cat-安全       { background: #FFE8E8; color: #990000; }
 .cat-粉狀藥品   { background: #F0E8FF; color: #662299; }
+.cat-液體藥品   { background: #E8F4FF; color: #1A4A88; }
 .cat-玻璃實驗器材 { background: #E8FFF0; color: #1A7040; }
 .cat-非玻璃實驗器材 { background: #E0F8FF; color: #1A6677; }
 .cat-一次性食材  { background: #FFFFF0; color: #777700; }
@@ -133,7 +134,7 @@
     <select id="filter-cat" onchange="filterTable()">
       <option value="">所有分類</option>
       <option>耗材</option><option>工具</option><option>文具</option>
-      <option>安全</option><option>粉狀藥品</option>
+      <option>安全</option><option>粉狀藥品</option><option>液體藥品</option>
       <option>玻璃實驗器材</option><option>非玻璃實驗器材</option>
       <option>一次性食材</option>
     </select>
@@ -175,7 +176,7 @@
 </div>
 
 <script src="js/data.js"></script>
-<script src="js/materials-data.js"></script>
+<script src="js/materials-data.js?v=2"></script>
 <script>
 
 // ── Stats ──
@@ -205,7 +206,14 @@ function renderTable() {
       ? `<span class="s-arrived">${m.arrivalStatus}</span>`
       : '—';
 
-    const channel = m.channel || '—';
+    let channel = '—';
+    if (m.channel) {
+      if (m.channel.startsWith('http')) {
+        channel = `<a href="${m.channel}" target="_blank" style="color:var(--teal-dark);font-size:0.78rem">🔗 購買連結</a>`;
+      } else {
+        channel = m.channel;
+      }
+    }
 
     return `
     <tr data-name="${m.name}" data-cat="${m.cat}"
