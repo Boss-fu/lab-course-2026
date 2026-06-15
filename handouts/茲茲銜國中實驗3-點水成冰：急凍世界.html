@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>茲茲銜接實驗3｜點水成冰：急凍世界</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #C0C0C0; font-family: "PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+
+.a4-page {
+  width: 794px; min-height: 1123px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  margin: 2rem auto;
+  font-size: 13px; line-height: 1.55; color: #222;
+  position: relative;
+}
+
+/* Cover */
+.a4-cover {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  height: 1123px; padding: 80px;
+  position: relative; overflow: hidden;
+}
+.cover-stripe { position:absolute;left:0;right:0;height:10px;background:linear-gradient(to right,#C8A84B 65%,transparent); }
+.cover-stripe-mid { position:absolute;left:0;right:0;height:4px;background:linear-gradient(to right,#2C2010 45%,transparent); }
+.cover-tag  { font-size:13px;font-weight:700;color:#888;letter-spacing:0.1em;margin-top:5rem; }
+.cover-exp-num { font-size:40px;font-weight:800;color:#C8A84B;-webkit-text-stroke:2px #C8A84B;margin-top:0.8rem;font-style:italic; }
+.cover-title { font-size:24px;font-weight:800;color:#2C2010;margin-top:0.5rem; }
+.cover-sub   { font-size:14px;color:#888;margin-top:0.3rem; }
+.cover-meta  { margin-top:2.5rem;font-size:12px;color:#555;line-height:2.2; }
+.cover-bottom { position:absolute;bottom:60px;left:80px;font-size:11px;color:#aaa; }
+
+/* Content page */
+.a4-content { padding: 36px 48px; }
+.page-header { display:flex;align-items:center;margin-bottom:14px; }
+.page-header-org { font-size:11px;color:#888;margin-right:auto; }
+.page-header-title { background:#C8A84B;color:#fff;padding:5px 18px;font-size:11px;font-weight:600; }
+.page-header-icon  { background:#2C2010;color:#fff;padding:5px 10px;font-size:11px; }
+
+/* Sections */
+.hs { margin-bottom: 16px; }
+.hs-header { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+.hs-num { width:28px;height:28px;border-radius:50%;background:#C8A84B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0; }
+.hs-title { font-size:15px;font-weight:700;color:#2C2010; }
+.hs-body { padding-left:38px; font-size:12px; }
+
+/* Info box */
+.info-box { background:#FBF5E4;border-left:4px solid #C8A84B;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.7; }
+.info-box strong { color:#7A5C20; }
+
+/* Alert */
+.alert-box { background:#FFFDE7;border:2px solid #C8A84B;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.75; }
+.alert-box .alert-title { font-size:13px;font-weight:800;color:#7A5C20;margin-bottom:4px; }
+.warn-box { background:#FFF3F3;border:2px solid #CC2222;border-radius:8px;padding:9px 13px;margin-bottom:8px;font-size:12px;line-height:1.7; }
+.warn-box strong { color:#CC2222; }
+
+/* Table */
+.hs-table { width:100%;border-collapse:collapse;font-size:12px; }
+.hs-table th { background:#C8A84B;color:#fff;padding:6px 10px;text-align:left;font-weight:600; }
+.hs-table td { padding:6px 10px;border-bottom:1px solid #E8DCC0; }
+.hs-table tr:last-child td { border-bottom:none; }
+.hs-table .chk { width:20px;text-align:center; }
+
+/* Steps */
+.phase-head { background:#FBF5E4;border-left:4px solid #C8A84B;border-radius:0 4px 4px 0;padding:5px 10px;font-weight:700;font-size:12px;color:#2C2010;margin:10px 0 5px; }
+.step-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.step-n { color:#C8A84B;font-weight:800;font-size:13px;min-width:20px;flex-shrink:0; }
+.step-note { font-size:11px;color:#888;font-style:italic; }
+.divider { border:none;border-top:1.5px dashed #E8DCC0;margin:10px 0; }
+
+/* Guess */
+.guess-box { background:#FFF8F0;border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;font-size:12px;line-height:1.8;margin-top:6px; }
+.guess-box .g-label { font-weight:700;color:#C8A84B; }
+.guess-line { border-bottom:1px solid #C8A84B;margin-top:14px;height:18px; }
+
+/* Observation */
+.obs-title { font-weight:700;font-size:12px;margin:10px 0 5px;color:#2C2010; }
+.obs-table { width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px; }
+.obs-table th { background:#C8A84B;color:#fff;padding:5px 8px;text-align:center; }
+.obs-table th:first-child { text-align:left; }
+.obs-table td { padding:7px 8px;border-bottom:1px solid #E8DCC0; }
+.obs-table td:first-child { text-align:left; }
+.obs-table .tall td { height:40px; }
+.obs-table tr:last-child td { border-bottom:none; }
+
+/* Temp record */
+.temp-row { display:flex;gap:12px;margin:6px 0; }
+.temp-box { flex:1;border:1.5px solid #C8A84B;border-radius:6px;padding:8px 12px;text-align:center; }
+.temp-box .temp-label { font-size:11px;color:#888;margin-bottom:4px; }
+.temp-box .temp-val { font-size:22px;font-weight:800;color:#C8A84B; }
+.temp-box .temp-unit { font-size:11px;color:#888; }
+.temp-arrow { display:flex;align-items:center;font-size:20px;color:#C8A84B;font-weight:700;padding-top:4px; }
+
+/* Sci note */
+.sci-note { background:#FBF5E4;border-radius:6px;padding:8px 12px;font-size:11.5px;line-height:1.7;margin-top:6px; }
+.sci-note strong { color:#7A5C20; }
+
+/* Draw box */
+.draw-box { border:1.5px solid #E8DCC0;border-radius:6px;height:90px;margin:6px 0;padding:6px 10px;font-size:11px;color:#ccc;display:flex;align-items:flex-start; }
+
+/* QA */
+.qa-item { border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;margin-bottom:8px;font-size:12px;min-height:52px; }
+.qa-q { font-weight:700;margin-bottom:4px; }
+.qa-tag { float:right;font-size:10px;background:#E8DCC0;color:#7A5C20;padding:1px 6px;border-radius:4px;font-weight:700; }
+
+/* Safety */
+.safety-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.safety-n { color:#CC2222;font-weight:700;min-width:20px;flex-shrink:0; }
+
+/* Print */
+@media print {
+  body { background:none; }
+  .a4-page { box-shadow:none;margin:0;page-break-after:always;width:100%; }
+  .print-btn { display:none !important; }
+}
+.print-btn {
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:#C8A84B;color:#fff;border:none;
+  padding:0.65rem 1.4rem;border-radius:8px;
+  font-size:0.9rem;font-weight:700;cursor:pointer;
+  box-shadow:0 3px 16px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+
+<!-- ═══════════════════════════════ 封面 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-cover">
+    <div class="cover-stripe" style="top:140px"></div>
+    <div class="cover-stripe-mid" style="top:155px"></div>
+    <div class="cover-stripe" style="bottom:140px"></div>
+    <div class="cover-stripe-mid" style="bottom:125px"></div>
+    <div class="cover-tag">茲茲實驗課 ｜ 國中銜接組</div>
+    <div class="cover-exp-num">Exp. 03</div>
+    <div class="cover-title">點水成冰：急凍世界</div>
+    <div class="cover-sub">Hot Ice — 一根手指讓液體瞬間結凍</div>
+    <div class="cover-meta">
+      分類：化學 ｜ 難度：⭐⭐ ｜ 風險：低（高溫液體）<br>
+      核心概念：過飽和溶液 · 晶核誘導結晶 · 放熱反應 · 物理變化可逆性<br>
+      帶回家：熱冰樣品（加熱後可無限次重複使用！）
+    </div>
+    <div style="margin-top:2rem;font-size:12px;color:#555;line-height:2">
+      姓名：_______________　　組別：_______________
+    </div>
+    <div class="cover-bottom">茲茲實驗課 2026 ｜ 設計 / 授課：福大老師</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 2：引言 + 材料 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">點水成冰：急凍世界</div>
+      <div class="page-header-icon">❄️</div>
+    </div>
+
+    <!-- 1 今天做什麼 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">1</div>
+        <div class="hs-title">今天我們要做什麼？</div>
+      </div>
+      <div class="hs-body">
+        <div class="info-box">
+          有一種神奇的液體，看起來和水一樣透明，但只要你輕輕<strong>用手指點一下</strong>，它就會瞬間從液體變成固體，而且碰到的當下還是<strong>熱的！</strong><br>
+          這就是「熱冰」——醋酸鈉的過飽和溶液。今天你要學會自己製作它、觸發它、測量它的溫度，甚至用它堆出一座不斷生長的冰柱！
+        </div>
+        <div class="guess-box">
+          <div class="g-label">先猜猜看 🤔</div>
+          <div style="margin-top:6px">Q1. 液體結凍通常要「降溫」，但熱冰卻是在常溫下結凍，你覺得這是怎麼辦到的？</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q2. 結凍的瞬間，溫度會升高還是降低？為什麼？</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q3. 為什麼熱冰加熱後又能變回液體，重新再玩一次？這是物理變化還是化學變化？</div>
+          <div class="guess-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 材料 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">2</div>
+        <div class="hs-title">我的材料（打勾確認）</div>
+      </div>
+      <div class="hs-body">
+        <table class="hs-table">
+          <thead><tr><th class="chk">✓</th><th>材料名稱</th><th>數量</th><th>備註</th></tr></thead>
+          <tbody>
+            <tr><td class="chk">□</td><td>醋酸鈉三水合物（白色顆粒）</td><td>150g</td><td>老師已分裝至燒杯中</td></tr>
+            <tr><td class="chk">□</td><td>250mL 燒杯</td><td>1 個</td><td>必須乾燥潔淨，否則會提前結晶</td></tr>
+            <tr><td class="chk">□</td><td>玻璃攪拌棒</td><td>1 支</td><td>加熱時攪拌；加熱完成後不再使用</td></tr>
+            <tr><td class="chk">□</td><td>數位溫度計</td><td>1 支</td><td>記錄結晶前後溫度</td></tr>
+            <tr><td class="chk">□</td><td>種晶（小粒醋酸鈉）</td><td>少許</td><td>老師已分裝，觸發結晶用</td></tr>
+            <tr><td class="chk">□</td><td>培養皿 / 小白碟</td><td>1 個</td><td>熱冰柱造型用</td></tr>
+            <tr><td class="chk">□</td><td>鑷子</td><td>1 支</td><td>放種晶 + 夾取熱冰</td></tr>
+            <tr><td class="chk">□</td><td>隔熱手套</td><td>1 副</td><td>搬移熱燒杯用</td></tr>
+            <tr><td class="chk">□</td><td>夾鏈袋</td><td>1 個</td><td>裝成品帶回</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 開場提示 -->
+    <div class="alert-box">
+      <div class="alert-title">⚡ 開場立即行動！</div>
+      老師會先帶大家把醋酸鈉放上加熱板加熱熔解。<br>
+      熔解後必須靜置冷卻（約 20–25 分鐘）——趁這段時間，我們來做原理說明和填寫猜測題！<br>
+      <strong>特別注意：冷卻期間不能搖晃桌子或碰燒杯，否則它會提前結晶。</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 3：實驗步驟 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">點水成冰：急凍世界</div>
+      <div class="page-header-icon">❄️</div>
+    </div>
+
+    <!-- 3 步驟 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">3</div>
+        <div class="hs-title">實驗步驟</div>
+      </div>
+      <div class="hs-body">
+
+        <div class="phase-head">【第一階段】製作過飽和溶液（開場立即進行）</div>
+        <div class="step-item"><div class="step-n">1.</div><div>戴上隔熱手套，確認燒杯乾燥潔淨。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>將燒杯放上電磁加熱板，開中溫，用攪拌棒輕輕攪拌。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>持續加熱直到白色顆粒<strong>完全融化成透明清液</strong>（約 80°C）。</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>關閉加熱板，將燒杯移到桌上靜置——<strong>從此刻起不可振動！</strong></div></div>
+        <div class="step-item"><div class="step-n">☕</div><div class="step-note">此時進行「先猜猜看」和原理說明，等待冷卻約 20–25 分鐘。</div></div>
+
+        <hr class="divider">
+
+        <div class="phase-head">【第二階段】觸發結晶</div>
+        <div class="warn-box">
+          <strong>⚠ 觸發前確認：</strong>燒杯外側摸起來微溫（不燙），溶液仍為透明液體。
+        </div>
+        <div class="step-item"><div class="step-n">1.</div><div>用溫度計輕輕插入溶液，記錄<strong>結晶前溫度</strong>（約室溫或略高）。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>用鑷子夾取一粒種晶，輕輕放入溶液液面上。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>觀察！結晶波會從種晶接觸點向外蔓延，固體快速生長。</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>結晶完成後，再次測量溫度，記錄<strong>結晶後溫度</strong>。</div></div>
+        <div class="step-item"><div class="step-n">⚠</div><div class="step-note">剛結晶完的熱冰可達 54°C，請等 2 分鐘再用手直接碰觸。</div></div>
+
+        <hr class="divider">
+
+        <div class="phase-head">【第三階段】熱冰柱造型挑戰</div>
+        <div class="step-item"><div class="step-n">1.</div><div>把培養皿放好，先在培養皿上放一粒種晶。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>重新加熱燒杯讓熱冰再次熔解成液體，稍微冷卻後慢慢倒出。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>讓液體流到種晶上，觀察熱冰柱如何從底部往上生長！</div></div>
+        <div class="step-item"><div class="step-n">4.</div><div>造型冷卻後拍照，將成品放入夾鏈袋帶回家。</div></div>
+
+        <hr class="divider">
+
+        <div class="phase-head">【第四階段】重複實驗驗證</div>
+        <div class="step-item"><div class="step-n">1.</div><div>將夾鏈袋中的熱冰重新放入燒杯加熱熔解。</div></div>
+        <div class="step-item"><div class="step-n">2.</div><div>冷卻後，再次放入種晶觸發，確認可無限次重複。</div></div>
+        <div class="step-item"><div class="step-n">3.</div><div>思考：這個實驗過程中，醋酸鈉的化學結構有沒有改變？</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 頁 4：觀察 + 動動腦 + 注意事項 ═══════════════════════════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">點水成冰：急凍世界</div>
+      <div class="page-header-icon">❄️</div>
+    </div>
+
+    <!-- 4 觀察紀錄 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">4</div>
+        <div class="hs-title">觀察紀錄</div>
+      </div>
+      <div class="hs-body">
+
+        <div class="obs-title">① 結晶前後溫度記錄：</div>
+        <div class="temp-row">
+          <div class="temp-box">
+            <div class="temp-label">結晶前（過飽和溶液）</div>
+            <div class="temp-val">____</div>
+            <div class="temp-unit">°C</div>
+          </div>
+          <div class="temp-arrow">→</div>
+          <div class="temp-box">
+            <div class="temp-label">結晶後（剛完成）</div>
+            <div class="temp-val">____</div>
+            <div class="temp-unit">°C</div>
+          </div>
+          <div class="temp-arrow">差：</div>
+          <div class="temp-box">
+            <div class="temp-label">溫度差（ΔT）</div>
+            <div class="temp-val">____</div>
+            <div class="temp-unit">°C</div>
+          </div>
+        </div>
+        <div style="font-size:11.5px;margin-top:4px;color:#555">
+          結晶後溫度 □ 升高　□ 降低　→ 這代表結晶是 □ 放熱反應　□ 吸熱反應
+        </div>
+
+        <div class="obs-title" style="margin-top:12px">② 結晶過程描述：</div>
+        <table class="obs-table">
+          <thead><tr><th>觀察項目</th><th>你看到/感受到的</th></tr></thead>
+          <tbody>
+            <tr><td>種晶接觸液面的瞬間</td><td style="height:32px"></td></tr>
+            <tr><td>結晶擴散的速度（快/慢）與方向</td><td style="height:32px"></td></tr>
+            <tr><td>結晶完成後固體的外觀與觸感</td><td style="height:32px"></td></tr>
+            <tr><td>加熱後重新熔解的現象</td><td style="height:32px"></td></tr>
+          </tbody>
+        </table>
+
+        <div class="obs-title" style="margin-top:10px">③ 畫出你的熱冰柱造型：</div>
+        <div class="draw-box">（在這裡畫出你的熱冰柱形狀，並標注大約高度）</div>
+
+        <div class="sci-note">
+          <strong>科學家小筆記：</strong>醋酸鈉（CH₃COONa）的飽和溶解度隨溫度升高而大幅增加。加熱後緩慢冷卻，溶液中的醋酸鈉量超過室溫的飽和量，卻因為沒有晶核而暫時維持液態——這叫做<strong>過飽和狀態</strong>。一旦晶核出現，原本多餘的溶質就會快速析出，同時釋放結晶熱（約 264 kJ/kg），所以摸起來是熱的！
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 動動腦 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">5</div>
+        <div class="hs-title">動動腦</div>
+      </div>
+      <div class="hs-body">
+        <div class="qa-item">
+          <div class="qa-q">問題 1｜熱冰加熱後能再次使用，說明這個過程是物理變化還是化學變化？理由是什麼？<span class="qa-tag">科學素養</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 2｜暖暖包裡也有一種「醋酸鈉熱冰」的設計，你按壓金屬片就會變熱。這和今天的實驗有什麼相同的原理？<span class="qa-tag">生活應用</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 3｜如果想讓熱冰「結晶更慢一點」，你可以調整哪個變因？（提示：想想溫度和晶核的關係）<span class="qa-tag">國八理化</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 注意事項 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">6</div>
+        <div class="hs-title">注意事項</div>
+      </div>
+      <div class="hs-body">
+        <div class="safety-item"><div class="safety-n">⚠</div><div>加熱中的燒杯溫度高達 80–100°C，搬移時必須戴隔熱手套，不要用手直接拿。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>剛結晶完成的熱冰溫度約 54°C，請等 2 分鐘冷卻後再用手碰觸。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>冷卻期間不要振動桌面或搖晃燒杯，否則會提前結晶，需要重新加熱。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>醋酸鈉本身無毒（即食用醋的鈉鹽），但實驗用品仍不可食用，做完請洗手。</div></div>
+        <div class="safety-item"><div class="safety-n">⚠</div><div>帶回家的熱冰請用夾鏈袋密封保存，重複加熱時用熱水浸泡（勿用明火）。</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
