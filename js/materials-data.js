@@ -15,7 +15,7 @@ const ALL_EXPERIMENTS = [
   { id: null, title: '煉金術士的點金術', cat: '化學', concept: '氧化還原與置換、結晶型態觀察', format: '分組實作', duration: 120 },
   { id: null, title: '魔幻紅綠燈變色瓶', cat: '化學', concept: '葡萄糖氧化還原、亞甲基藍/靛胭脂', format: '個人實作', duration: 90 },
   { id: null, title: '夜光魔法與終極焰色', cat: '化學', concept: '原子光譜電子躍遷、化學發光冷光現象', format: '分組實作', duration: 100 },
-  { id: null, title: '黑色磁力怪獸製造機', cat: '化學', concept: '高分子交聯作用、磁性物質感應', format: '個人實作', duration: 100 },
+  { id: '中1', title: '磁力史萊姆', cat: '化學', concept: '高分子交聯作用、磁性物質感應', format: '個人實作', duration: 100 },
   { id: null, title: '尋找解藥：煉金術士矩陣', cat: '化學', concept: '離子沉澱反應、溶解度規則表格', format: '2人一組/點滴板', duration: 120 },
   { id: null, title: '時間規律者：自製時鐘', cat: '物理', concept: '古典力學、單擺等時性探究', format: '分組實作', duration: 90 },
   { id: null, title: '手動小吊車：帕斯卡契約', cat: '物理', concept: '簡單機械、槓桿原理與輪軸', format: '個人結構組裝', duration: 100 },

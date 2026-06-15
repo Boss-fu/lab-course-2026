@@ -18,7 +18,7 @@ const COURSE_MIDDLE = {
       riskLevel: 1,
       takeHome: "磁力史萊姆",
       status: "ready",
-      handout: "handouts/茲茲銜國中實驗1-黑色磁力怪獸：磁力史萊姆.html",
+      handout: "handouts/茲茲銜接實驗1-磁力史萊姆V3.pdf",
       experiments: ["史萊姆製作", "磁力史萊姆測試"],
       objectives: [
         "理解 PVA（聚乙烯醇）與硼砂交聯反應形成非牛頓流體",
