@@ -3,130 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>茲茲國小 暑期實驗課 2026</title>
+<title>茲茲實驗課</title>
 <link rel="stylesheet" href="css/style2.css">
+<style>
+.landing {
+  min-height: calc(100vh - 52px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+.landing-title {
+  font-size: 1rem;
+  color: var(--text-light);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.landing-subtitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--teal);
+  margin-bottom: 3rem;
+  letter-spacing: 0.02em;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  gap: 2rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 820px;
+}
+.category-card {
+  background: #2A1E10;
+  border: 2px solid #3D2A10;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.category-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 36px rgba(232,184,64,0.22);
+}
+.category-icon { font-size: 3rem; line-height: 1; }
+.category-label {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--teal);
+  letter-spacing: 0.05em;
+}
+.category-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-align: center;
+  line-height: 1.8;
+}
+.category-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.9rem;
+  border-radius: 20px;
+  font-weight: 600;
+  background: #3D2A08;
+  color: var(--teal);
+  border: 1px solid rgba(232,184,64,0.3);
+}
+</style>
 </head>
 <body>
 
 <nav>
-  <span class="brand"><img src="茲茲icon.png" alt="茲茲">2026茲茲國小夏令營科學實驗</span>
-  <a href="index.html" class="active">課程總覽</a>
-  <a href="teacher.html">老師工具</a>
+  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
   <a href="materials.html">器材管理</a>
+  <a href="teacher.html">老師工具</a>
   <a href="generator.html">講義生成器</a>
 </nav>
 
-<div class="hero">
-  <h1>茲茲國小部 暑期實驗課</h1>
-  <p>實驗設計／編寫／授課：福大老師</p>
-  <div class="hero-meta">
-    <span id="hero-grade"></span>
-    <span id="hero-students"></span>
-    <span id="hero-time"></span>
-    <span id="hero-period"></span>
+<div class="landing">
+  <div class="landing-title">請選擇課程分類</div>
+  <div class="landing-subtitle">⚗️ 茲茲實驗課 2026</div>
+
+  <div class="category-grid">
+    <a href="elementary.html" class="category-card">
+      <div class="category-icon">🔬</div>
+      <div class="category-label">國小實驗課</div>
+      <div class="category-desc">
+        國小五、六年級<br>
+        2026 暑期夏令營<br>
+        7/6 ～ 8/24
+      </div>
+      <div class="category-badge">5 堂 ｜ 全數完成</div>
+    </a>
+
+    <a href="middle.html" class="category-card">
+      <div class="category-icon">🧲</div>
+      <div class="category-label">國中實驗課</div>
+      <div class="category-desc">
+        國中生（含升國一）<br>
+        進階科學探索<br>
+        難度更高、概念更深
+      </div>
+      <div class="category-badge">1 堂 ｜ 持續更新中</div>
+    </a>
   </div>
 </div>
 
-<div class="summary-bar">
-  <div class="summary-item"><span class="dot dot-green"></span> <span id="count-ready"></span> 堂講義已完成</div>
-  <div class="summary-item"><span class="dot dot-orange"></span> <span id="count-pending"></span> 堂講義製作中</div>
-  <div class="summary-item"><span class="dot dot-teal"></span> 共 5 堂 ｜ 7/6 ～ 8/24</div>
-</div>
-
-<div class="container">
-  <div class="section-title">課程總覽</div>
-  <div class="sessions-grid" id="sessions-grid"></div>
-
-  <div class="section-title" style="margin-top:2.5rem">講義製作進度</div>
-  <table class="data-table" id="progress-table">
-    <thead>
-      <tr>
-        <th>堂次</th>
-        <th>日期</th>
-        <th>課程主題</th>
-        <th>講義狀態</th>
-        <th>預計完成</th>
-      </tr>
-    </thead>
-    <tbody id="progress-body"></tbody>
-  </table>
-</div>
-
-<script src="js/data.js"></script>
-<script>
-// Hero
-const c = COURSE;
-document.getElementById('hero-grade').textContent = c.grade;
-document.getElementById('hero-students').textContent = c.students;
-document.getElementById('hero-time').textContent = c.time.replace('每次 ', '');
-document.getElementById('hero-period').textContent = c.period.replace('2026 年 ', '2026 ');
-
-// Count
-const ready   = c.sessions.filter(s => s.status === 'ready').length;
-const pending = c.sessions.filter(s => s.status === 'pending').length;
-document.getElementById('count-ready').textContent   = ready;
-document.getElementById('count-pending').textContent = pending;
-
-// Risk helper
-function riskClass(level) {
-  if (level >= 3) return 'risk-high';
-  if (level === 2) return 'risk-med';
-  return '';
-}
-
-// Session cards
-const grid = document.getElementById('sessions-grid');
-c.sessions.forEach(s => {
-  const handoutBtn = s.handout
-    ? `<a href="${s.handout}" target="_blank">📄 下載講義</a>`
-    : `<span class="no-handout">⏳ 講義製作中（${s.handoutDeadline || ''}）</span>`;
-
-  const riskLabel = ['', '低', '中', '中高', '高'][s.riskLevel];
-  const riskBadgeClass = s.riskLevel >= 3 ? 'high' : '';
-
-  grid.innerHTML += `
-  <div class="session-card ${riskClass(s.riskLevel)}">
-    <div class="card-header">
-      <div class="session-num">${s.id}</div>
-      <div class="card-title">
-        <h3>${s.title}</h3>
-        <div class="date">📅 ${s.dateDisplay}</div>
-      </div>
-    </div>
-    <div class="card-badges">
-      <span class="badge badge-cat">${s.category}</span>
-      <span class="badge badge-diff">難度：${s.difficulty}</span>
-      <span class="badge badge-risk ${riskBadgeClass}">風險：${riskLabel}</span>
-      <span class="badge ${s.status === 'ready' ? 'badge-ready' : 'badge-pending'}">
-        ${s.status === 'ready' ? '✅ 講義完成' : '🔧 製作中'}
-      </span>
-    </div>
-    <div class="card-experiments">
-      ${s.experiments.map(e => `<span class="exp-chip">⚗️ ${e}</span>`).join('')}
-    </div>
-    <div class="card-footer">
-      ${handoutBtn}
-      <span class="take-home">🎁 ${s.takeHome !== '無' ? '帶回：' + s.takeHome : '無成品帶回'}</span>
-    </div>
-  </div>`;
-});
-
-// Progress table
-const tbody = document.getElementById('progress-body');
-c.sessions.forEach(s => {
-  const statusHtml = s.status === 'ready'
-    ? '<span class="progress-status status-ready">✅ 已完成</span>'
-    : '<span class="progress-status status-pending">🔧 製作中</span>';
-  const deadline = s.status === 'ready' ? '—' : (s.handoutDeadline || '');
-  tbody.innerHTML += `
-  <tr>
-    <td>第 ${s.id} 堂</td>
-    <td>${s.dateDisplay}</td>
-    <td>${s.title}</td>
-    <td>${statusHtml}</td>
-    <td>${deadline}</td>
-  </tr>`;
-});
-</script>
 </body>
 </html>

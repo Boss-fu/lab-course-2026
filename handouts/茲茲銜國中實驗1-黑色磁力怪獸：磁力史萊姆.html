@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>茲茲銜國中實驗1｜黑色磁力怪獸：磁力史萊姆</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #B0B0B0; font-family: "PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+
+.a4-page {
+  width: 794px; min-height: 1123px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  margin: 2rem auto;
+  font-size: 13px; line-height: 1.5; color: #222;
+  position: relative;
+}
+
+/* Cover */
+.a4-cover {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  height: 1123px; padding: 80px;
+  position: relative; overflow: hidden;
+}
+.cover-stripe-top  { position:absolute;top:160px;left:0;right:0;height:10px;background:linear-gradient(to right,#C8A84B 60%,transparent); }
+.cover-stripe-mid  { position:absolute;top:175px;left:0;right:0;height:4px;background:linear-gradient(to right,#2C3E50 40%,transparent); }
+.cover-stripe-bot  { position:absolute;bottom:160px;left:0;right:0;height:10px;background:linear-gradient(to right,#C8A84B 60%,transparent); }
+.cover-deco-bot    { position:absolute;bottom:145px;left:0;right:0;height:4px;background:linear-gradient(to right,#2C3E50 40%,transparent); }
+.cover-tag  { font-size:13px;font-weight:700;color:#888;letter-spacing:0.1em; margin-top:6rem; }
+.cover-exp-num { font-size:38px;font-weight:800;color:#C8A84B;-webkit-text-stroke:2px #C8A84B;margin-top:1rem;font-style:italic; }
+.cover-title { font-size:22px;font-weight:700;color:#2C3E50;margin-top:0.5rem; }
+.cover-sub   { font-size:14px;color:#888;margin-top:0.4rem; }
+.cover-meta  { margin-top:2rem;font-size:12px;color:#666;line-height:2; }
+.cover-bottom { position:absolute;bottom:80px;left:80px;font-size:11px;color:#aaa; }
+
+/* Content page */
+.a4-content { padding: 36px 48px; }
+.page-header { display:flex;align-items:center;margin-bottom:16px;font-size:11px;color:#666; }
+.page-header-org { margin-right:auto; }
+.page-header-title { background:#C8A84B;color:#fff;padding:5px 18px;font-size:11px;font-weight:600; }
+.page-header-icon  { background:#2C3E50;color:#fff;padding:5px 10px;font-size:11px; }
+
+/* Sections */
+.hs { margin-bottom: 20px; }
+.hs-header { display:flex;align-items:center;gap:10px;margin-bottom:10px; }
+.hs-num { width:30px;height:30px;border-radius:50%;background:#C8A84B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0; }
+.hs-title { font-size:16px;font-weight:700;color:#222;font-style:italic; }
+.hs-body { padding-left:40px; }
+
+.guess-box { background:#FBF5E4;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:12px; }
+.guess-box .label { font-weight:700;font-size:12px;color:#C8A84B; }
+
+.hs-table { width:100%;border-collapse:collapse;font-size:12px;border-radius:8px;overflow:hidden; }
+.hs-table th { background:#C8A84B;color:#fff;padding:6px 10px;text-align:left;font-weight:600; }
+.hs-table td { padding:6px 10px;border-bottom:1px solid #E0D0A0; }
+.hs-table tr:last-child td { border-bottom:none; }
+
+.task-box { background:#FBF5E4;border-radius:6px;padding:10px 14px;font-size:12px; }
+.task-box .remind { color:#C8A84B;font-weight:700; }
+
+.step-part { margin-bottom:10px; }
+.step-part-title { font-weight:700;font-size:13px;margin-bottom:6px; }
+.step-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.step-n { color:#C8A84B;font-weight:700;font-size:13px;min-width:18px; }
+
+.obs-table { width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px; }
+.obs-table th { background:#C8A84B;color:#fff;padding:5px 8px;text-align:left; }
+.obs-table td { padding:8px;border-bottom:1px solid #E0D0A0;height:30px; }
+.obs-table tr:last-child td { border-bottom:none; }
+
+.sci-note { background:#FBF5E4;border-radius:6px;padding:8px 12px;font-size:11.5px;margin-top:8px;line-height:1.6; }
+.sci-note .label { color:#C8A84B;font-weight:700; }
+
+.qa-item { border:1.5px dashed #C8A84B;border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;min-height:52px; }
+.qa-q { font-weight:700;margin-bottom:4px; }
+
+.safety-item { display:flex;gap:8px;margin-bottom:6px;font-size:12px;align-items:flex-start; }
+.safety-n { color:#CC2222;font-weight:700;min-width:18px; }
+
+@media print {
+  body { background:none; }
+  .a4-page { box-shadow:none;margin:0;page-break-after:always;width:100%; }
+  .print-btn { display:none; }
+}
+
+.print-btn {
+  position:fixed;top:1rem;right:1rem;
+  background:#C8A84B;color:#fff;
+  border:none;padding:0.6rem 1.2rem;
+  border-radius:8px;font-size:0.9rem;font-weight:700;
+  cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+
+<!-- 封面 -->
+<div class="a4-page">
+  <div class="a4-cover">
+    <div class="cover-stripe-top"></div>
+    <div class="cover-stripe-mid"></div>
+    <div class="cover-stripe-bot"></div>
+    <div class="cover-deco-bot"></div>
+    <div class="cover-tag">茲茲實驗課 ｜ 國中組</div>
+    <div class="cover-exp-num">Exp.01</div>
+    <div class="cover-title">黑色磁力怪獸：磁力史萊姆</div>
+    <div class="cover-sub">Black Magnetic Monster — Magnetic Slime</div>
+    <div class="cover-meta">
+      分類：化學 ｜ 難度：⭐<br>
+      核心概念：高分子交聯作用 · 磁性物質感應<br>
+      帶回家：磁力史萊姆一份
+    </div>
+    <div class="cover-bottom">茲茲實驗課 2026 ｜ 設計 / 授課：福大老師</div>
+  </div>
+</div>
+
+<!-- 內容頁 -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中組</div>
+      <div class="page-header-title">黑色磁力怪獸：磁力史萊姆</div>
+      <div class="page-header-icon">🧲</div>
+    </div>
+
+    <!-- 1 探索什麼 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">1</div>
+        <div class="hs-title">今天我們要探索什麼？</div>
+      </div>
+      <div class="hs-body">
+        <p style="font-size:12px">今天我們要製作一種會對磁鐵「做出反應」的史萊姆！一般的史萊姆只能拉長、擠壓，但加入特殊粉末後，它竟然能被磁鐵吸引、甚至被磁鐵「控制」移動。這究竟是什麼科學原理？讓我們一起動手找答案！</p>
+        <div class="guess-box" style="margin-top:10px">
+          <div class="label">先猜猜看 🤔</div>
+          <p>Q1 白膠加入硼砂之後，為什麼會從液體變成固體狀的史萊姆？</p>
+          <p>Q2 要讓史萊姆被磁鐵吸引，需要加什麼東西？</p>
+          <p>Q3 磁鐵靠近黑色史萊姆時，史萊姆會怎麼動？</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 材料 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">2</div>
+        <div class="hs-title">我的材料</div>
+      </div>
+      <div class="hs-body">
+        <table class="hs-table">
+          <thead><tr><th>材料</th><th>規格 / 說明</th><th>數量</th></tr></thead>
+          <tbody>
+            <tr><td>白膠（PVA 膠）</td><td>一般白膠即可</td><td>50 mL</td></tr>
+            <tr><td>硼砂溶液（4%）</td><td>老師課前配好</td><td>50 mL</td></tr>
+            <tr><td>氧化鐵粉</td><td>四氧化三鐵（Fe₃O₄）</td><td>2 湯匙</td></tr>
+            <tr><td>量杯</td><td>100 mL</td><td>1 個</td></tr>
+            <tr><td>攪拌棒</td><td>木棒或玻璃棒均可</td><td>1 支</td></tr>
+            <tr><td>強力釹磁鐵</td><td>直徑約 2–3 cm</td><td>1 顆</td></tr>
+            <tr><td>乳膠手套</td><td>全程佩戴</td><td>1 副</td></tr>
+            <tr><td>夾鏈袋</td><td>裝成品帶回家</td><td>1 個</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3 任務 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">3</div>
+        <div class="hs-title">科學家任務</div>
+      </div>
+      <div class="hs-body">
+        <div class="task-box">
+          <span class="remind">🎯 今日挑戰：</span>製作出「史上最強磁力史萊姆」！<br>
+          成功指標：磁鐵放在距離 <u>3 cm</u> 處，史萊姆要能被吸引、明顯移動。<br>
+          進階挑戰：試試看能不能用磁鐵「帶著」史萊姆在桌上移動！
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 步驟 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">4</div>
+        <div class="hs-title">實驗步驟</div>
+      </div>
+      <div class="hs-body">
+        <div class="step-part">
+          <div class="step-part-title">Part A｜製作磁力史萊姆</div>
+          <div class="step-item"><div class="step-n">1.</div><div>量取 50 mL 白膠倒入量杯</div></div>
+          <div class="step-item"><div class="step-n">2.</div><div>加入 2 湯匙氧化鐵粉，充分攪拌至顏色均勻（會變成深灰色）</div></div>
+          <div class="step-item"><div class="step-n">3.</div><div>緩慢加入硼砂溶液，每次加 <strong>5 mL</strong>，邊加邊快速攪拌</div></div>
+          <div class="step-item"><div class="step-n">4.</div><div>感覺愈來愈黏稠、開始結成一團時 → 停止加硼砂，繼續揉捏</div></div>
+          <div class="step-item"><div class="step-n">5.</div><div>用手揉捏 2–3 分鐘，直到不黏手、有彈性</div></div>
+        </div>
+        <div class="step-part">
+          <div class="step-part-title">Part B｜磁力測試</div>
+          <div class="step-item"><div class="step-n">6.</div><div>把史萊姆放在桌上，慢慢將磁鐵靠近，記錄「開始移動的距離」</div></div>
+          <div class="step-item"><div class="step-n">7.</div><div>試試看從不同角度靠近，觀察史萊姆形狀有什麼變化</div></div>
+          <div class="step-item"><div class="step-n">8.</div><div>試著用磁鐵帶著史萊姆在桌面移動</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第三頁：觀察 + 動動腦 + 注意事項 -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中組</div>
+      <div class="page-header-title">黑色磁力怪獸：磁力史萊姆</div>
+      <div class="page-header-icon">🧲</div>
+    </div>
+
+    <!-- 5 觀察 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">5</div>
+        <div class="hs-title">觀察紀錄</div>
+      </div>
+      <div class="hs-body">
+        <table class="obs-table">
+          <thead><tr><th>觀察項目</th><th>我的記錄</th></tr></thead>
+          <tbody>
+            <tr><td>加入氧化鐵粉後，混合物顏色</td><td></td></tr>
+            <tr><td>史萊姆完成後的質地（軟 / 硬 / 黏）</td><td></td></tr>
+            <tr><td>磁鐵在幾公分時，史萊姆開始移動？</td><td></td></tr>
+            <tr><td>磁鐵碰到史萊姆，史萊姆形狀有什麼變化？</td><td></td></tr>
+            <tr><td>磁鐵移動時，史萊姆跟著動了嗎？</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="sci-note">
+          <span class="label">📌 小提醒：</span>硼砂加太多，史萊姆會太硬、太脆；加太少則太黏。如果結果不理想，可以跟旁邊的同學比較你們加的量有什麼不同！
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 動動腦 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">6</div>
+        <div class="hs-title">動動腦</div>
+      </div>
+      <div class="hs-body">
+        <div class="qa-item">
+          <div class="qa-q">Q1 白膠（PVA）加了硼砂之後，為什麼會從液體變成固體狀的史萊姆？</div>
+          <div style="font-size:11px;color:#aaa;margin-top:4px">提示：想想「分子」是怎麼被「連在一起」的……這叫做「交聯反應」</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">Q2 普通史萊姆沒有磁性，但你今天做的有。為什麼？哪個成分貢獻了磁性？</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">Q3 科學家把磁性材料加入橡膠、塑膠等材料，做成各種「智慧材料」。你能想到什麼生活中的可能應用嗎？</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 注意事項 -->
+    <div class="hs">
+      <div class="hs-header">
+        <div class="hs-num">7</div>
+        <div class="hs-title">注意事項</div>
+      </div>
+      <div class="hs-body">
+        <div class="safety-item"><div class="safety-n">⚠️</div><div>全程佩戴乳膠手套，硼砂刺激皮膚，請勿直接接觸</div></div>
+        <div class="safety-item"><div class="safety-n">⚠️</div><div>氧化鐵粉容易染色，注意不要灑到衣物，桌面有鋪報紙</div></div>
+        <div class="safety-item"><div class="safety-n">⚠️</div><div>史萊姆不可食用</div></div>
+        <div class="safety-item"><div class="safety-n">⚠️</div><div>磁鐵請勿靠近手機、電腦、信用卡等含有磁條或晶片的物品</div></div>
+        <div class="safety-item"><div class="safety-n">⚠️</div><div>帶回家的史萊姆請密封存放（夾鏈袋），不可沖入排水管</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

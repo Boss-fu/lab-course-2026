@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>國中實驗課 — 茲茲實驗課</title>
+<link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+
+<nav>
+  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
+  <a href="index.html">首頁</a>
+  <a href="elementary.html">國小課程</a>
+  <a href="middle.html" class="active">國中課程</a>
+  <a href="materials.html">器材管理</a>
+  <a href="teacher.html">老師工具</a>
+  <a href="generator.html">講義生成器</a>
+</nav>
+
+<div class="hero">
+  <h1>國中實驗課</h1>
+  <p>進階科學探索 ｜ 概念更深、挑戰更高</p>
+  <div class="hero-meta">
+    <span id="hero-grade"></span>
+    <span id="hero-students"></span>
+    <span id="hero-time"></span>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="summary-item"><span class="dot dot-green"></span> <span id="count-ready"></span> 堂講義已完成</div>
+  <div class="summary-item"><span class="dot dot-orange"></span> <span id="count-pending"></span> 堂講義製作中</div>
+  <div class="summary-item"><span class="dot dot-teal"></span> 持續新增中</div>
+</div>
+
+<div class="container">
+  <div class="section-title">課程總覽</div>
+  <div class="sessions-grid" id="sessions-grid"></div>
+
+  <div class="section-title" style="margin-top:2.5rem">講義製作進度</div>
+  <table class="data-table" id="progress-table">
+    <thead>
+      <tr>
+        <th>堂次</th>
+        <th>日期</th>
+        <th>課程主題</th>
+        <th>講義狀態</th>
+      </tr>
+    </thead>
+    <tbody id="progress-body"></tbody>
+  </table>
+</div>
+
+<script src="js/data-middle.js"></script>
+<script>
+const c = COURSE_MIDDLE;
+document.getElementById('hero-grade').textContent = c.grade;
+document.getElementById('hero-students').textContent = c.students;
+document.getElementById('hero-time').textContent = c.time.replace('每次 ', '');
+
+const ready   = c.sessions.filter(s => s.status === 'ready').length;
+const pending = c.sessions.filter(s => s.status === 'pending').length;
+document.getElementById('count-ready').textContent   = ready;
+document.getElementById('count-pending').textContent = pending;
+
+function riskClass(level) {
+  if (level >= 3) return 'risk-high';
+  if (level === 2) return 'risk-med';
+  return '';
+}
+
+const grid = document.getElementById('sessions-grid');
+c.sessions.forEach(s => {
+  const handoutBtn = s.handout
+    ? `<a href="${s.handout}" target="_blank">📄 開啟講義</a>`
+    : `<span class="no-handout">⏳ 講義製作中${s.handoutDeadline ? '（' + s.handoutDeadline + '）' : ''}</span>`;
+
+  const riskLabel = ['', '低', '中', '中高', '高'][s.riskLevel];
+  const riskBadgeClass = s.riskLevel >= 3 ? 'high' : '';
+
+  grid.innerHTML += `
+  <div class="session-card ${riskClass(s.riskLevel)}">
+    <div class="card-header">
+      <div class="session-num">${s.id}</div>
+      <div class="card-title">
+        <h3>${s.title}</h3>
+        <div class="date">📅 ${s.dateDisplay}</div>
+      </div>
+    </div>
+    <div class="card-badges">
+      <span class="badge badge-cat">${s.category}</span>
+      <span class="badge badge-diff">難度：${s.difficulty}</span>
+      <span class="badge badge-risk ${riskBadgeClass}">風險：${riskLabel}</span>
+      <span class="badge ${s.status === 'ready' ? 'badge-ready' : 'badge-pending'}">
+        ${s.status === 'ready' ? '✅ 講義完成' : '🔧 製作中'}
+      </span>
+    </div>
+    <div class="card-experiments">
+      ${s.experiments.map(e => `<span class="exp-chip">⚗️ ${e}</span>`).join('')}
+    </div>
+    <div class="card-footer">
+      ${handoutBtn}
+      <span class="take-home">🎁 ${s.takeHome !== '無' ? '帶回：' + s.takeHome : '無成品帶回'}</span>
+    </div>
+  </div>`;
+});
+
+const tbody = document.getElementById('progress-body');
+c.sessions.forEach(s => {
+  const statusHtml = s.status === 'ready'
+    ? '<span class="progress-status status-ready">✅ 已完成</span>'
+    : '<span class="progress-status status-pending">🔧 製作中</span>';
+  tbody.innerHTML += `
+  <tr>
+    <td>第 ${s.id} 堂</td>
+    <td>${s.dateDisplay}</td>
+    <td>${s.title}</td>
+    <td>${statusHtml}</td>
+  </tr>`;
+});
+</script>
+</body>
+</html>

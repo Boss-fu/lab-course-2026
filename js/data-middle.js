@@ -1,0 +1,55 @@
+const COURSE_MIDDLE = {
+  name: "茲茲國中實驗課",
+  year: 2026,
+  grade: "國中生（含升國一）",
+  students: "10–15 人",
+  time: "每次 10:00–12:00（共 120 分鐘）",
+  teacher: "福大老師",
+  sessions: [
+    {
+      id: 1,
+      date: null,
+      dateDisplay: "待定",
+      title: "黑色磁力怪獸：磁力史萊姆",
+      category: "化學",
+      difficulty: "易",
+      risk: "低",
+      riskLevel: 1,
+      takeHome: "磁力史萊姆",
+      status: "ready",
+      handout: "handouts/茲茲銜國中實驗1-黑色磁力怪獸：磁力史萊姆.html",
+      experiments: ["史萊姆製作", "磁力史萊姆測試"],
+      objectives: [
+        "理解 PVA（聚乙烯醇）與硼砂交聯反應形成非牛頓流體",
+        "觀察磁性物質在磁場中的受力現象",
+        "體驗複合材料的概念：將磁性加入高分子材料"
+      ],
+      timeline: [
+        { time: "10:00–10:15", activity: "原理講解：什麼是高分子？交聯作用是什麼？", warning: false, note: "" },
+        { time: "10:15–10:45", activity: "Part A：製作基本史萊姆（白膠 + 氧化鐵粉 + 硼砂溶液）", warning: true, note: "硼砂有刺激性，全程戴乳膠手套；氧化鐵粉易染色，桌面鋪報紙" },
+        { time: "10:45–11:20", activity: "Part B：磁力測試──用磁鐵控制、拉伸史萊姆，記錄感應距離", warning: false, note: "磁鐵遠離手機、電腦" },
+        { time: "11:20–11:45", activity: "結果分享與動動腦：交聯結構、磁力應用討論", warning: false, note: "" },
+        { time: "11:45–12:00", activity: "清潔整理，史萊姆裝袋帶回", warning: false, note: "史萊姆不可沖入排水管" }
+      ],
+      materials: [
+        { name: "白膠（PVA膠）", qty: "50 mL/人", unit: "瓶", note: "一般白膠即可", prepBy: "福大老師" },
+        { name: "硼砂溶液（4%）", qty: "50 mL/人", unit: "份", note: "課前配好：20g硼砂 + 500mL水", prepBy: "福大老師" },
+        { name: "氧化鐵粉（四氧化三鐵）", qty: "2 湯匙/人", unit: "包", note: "可網購，勿使用生鏽粉", prepBy: "福大老師" },
+        { name: "強力釹磁鐵", qty: 15, unit: "顆", note: "直徑 2–3cm 即可", prepBy: "福大老師" },
+        { name: "量杯 100mL", qty: 15, unit: "個", note: "", prepBy: "福大老師" },
+        { name: "攪拌棒", qty: 15, unit: "支", note: "木棒或玻璃棒均可", prepBy: "福大老師" },
+        { name: "乳膠手套", qty: 1, unit: "盒", note: "每人1副", prepBy: "福大老師" },
+        { name: "夾鏈袋", qty: 15, unit: "個", note: "裝成品帶回", prepBy: "福大老師" },
+        { name: "報紙", qty: 15, unit: "張", note: "鋪桌面防染色", prepBy: "周老師" },
+        { name: "抹布", qty: 10, unit: "條", note: "清潔用", prepBy: "周老師" }
+      ],
+      assistantNotes: [
+        "硼砂溶液課前一天配好靜置，讓泡泡消散",
+        "氧化鐵粉分裝成小杯，每人2湯匙",
+        "桌面預先鋪報紙",
+        "磁鐵遠離教室內的電子設備",
+        "提醒帶回的史萊姆不可沖水管，密封存放"
+      ]
+    }
+  ]
+};
