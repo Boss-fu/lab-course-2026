@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>器材管理 — 茲茲實驗課</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.filter-bar {
+  display: flex; gap: 0.6rem; flex-wrap: wrap;
+  padding: 1rem 2rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+.filter-bar input {
+  padding: 0.4rem 0.8rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit; font-size: 0.86rem;
+  min-width: 200px;
+}
+.filter-bar input:focus { outline: none; border-color: var(--teal); }
+.filter-bar select {
+  padding: 0.4rem 0.7rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit; font-size: 0.86rem;
+  background: var(--white); cursor: pointer;
+}
+.filter-bar select:focus { outline: none; border-color: var(--teal); }
+.filter-label { font-size: 0.82rem; color: var(--text-light); }
+
+/* Status badges */
+.s-bought  { background:#E6F9EF; color:#1E8A52; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-arrived { background:#E6F0FF; color:#2255AA; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-school  { background:#FFF3E0; color:#B36000; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-pending { background:#F5F5F5; color:#888; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+
+/* Stats bar */
+.stats-bar {
+  display: flex; gap: 1.5rem; flex-wrap: wrap;
+  padding: 0.8rem 2rem;
+  background: var(--teal-light);
+  font-size: 0.84rem;
+}
+.stat { display: flex; align-items: center; gap: 0.4rem; }
+.stat strong { color: var(--teal-dark); font-size: 1rem; }
+
+/* Experiment grid */
+.exp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.exp-card {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  border-left: 4px solid var(--teal);
+}
+.exp-card.cat-化學 { border-left-color: #E89020; }
+.exp-card.no-id { opacity: 0.6; border-left-style: dashed; }
+.exp-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; }
+.exp-card .meta { font-size: 0.76rem; color: var(--text-light); display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.exp-id { font-size: 0.72rem; font-weight: 700; background: var(--teal); color: #fff; padding: 0.1rem 0.4rem; border-radius: 4px; }
+.exp-id.cat-化學 { background: #E89020; }
+
+/* Table container */
+.table-wrap { overflow-x: auto; }
+.mat-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; white-space: nowrap; }
+.mat-table th {
+  background: var(--teal); color: #fff;
+  padding: 0.55rem 0.8rem; text-align: left;
+  position: sticky; top: 0;
+}
+.mat-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+.mat-table tr:hover td { background: var(--teal-light); }
+.mat-table tr.hidden { display: none; }
+.cat-tag {
+  font-size: 0.72rem; padding: 0.1rem 0.45rem;
+  border-radius: 4px; font-weight: 600;
+}
+.cat-耗材       { background: #E8F0FF; color: #2255AA; }
+.cat-工具       { background: #F0F0F0; color: #555; }
+.cat-文具       { background: #FFF0E0; color: #AA5500; }
+.cat-安全       { background: #FFE8E8; color: #AA2222; }
+.cat-粉狀藥品   { background: #F0E8FF; color: #6622AA; }
+.cat-玻璃實驗器材 { background: #E8FFF0; color: #007744; }
+.cat-非玻璃實驗器材 { background: #E8FFFF; color: #006677; }
+.cat-一次性食材  { background: #FFFFE0; color: #888800; }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">🧪 茲茲實驗課</span>
+  <a href="index.html">課程總覽</a>
+  <a href="teacher.html">老師工具</a>
+  <a href="materials.html" class="active">器材管理</a>
+  <a href="generator.html">講義生成器</a>
+</nav>
+
+<div class="hero" style="padding:1.5rem 2rem">
+  <h1>器材管理</h1>
+  <p>採購進度追蹤 ｜ 實驗總表 ｜ 器材清單</p>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div class="tabs" style="padding:0 2rem;background:var(--white);border-bottom:2px solid var(--border)">
+  <button class="tab active" onclick="switchTab('purchase', this)">採購清單</button>
+  <button class="tab" onclick="switchTab('experiments', this)">實驗總表</button>
+</div>
+
+<!-- 採購清單 tab -->
+<div id="tab-purchase" class="tab-content active">
+  <div class="filter-bar">
+    <input type="text" id="search" placeholder="🔍 搜尋器材名稱…" oninput="filterTable()">
+    <span class="filter-label">篩選：</span>
+    <select id="filter-cat" onchange="filterTable()">
+      <option value="">所有分類</option>
+      <option>耗材</option><option>工具</option><option>文具</option>
+      <option>安全</option><option>粉狀藥品</option>
+      <option>玻璃實驗器材</option><option>非玻璃實驗器材</option>
+      <option>一次性食材</option>
+    </select>
+    <select id="filter-status" onchange="filterTable()">
+      <option value="">所有狀態</option>
+      <option value="bought">已購買</option>
+      <option value="arrived">已到貨</option>
+      <option value="pending">待購買</option>
+    </select>
+    <span id="count-display" style="margin-left:auto;font-size:0.82rem;color:var(--text-light)"></span>
+  </div>
+  <div style="padding:1.5rem 2rem">
+    <div class="table-wrap">
+      <table class="mat-table" id="mat-table">
+        <thead>
+          <tr>
+            <th>器材名稱</th>
+            <th>規格</th>
+            <th>分類</th>
+            <th>數量</th>
+            <th>備註</th>
+            <th>採購狀態</th>
+            <th>到貨狀態</th>
+            <th>購買通路</th>
+          </tr>
+        </thead>
+        <tbody id="mat-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 實驗總表 tab -->
+<div id="tab-experiments" class="tab-content">
+  <div style="padding:1.5rem 2rem">
+    <div class="section-title">已規劃實驗（含未來課程）</div>
+    <div class="exp-grid" id="exp-grid"></div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/materials-data.js"></script>
+<script>
+
+// ── Stats ──
+function renderStats() {
+  const total   = MATERIALS_LIST.length;
+  const bought  = MATERIALS_LIST.filter(m => m.purchaseStatus && m.purchaseStatus.includes('已購買')).length;
+  const arrived = MATERIALS_LIST.filter(m => m.arrivalStatus && m.arrivalStatus.includes('已到貨')).length;
+  const pending = total - bought;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat">共 <strong>${total}</strong> 項器材</div>
+    <div class="stat"><span class="s-bought">已購買</span> <strong>${bought}</strong> 項</div>
+    <div class="stat"><span class="s-arrived">已到貨</span> <strong>${arrived}</strong> 項</div>
+    <div class="stat"><span class="s-pending">待購買</span> <strong>${pending}</strong> 項</div>
+  `;
+}
+
+// ── Materials table ──
+function renderTable() {
+  const tbody = document.getElementById('mat-tbody');
+  tbody.innerHTML = MATERIALS_LIST.map((m, i) => {
+    const purchaseBadge = m.purchaseStatus
+      ? m.purchaseStatus.includes('已購買') ? `<span class="s-bought">${m.purchaseStatus}</span>`
+      : `<span class="s-school">${m.purchaseStatus}</span>`
+      : '<span class="s-pending">待購買</span>';
+
+    const arrivalBadge = m.arrivalStatus
+      ? `<span class="s-arrived">${m.arrivalStatus}</span>`
+      : '—';
+
+    const channel = m.channel || '—';
+
+    return `
+    <tr data-name="${m.name}" data-cat="${m.cat}"
+        data-bought="${m.purchaseStatus || ''}"
+        data-arrived="${m.arrivalStatus || ''}">
+      <td><strong>${m.name}</strong></td>
+      <td>${m.spec || '—'}</td>
+      <td><span class="cat-tag cat-${m.cat}">${m.cat}</span></td>
+      <td>${m.qty || '—'}</td>
+      <td style="white-space:normal;max-width:180px;font-size:0.8rem">${m.note || '—'}</td>
+      <td>${purchaseBadge}</td>
+      <td>${arrivalBadge}</td>
+      <td style="font-size:0.8rem">${channel}</td>
+    </tr>`;
+  }).join('');
+  updateCount();
+}
+
+function filterTable() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const cat    = document.getElementById('filter-cat').value;
+  const status = document.getElementById('filter-status').value;
+  const rows   = document.querySelectorAll('#mat-tbody tr');
+  rows.forEach(row => {
+    const name    = row.dataset.name.toLowerCase();
+    const rowCat  = row.dataset.cat;
+    const bought  = row.dataset.bought;
+    const arrived = row.dataset.arrived;
+
+    const matchSearch = !search || name.includes(search);
+    const matchCat    = !cat || rowCat === cat;
+    let   matchStatus = true;
+    if (status === 'bought')  matchStatus = bought.includes('已購買');
+    if (status === 'arrived') matchStatus = arrived.includes('已到貨');
+    if (status === 'pending') matchStatus = !bought.includes('已購買');
+
+    row.classList.toggle('hidden', !(matchSearch && matchCat && matchStatus));
+  });
+  updateCount();
+}
+
+function updateCount() {
+  const visible = document.querySelectorAll('#mat-tbody tr:not(.hidden)').length;
+  document.getElementById('count-display').textContent = `顯示 ${visible} 項`;
+}
+
+// ── Experiments grid ──
+function renderExperiments() {
+  const grid = document.getElementById('exp-grid');
+  grid.innerHTML = ALL_EXPERIMENTS.map(e => {
+    const idBadge = e.id
+      ? `<span class="exp-id cat-${e.cat}">${e.id}</span>`
+      : `<span style="font-size:0.72rem;color:#aaa">規劃中</span>`;
+    return `
+    <div class="exp-card cat-${e.cat} ${e.id ? '' : 'no-id'}">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+        ${idBadge}
+        <span class="badge badge-cat" style="font-size:0.72rem">${e.cat}</span>
+      </div>
+      <h4>${e.title}</h4>
+      <div class="meta">
+        <span>⏱ ${e.duration} 分鐘</span>
+        <span>👥 ${e.format}</span>
+      </div>
+      <div style="font-size:0.76rem;color:var(--text-light);margin-top:0.4rem">${e.concept}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Tabs ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// Init
+renderStats();
+renderTable();
+renderExperiments();
+</script>
+</body>
+</html>
