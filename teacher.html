@@ -114,7 +114,7 @@
   <a href="elementary.html">國小課程</a>
   <a href="middle.html">國中課程</a>
   <a href="materials.html">器材管理</a>
-  <a href="teacher.html" class="active">老師工具</a>
+  <a href="teacher.html" class="active">課前準備</a>
   <a href="generator.html">講義生成器</a>
 </nav>
 
@@ -316,8 +316,9 @@ function printMaterials() {
   window.print();
 }
 
-// Auto-select first session
-showSession(1);
+// Auto-select session from URL param ?s=N, else first session
+const _urlSession = parseInt(new URLSearchParams(window.location.search).get('s'));
+showSession(_urlSession && _urlSession >= 1 && _urlSession <= COURSE.sessions.length ? _urlSession : 1);
 </script>
 </body>
 </html>

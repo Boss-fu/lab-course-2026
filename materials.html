@@ -9,7 +9,7 @@
 .filter-bar {
   display: flex; gap: 0.6rem; flex-wrap: wrap;
   padding: 1rem 2rem;
-  background: #2A1E10;
+  background: var(--white);
   border-bottom: 1px solid var(--border);
   align-items: center;
 }
@@ -26,22 +26,22 @@
   border: 1.5px solid var(--border);
   border-radius: 8px;
   font-family: inherit; font-size: 0.86rem;
-  background: #2A1E10; cursor: pointer;
+  background: var(--white); cursor: pointer;
 }
 .filter-bar select:focus { outline: none; border-color: var(--teal); }
 .filter-label { font-size: 0.82rem; color: var(--text-light); }
 
 /* Status badges */
-.s-bought  { background:#0A2818; color:#4DC878; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-arrived { background:#0F1830; color:#7AA8E8; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-school  { background:#302008; color:#D08020; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-pending { background:#252525; color:#AAAAAA; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-bought  { background:#E6F9EF; color:#1A7040; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-arrived { background:#E0EEFF; color:#1A50A0; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-school  { background:#FFF3E0; color:#A05000; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+.s-pending { background:#F0F0F0; color:#666666; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
 
 /* Stats bar */
 .stats-bar {
   display: flex; gap: 1.5rem; flex-wrap: wrap;
   padding: 0.8rem 2rem;
-  background: #2A1E10;
+  background: var(--teal-light);
   font-size: 0.84rem;
 }
 .stat { display: flex; align-items: center; gap: 0.4rem; }
@@ -54,7 +54,7 @@
   gap: 1rem;
 }
 .exp-card {
-  background: #2A1E10;
+  background: var(--white);
   border-radius: 10px;
   box-shadow: var(--shadow);
   padding: 1rem;
@@ -66,6 +66,15 @@
 .exp-card .meta { font-size: 0.76rem; color: var(--text-light); display: flex; gap: 0.6rem; flex-wrap: wrap; }
 .exp-id { font-size: 0.72rem; font-weight: 700; background: var(--teal); color: #fff; padding: 0.1rem 0.4rem; border-radius: 4px; }
 .exp-id.cat-化學 { background: #E89020; }
+.exp-session-link {
+  display: inline-block; margin-top: 0.6rem;
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--teal-dark); text-decoration: none;
+  border: 1.5px solid var(--teal); border-radius: 6px;
+  padding: 0.15rem 0.55rem;
+  transition: background 0.15s;
+}
+.exp-session-link:hover { background: var(--teal-light); }
 
 /* Table container */
 .table-wrap { overflow-x: auto; }
@@ -76,20 +85,20 @@
   position: sticky; top: 0;
 }
 .mat-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
-.mat-table tr:hover td { background: #2A1E10; }
+.mat-table tr:hover td { background: var(--teal-light); }
 .mat-table tr.hidden { display: none; }
 .cat-tag {
   font-size: 0.72rem; padding: 0.1rem 0.45rem;
   border-radius: 4px; font-weight: 600;
 }
-.cat-耗材       { background: #0F1830; color: #7AA8E8; }
-.cat-工具       { background: #252525; color: #AAAAAA; }
-.cat-文具       { background: #302010; color: #D07030; }
-.cat-安全       { background: #300808; color: #CC4444; }
-.cat-粉狀藥品   { background: #1A0830; color: #9966CC; }
-.cat-玻璃實驗器材 { background: #0A2818; color: #44AA77; }
-.cat-非玻璃實驗器材 { background: #0A2028; color: #44BBCC; }
-.cat-一次性食材  { background: #202010; color: #BBBB44; }
+.cat-耗材       { background: #E0EEFF; color: #2255AA; }
+.cat-工具       { background: #F0F0F0; color: #555555; }
+.cat-文具       { background: #FFF0E0; color: #996620; }
+.cat-安全       { background: #FFE8E8; color: #990000; }
+.cat-粉狀藥品   { background: #F0E8FF; color: #662299; }
+.cat-玻璃實驗器材 { background: #E8FFF0; color: #1A7040; }
+.cat-非玻璃實驗器材 { background: #E0F8FF; color: #1A6677; }
+.cat-一次性食材  { background: #FFFFF0; color: #777700; }
 </style>
 </head>
 <body>
@@ -100,7 +109,7 @@
   <a href="elementary.html">國小課程</a>
   <a href="middle.html">國中課程</a>
   <a href="materials.html" class="active">器材管理</a>
-  <a href="teacher.html">老師工具</a>
+  <a href="teacher.html">課前準備</a>
   <a href="generator.html">講義生成器</a>
 </nav>
 
@@ -244,12 +253,23 @@ function updateCount() {
 }
 
 // ── Experiments grid ──
+const SESSION_LINK_MAP = {
+  'P01': 'teacher.html?s=1',
+  'C01': 'teacher.html?s=2',
+  'P02': 'teacher.html?s=3',
+  'P03': 'teacher.html?s=4',
+  'C02': 'teacher.html?s=5',
+};
+
 function renderExperiments() {
   const grid = document.getElementById('exp-grid');
   grid.innerHTML = ALL_EXPERIMENTS.map(e => {
     const idBadge = e.id
       ? `<span class="exp-id cat-${e.cat}">${e.id}</span>`
       : `<span style="font-size:0.72rem;color:#aaa">規劃中</span>`;
+    const sessionLink = SESSION_LINK_MAP[e.id]
+      ? `<a class="exp-session-link" href="${SESSION_LINK_MAP[e.id]}">📋 課前準備</a>`
+      : '';
     return `
     <div class="exp-card cat-${e.cat} ${e.id ? '' : 'no-id'}">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
@@ -262,6 +282,7 @@ function renderExperiments() {
         <span>👥 ${e.format}</span>
       </div>
       <div style="font-size:0.76rem;color:var(--text-light);margin-top:0.4rem">${e.concept}</div>
+      ${sessionLink}
     </div>`;
   }).join('');
 }
