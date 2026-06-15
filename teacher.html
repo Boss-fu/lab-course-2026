@@ -126,31 +126,41 @@
 let currentCourse = 'elementary';
 let currentSession = null;
 let editMode = false;
-const _cache = {};
+const _sCache = {}; // key: `${course}_${id}` → session object
 
 // ═══════════════════════════════════════════
-//  Data Layer  (localStorage > JS default)
+//  Data Layer  (per-session localStorage)
+//  已編輯的堂次 → localStorage
+//  未動過的堂次 → 直接讀 JS 檔（data.js / data-middle.js）
 // ═══════════════════════════════════════════
-function getCourseData() {
-  const c = currentCourse;
-  if (_cache[c]) return _cache[c];
-  const raw = c === 'middle' ? COURSE_MIDDLE : COURSE;
-  const saved = localStorage.getItem(`courseEdit_${c}`);
-  _cache[c] = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(raw));
-  return _cache[c];
-}
-
-function saveData() {
-  localStorage.setItem(`courseEdit_${currentCourse}`, JSON.stringify(_cache[currentCourse]));
-  updateExportBtn();
+function _sKey(id) {
+  return `sEdit_${currentCourse === 'middle' ? 'm' : 'e'}_${id}`;
 }
 
 function getSession(id) {
-  return getCourseData().sessions.find(x => x.id === id);
+  const ck = `${currentCourse}_${id}`;
+  if (_sCache[ck]) return _sCache[ck];
+  const raw = currentCourse === 'middle' ? COURSE_MIDDLE : COURSE;
+  const saved = localStorage.getItem(_sKey(id));
+  _sCache[ck] = saved
+    ? JSON.parse(saved)
+    : JSON.parse(JSON.stringify(raw.sessions.find(x => x.id === id)));
+  return _sCache[ck];
+}
+
+function getCourseData() {
+  const raw = currentCourse === 'middle' ? COURSE_MIDDLE : COURSE;
+  return { ...raw, sessions: raw.sessions.map(s => getSession(s.id)) };
+}
+
+function saveData(id) {
+  localStorage.setItem(_sKey(id), JSON.stringify(_sCache[`${currentCourse}_${id}`]));
+  updateExportBtn();
 }
 
 function updateExportBtn() {
-  const has = !!localStorage.getItem(`courseEdit_${currentCourse}`);
+  const raw = currentCourse === 'middle' ? COURSE_MIDDLE : COURSE;
+  const has = raw.sessions.some(s => localStorage.getItem(_sKey(s.id)));
   const btn = document.getElementById('export-btn');
   if (btn) btn.style.display = has ? '' : 'none';
 }
@@ -231,25 +241,25 @@ function editField(id, field, value) {
   } else {
     s[field] = value;
   }
-  saveData();
+  saveData(id);
   if (['title','status','category','dateDisplay'].includes(field)) buildSidebar();
 }
 
-function editMat(id, i, field, v)  { getSession(id).materials[i][field] = v; saveData(); }
-function delMat(id, i)             { getSession(id).materials.splice(i,1); saveData(); showSession(id); }
-function addMat(id)                { getSession(id).materials.push({name:'',qty:'',unit:'份',note:'',prepBy:'福大老師'}); saveData(); showSession(id); }
+function editMat(id, i, field, v)  { getSession(id).materials[i][field] = v; saveData(id); }
+function delMat(id, i)             { getSession(id).materials.splice(i,1); saveData(id); showSession(id); }
+function addMat(id)                { getSession(id).materials.push({name:'',qty:'',unit:'份',note:'',prepBy:'福大老師'}); saveData(id); showSession(id); }
 
-function editTL(id, i, field, v)   { if (field==='warning') v=Boolean(v); getSession(id).timeline[i][field]=v; saveData(); }
-function delTL(id, i)              { getSession(id).timeline.splice(i,1); saveData(); showSession(id); }
-function addTL(id)                 { getSession(id).timeline.push({time:'',activity:'',warning:false,note:''}); saveData(); showSession(id); }
+function editTL(id, i, field, v)   { if (field==='warning') v=Boolean(v); getSession(id).timeline[i][field]=v; saveData(id); }
+function delTL(id, i)              { getSession(id).timeline.splice(i,1); saveData(id); showSession(id); }
+function addTL(id)                 { getSession(id).timeline.push({time:'',activity:'',warning:false,note:''}); saveData(id); showSession(id); }
 
-function editObj(id, i, v)         { getSession(id).objectives[i] = v; saveData(); }
-function delObj(id, i)             { getSession(id).objectives.splice(i,1); saveData(); showSession(id); }
-function addObj(id)                { getSession(id).objectives.push(''); saveData(); showSession(id); }
+function editObj(id, i, v)         { getSession(id).objectives[i] = v; saveData(id); }
+function delObj(id, i)             { getSession(id).objectives.splice(i,1); saveData(id); showSession(id); }
+function addObj(id)                { getSession(id).objectives.push(''); saveData(id); showSession(id); }
 
-function editAst(id, i, v)         { getSession(id).assistantNotes[i] = v; saveData(); }
-function delAst(id, i)             { getSession(id).assistantNotes.splice(i,1); saveData(); showSession(id); }
-function addAst(id)                { getSession(id).assistantNotes.push(''); saveData(); showSession(id); }
+function editAst(id, i, v)         { getSession(id).assistantNotes[i] = v; saveData(id); }
+function delAst(id, i)             { getSession(id).assistantNotes.splice(i,1); saveData(id); showSession(id); }
+function addAst(id)                { getSession(id).assistantNotes.push(''); saveData(id); showSession(id); }
 
 function applyTemplate(id) {
   const s = getSession(id);
@@ -274,19 +284,16 @@ function applyTemplate(id) {
     s.materials = [{name:'',qty:'',unit:'份',note:'',prepBy:'福大老師'}];
   if (!s.assistantNotes?.length || !s.assistantNotes[0])
     s.assistantNotes = [''];
-  saveData();
+  saveData(id);
   buildSidebar();
   showSession(id);
 }
 
 function resetSession(id) {
   if (!confirm('確定還原此堂次的預設資料？此堂次的所有修改將消失。')) return;
-  const raw = currentCourse === 'middle' ? COURSE_MIDDLE : COURSE;
-  const rawS = raw.sessions.find(x => x.id === id);
-  const course = getCourseData();
-  const idx = course.sessions.findIndex(x => x.id === id);
-  course.sessions[idx] = JSON.parse(JSON.stringify(rawS));
-  saveData();
+  localStorage.removeItem(_sKey(id));
+  delete _sCache[`${currentCourse}_${id}`];
+  updateExportBtn();
   buildSidebar();
   showSession(id);
 }
