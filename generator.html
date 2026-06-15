@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>講義生成器 — 茲茲實驗課</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ── Layout ── */
+.gen-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  height: calc(100vh - 52px);
+}
+.gen-form {
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+}
+.gen-preview {
+  overflow-y: auto;
+  background: #B0B0B0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Form sections ── */
+.form-section {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.form-section-header {
+  background: var(--teal-light);
+  padding: 0.55rem 0.9rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--teal-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.form-section-header .toggle { margin-left: auto; font-size: 0.75rem; color: var(--teal); }
+.form-section-body { padding: 0.9rem; display: block; }
+.form-section-body.collapsed { display: none; }
+
+/* Dynamic rows */
+.dynamic-row {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  align-items: center;
+}
+.dynamic-row input, .dynamic-row textarea, .dynamic-row select {
+  padding: 0.38rem 0.55rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit; font-size: 0.82rem;
+  width: 100%;
+}
+.dynamic-row input:focus, .dynamic-row textarea:focus {
+  outline: none; border-color: var(--teal);
+}
+.add-row-btn {
+  background: none; border: 1.5px dashed var(--teal);
+  color: var(--teal-dark); border-radius: 6px;
+  padding: 0.3rem 0.8rem; font-size: 0.78rem; cursor: pointer;
+  margin-top: 0.3rem;
+}
+.add-row-btn:hover { background: var(--teal-light); }
+.del-btn {
+  background: none; border: none;
+  color: #CCC; cursor: pointer; font-size: 1rem; padding: 0 0.2rem;
+}
+.del-btn:hover { color: var(--red); }
+
+/* ── Action bar ── */
+.action-bar {
+  display: flex; gap: 0.6rem; align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* ── A4 Preview ── */
+.a4-page {
+  width: 794px;
+  min-height: 1123px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  margin-bottom: 2rem;
+  font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #222;
+  position: relative;
+}
+
+/* Cover page */
+.a4-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 1123px;
+  padding: 80px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.cover-stripe-top {
+  position: absolute; top: 160px; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(to right, #1ABFBF 60%, transparent);
+}
+.cover-stripe-mid {
+  position: absolute; top: 175px; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #2C3E50 40%, transparent);
+}
+.cover-stripe-bot {
+  position: absolute; bottom: 160px; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(to right, #1ABFBF 60%, transparent);
+}
+.cover-deco-bot {
+  position: absolute; bottom: 145px; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #2C3E50 40%, transparent);
+}
+.cover-exp-num {
+  font-size: 38px; font-weight: 800;
+  color: #1ABFBF;
+  -webkit-text-stroke: 2px #1ABFBF;
+  margin-top: 2rem;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+.cover-title {
+  font-size: 22px; font-weight: 700;
+  color: #2C3E50; margin-top: 0.5rem;
+}
+
+/* Content page */
+.a4-content { padding: 36px 48px; }
+.page-header {
+  display: flex; align-items: center;
+  border-bottom: none;
+  margin-bottom: 16px;
+  font-size: 11px; color: #666;
+}
+.page-header-org { margin-right: auto; }
+.page-header-title {
+  background: #1ABFBF; color: #fff;
+  padding: 5px 18px; font-size: 11px; font-weight: 600;
+}
+.page-header-icon {
+  background: #2C3E50; color: #fff;
+  padding: 5px 10px; font-size: 11px;
+}
+
+/* Handout sections */
+.hs { margin-bottom: 20px; }
+.hs-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.hs-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #1ABFBF; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.hs-title {
+  font-size: 16px; font-weight: 700; color: #222;
+  font-style: italic;
+}
+.hs-body { padding-left: 40px; }
+
+/* Guess box */
+.guess-box {
+  background: #E8F9F9; border-radius: 6px;
+  padding: 10px 14px; margin-top: 8px;
+  font-size: 12px;
+}
+.guess-box .label { font-weight: 700; font-size: 12px; color: #1ABFBF; }
+
+/* Materials table */
+.hs-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px; border-radius: 8px; overflow: hidden;
+}
+.hs-table th {
+  background: #1ABFBF; color: #fff;
+  padding: 6px 10px; text-align: left;
+  font-weight: 600;
+}
+.hs-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #D0E6E6;
+}
+.hs-table tr:last-child td { border-bottom: none; }
+
+/* Task box */
+.task-box {
+  background: #E8F9F9; border-radius: 6px;
+  padding: 10px 14px; font-size: 12px;
+}
+.task-box .remind { color: #1ABFBF; font-weight: 700; }
+
+/* Steps */
+.step-part { margin-bottom: 10px; }
+.step-part-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+.step-item {
+  display: flex; gap: 8px;
+  margin-bottom: 5px; font-size: 12px; align-items: flex-start;
+}
+.step-n {
+  color: #1ABFBF; font-weight: 700; font-size: 13px;
+  min-width: 18px;
+}
+
+/* Observation table */
+.obs-table {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+  margin-bottom: 10px;
+}
+.obs-table th {
+  background: #1ABFBF; color: #fff;
+  padding: 5px 8px; text-align: left;
+}
+.obs-table td {
+  padding: 6px 8px; border-bottom: 1px solid #D0E6E6;
+  height: 26px;
+}
+.obs-table tr:last-child td { border-bottom: none; }
+
+/* Conclusion */
+.conclusion { font-size: 12px; margin-top: 8px; }
+.conclusion strong { color: #222; }
+.sci-note {
+  background: #E8F9F9; border-radius: 6px;
+  padding: 8px 12px; font-size: 11.5px;
+  margin-top: 8px; line-height: 1.6;
+}
+.sci-note .label { color: #1ABFBF; font-weight: 700; }
+
+/* Q&A */
+.qa-item {
+  border: 1.5px dashed #B0D8D8;
+  border-radius: 6px; padding: 8px 12px;
+  margin-bottom: 8px; font-size: 12px;
+  min-height: 48px;
+}
+
+/* Safety */
+.safety-item {
+  display: flex; gap: 8px; margin-bottom: 6px;
+  font-size: 12px; align-items: flex-start;
+}
+.safety-n { color: #1ABFBF; font-weight: 700; min-width: 18px; }
+
+/* ── Print ── */
+@media print {
+  nav, .gen-form, .action-bar { display: none !important; }
+  .gen-layout { grid-template-columns: 1fr; height: auto; }
+  .gen-preview {
+    background: none; padding: 0;
+    display: block;
+  }
+  .a4-page {
+    box-shadow: none;
+    page-break-after: always;
+    margin: 0;
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">🧪 茲茲實驗課</span>
+  <a href="index.html">課程總覽</a>
+  <a href="teacher.html">老師工具</a>
+  <a href="generator.html" class="active">講義生成器</a>
+</nav>
+
+<div class="gen-layout">
+
+  <!-- ─── FORM PANEL ─── -->
+  <div class="gen-form">
+    <div style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:1rem">📝 講義生成器</div>
+
+    <!-- Basic Info -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        📋 基本資訊 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>實驗編號</label>
+            <input type="text" id="f-num" placeholder="例：4" oninput="render()">
+          </div>
+          <div class="form-group">
+            <label>分類</label>
+            <select id="f-cat" onchange="render()">
+              <option>物理</option><option>化學</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>實驗標題</label>
+          <input type="text" id="f-title" placeholder="例：風的掌控者：人造雲與轉轉飛天杯" oninput="render()">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>年級</label>
+            <input type="text" id="f-grade" value="小六升國七" oninput="render()">
+          </div>
+          <div class="form-group">
+            <label>日期</label>
+            <input type="text" id="f-date" placeholder="8/17（二）" oninput="render()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        1️⃣ 今天我們要探索什麼？ <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div class="form-group">
+          <label>引導段落</label>
+          <textarea id="f-intro" rows="3" placeholder="今天我們要認識……" oninput="render()"></textarea>
+        </div>
+        <div class="form-group">
+          <label>先猜猜看（3 個問題，每行一個）</label>
+          <textarea id="f-guess" rows="3" placeholder="Q1 ……&#10;Q2 ……&#10;Q3 ……" oninput="render()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Materials -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        2️⃣ 我的材料 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="mat-rows"></div>
+        <button class="add-row-btn" onclick="addMat()">＋ 新增材料</button>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        3️⃣ 科學家任務 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="task-rows"></div>
+        <button class="add-row-btn" onclick="addTask()">＋ 新增任務</button>
+        <div class="form-group" style="margin-top:0.7rem">
+          <label>我們要觀察（每行一項）</label>
+          <textarea id="f-observe" rows="3" placeholder="靜電會不會吸引物體？&#10;靜電會不會排斥物體？" oninput="render()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        4️⃣ 實驗步驟 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="parts-container"></div>
+        <button class="add-row-btn" onclick="addPart()">＋ 新增子實驗</button>
+      </div>
+    </div>
+
+    <!-- Observations -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        5️⃣ 觀察紀錄 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="obs-container"></div>
+        <div class="form-group" style="margin-top:0.7rem">
+          <label>結論文字（填空題）</label>
+          <input type="text" id="f-conclusion" placeholder="例：起電效果越強且距離越近，富蘭克林馬達旋轉的效果會" oninput="render()">
+        </div>
+        <div class="form-group">
+          <label>結論選項（逗號分隔）</label>
+          <input type="text" id="f-choices" placeholder="越明顯,越不明顯,沒差別" oninput="render()">
+        </div>
+        <div class="form-group">
+          <label>科學家小筆記</label>
+          <textarea id="f-sci-note" rows="3" oninput="render()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q&A -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        6️⃣ 動動腦 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="qa-rows"></div>
+        <button class="add-row-btn" onclick="addQA()">＋ 新增問題</button>
+      </div>
+    </div>
+
+    <!-- Safety -->
+    <div class="form-section">
+      <div class="form-section-header" onclick="toggleSection(this)">
+        7️⃣ 注意事項 <span class="toggle">▲</span>
+      </div>
+      <div class="form-section-body">
+        <div id="safety-rows"></div>
+        <button class="add-row-btn" onclick="addSafety()">＋ 新增注意事項</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.6rem;margin-top:0.5rem">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ 列印 / 儲存為 PDF</button>
+      <button class="btn btn-outline" onclick="saveData()">💾 儲存草稿</button>
+      <button class="btn btn-outline" onclick="loadData()">📂 載入草稿</button>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-light);margin-top:0.5rem">
+      列印時選「另存為 PDF」即可產生講義檔
+    </div>
+  </div>
+
+  <!-- ─── PREVIEW PANEL ─── -->
+  <div class="gen-preview">
+    <div style="font-size:0.8rem;color:#ddd;margin-bottom:1rem;align-self:flex-start">
+      預覽（A4 尺寸）
+    </div>
+    <div id="preview-root"></div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+// ── Dynamic row helpers ──
+let matList   = [{ name:'', qty:'', unit:'個', note:'' }];
+let taskList  = [{ text:'' }];
+let partList  = [{ title:'第一部分', steps:[''] }];
+let obsList   = [{ partTitle:'', rows:[{ q:'', choices:'□可以 □不可以', note:'' }] }];
+let qaList    = [{ text:'' }];
+let safetyList= [{ text:'' }];
+
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.toggle');
+  const collapsed = body.classList.toggle('collapsed');
+  toggle.textContent = collapsed ? '▼' : '▲';
+}
+
+// ── Render form rows ──
+function renderMats() {
+  const c = document.getElementById('mat-rows');
+  c.innerHTML = matList.map((m, i) => `
+  <div class="dynamic-row" style="grid-template-columns:1fr 60px 60px 1fr 24px">
+    <input placeholder="材料名稱" value="${esc(m.name)}" oninput="matList[${i}].name=this.value;render()">
+    <input placeholder="數量" value="${esc(m.qty)}"  oninput="matList[${i}].qty=this.value;render()">
+    <input placeholder="單位" value="${esc(m.unit)}" oninput="matList[${i}].unit=this.value;render()">
+    <input placeholder="備註" value="${esc(m.note)}" oninput="matList[${i}].note=this.value;render()">
+    <button class="del-btn" onclick="matList.splice(${i},1);renderMats();render()">✕</button>
+  </div>`).join('');
+}
+function addMat() { matList.push({name:'',qty:'',unit:'個',note:''}); renderMats(); render(); }
+
+function renderTasks() {
+  const c = document.getElementById('task-rows');
+  c.innerHTML = taskList.map((t, i) => `
+  <div class="dynamic-row" style="grid-template-columns:1fr 24px">
+    <input placeholder="任務描述" value="${esc(t.text)}" oninput="taskList[${i}].text=this.value;render()">
+    <button class="del-btn" onclick="taskList.splice(${i},1);renderTasks();render()">✕</button>
+  </div>`).join('');
+}
+function addTask() { taskList.push({text:''}); renderTasks(); render(); }
+
+function renderParts() {
+  const c = document.getElementById('parts-container');
+  c.innerHTML = partList.map((p, pi) => `
+  <div style="border:1px solid var(--border);border-radius:8px;padding:0.7rem;margin-bottom:0.8rem">
+    <div class="dynamic-row" style="grid-template-columns:1fr 24px;margin-bottom:0.5rem">
+      <input placeholder="子實驗名稱" value="${esc(p.title)}" oninput="partList[${pi}].title=this.value;render()">
+      <button class="del-btn" onclick="partList.splice(${pi},1);renderParts();render()">✕</button>
+    </div>
+    <div id="steps-${pi}">
+      ${p.steps.map((s, si) => `
+      <div class="dynamic-row" style="grid-template-columns:24px 1fr 24px;margin-bottom:0.3rem">
+        <span style="color:var(--teal);font-weight:700;font-size:0.85rem">${si+1}.</span>
+        <input placeholder="步驟說明" value="${esc(s)}" oninput="partList[${pi}].steps[${si}]=this.value;render()">
+        <button class="del-btn" onclick="partList[${pi}].steps.splice(${si},1);renderParts();render()">✕</button>
+      </div>`).join('')}
+    </div>
+    <button class="add-row-btn" style="font-size:0.74rem" onclick="partList[${pi}].steps.push('');renderParts();render()">＋ 新增步驟</button>
+  </div>`).join('');
+}
+function addPart() { partList.push({title:'第'+(partList.length+1)+'部分',steps:['']}); renderParts(); render(); }
+
+function renderObs() {
+  const c = document.getElementById('obs-container');
+  c.innerHTML = obsList.map((o, oi) => `
+  <div style="border:1px solid var(--border);border-radius:8px;padding:0.7rem;margin-bottom:0.8rem">
+    <div class="dynamic-row" style="grid-template-columns:1fr 24px;margin-bottom:0.5rem">
+      <input placeholder="對應子實驗名稱（選填）" value="${esc(o.partTitle)}" oninput="obsList[${oi}].partTitle=this.value;render()">
+      <button class="del-btn" onclick="obsList.splice(${oi},1);renderObs();render()">✕</button>
+    </div>
+    ${o.rows.map((r, ri) => `
+    <div class="dynamic-row" style="grid-template-columns:1fr 1fr 24px;margin-bottom:0.3rem">
+      <input placeholder="觀察項目" value="${esc(r.q)}" oninput="obsList[${oi}].rows[${ri}].q=this.value;render()">
+      <input placeholder="選項(□可以 □不可以)" value="${esc(r.choices)}" oninput="obsList[${oi}].rows[${ri}].choices=this.value;render()">
+      <button class="del-btn" onclick="obsList[${oi}].rows.splice(${ri},1);renderObs();render()">✕</button>
+    </div>`).join('')}
+    <button class="add-row-btn" style="font-size:0.74rem" onclick="obsList[${oi}].rows.push({q:'',choices:'□是 □否',note:''});renderObs();render()">＋ 新增觀察項目</button>
+  </div>`).join('');
+}
+function addObs() { obsList.push({partTitle:'',rows:[{q:'',choices:'□是 □否',note:''}]}); renderObs(); render(); }
+
+function renderQA() {
+  const c = document.getElementById('qa-rows');
+  c.innerHTML = qaList.map((q, i) => `
+  <div class="dynamic-row" style="grid-template-columns:1fr 24px">
+    <input placeholder="問題" value="${esc(q.text)}" oninput="qaList[${i}].text=this.value;render()">
+    <button class="del-btn" onclick="qaList.splice(${i},1);renderQA();render()">✕</button>
+  </div>`).join('');
+}
+function addQA() { qaList.push({text:''}); renderQA(); render(); }
+
+function renderSafety() {
+  const c = document.getElementById('safety-rows');
+  c.innerHTML = safetyList.map((s, i) => `
+  <div class="dynamic-row" style="grid-template-columns:1fr 24px">
+    <input placeholder="注意事項" value="${esc(s.text)}" oninput="safetyList[${i}].text=this.value;render()">
+    <button class="del-btn" onclick="safetyList.splice(${i},1);renderSafety();render()">✕</button>
+  </div>`).join('');
+}
+function addSafety() { safetyList.push({text:''}); renderSafety(); render(); }
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ── Build HTML preview ──
+function render() {
+  const num   = document.getElementById('f-num').value.trim() || 'N';
+  const title = document.getElementById('f-title').value.trim() || '實驗標題';
+  const grade = document.getElementById('f-grade').value.trim() || '';
+  const date  = document.getElementById('f-date').value.trim() || '';
+  const cat   = document.getElementById('f-cat').value;
+  const intro = document.getElementById('f-intro').value.trim();
+  const guess = document.getElementById('f-guess').value.trim().split('\n').filter(Boolean);
+  const observe = document.getElementById('f-observe').value.trim().split('\n').filter(Boolean);
+  const conclText = document.getElementById('f-conclusion').value.trim();
+  const choices   = document.getElementById('f-choices').value.trim().split(',').filter(Boolean);
+  const sciNote   = document.getElementById('f-sci-note').value.trim();
+
+  // Cover
+  const coverHtml = `
+  <div class="a4-page">
+    <div class="a4-cover">
+      <div class="cover-stripe-top"></div>
+      <div class="cover-stripe-mid"></div>
+      <div class="cover-exp-num">茲茲國小實驗 ${num}</div>
+      <div class="cover-title">${title}</div>
+      <div class="cover-stripe-bot"></div>
+      <div class="cover-deco-bot"></div>
+    </div>
+  </div>`;
+
+  // Page header
+  function pageHeader(pageNum) {
+    return `
+    <div class="page-header">
+      <span class="page-header-org">${pageNum} &nbsp; 茲茲文教 ${grade}</span>
+      <div class="page-header-icon">🧪</div>
+      <div class="page-header-title">${title}</div>
+      <div class="page-header-icon">🧪</div>
+    </div>`;
+  }
+
+  // Section 1: 今天我們要探索什麼？
+  const sec1 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">1</div>
+      <div class="hs-title">今天我們要探索什麼？</div>
+    </div>
+    <div class="hs-body">
+      <p style="text-indent:2em;margin-bottom:8px">${intro || '（輸入引導段落）'}</p>
+      ${guess.length ? `
+      <div class="guess-box">
+        <div class="label">先猜猜看：寫下你的猜測：</div>
+        ${guess.map(q => `<div>${q}</div>`).join('')}
+      </div>` : ''}
+    </div>
+  </div>`;
+
+  // Section 2: 材料
+  const sec2 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">2</div>
+      <div class="hs-title">我的材料（打勾確認）</div>
+    </div>
+    <div class="hs-body">
+      <table class="hs-table">
+        <thead><tr><th>材料名稱</th><th>數量</th><th>備註</th></tr></thead>
+        <tbody>
+          ${matList.filter(m => m.name).map(m => `
+          <tr><td>□ ${m.name}</td><td>${m.qty} ${m.unit}</td><td>${m.note}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  // Section 3: 科學家任務
+  const sec3 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">3</div>
+      <div class="hs-title">我的科學家任務</div>
+    </div>
+    <div class="hs-body">
+      <div class="task-box">
+        <div class="remind">重要提醒：今天我們要完成以下任務（完成後請在框框中打勾）</div>
+        ${taskList.filter(t => t.text).map((t,i) => `<div>□ 任務${['一','二','三','四','五'][i] || i+1}：${t.text}</div>`).join('')}
+        ${observe.length ? `
+        <div style="margin-top:6px">我們要觀察：</div>
+        ${observe.map(o => `<div>${o}　　　　</div>`).join('')}` : ''}
+      </div>
+    </div>
+  </div>`;
+
+  // Section 4: 步驟
+  const sec4 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">4</div>
+      <div class="hs-title">實驗步驟（跟著老師一步一步做）</div>
+    </div>
+    <div class="hs-body">
+      ${partList.map(p => `
+      <div class="step-part">
+        <div class="step-part-title">${p.title}：</div>
+        ${p.steps.filter(Boolean).map((s, si) => `
+        <div class="step-item">
+          <span class="step-n">${si+1}.</span>
+          <span>${s}</span>
+        </div>`).join('')}
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  // Section 5: 觀察紀錄
+  const sec5 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">5</div>
+      <div class="hs-title">小小科學家：我的觀察紀錄</div>
+    </div>
+    <div class="hs-body">
+      ${obsList.map(o => `
+      ${o.partTitle ? `<div style="font-weight:700;font-size:13px;margin-bottom:6px">${o.partTitle}</div>` : ''}
+      <table class="obs-table">
+        <thead><tr><th>觀察項目</th><th>結果</th><th>我的發現</th></tr></thead>
+        <tbody>
+          ${o.rows.filter(r => r.q).map(r => `
+          <tr>
+            <td>${r.q}</td>
+            <td>${r.choices}</td>
+            <td></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`).join('')}
+      ${conclText ? `
+      <div class="conclusion" style="margin-top:10px">
+        <strong>我們的結論：</strong>${conclText}<br>
+        ${choices.map(c => `□ ${c.trim()}`).join('　　')}
+      </div>` : ''}
+      ${sciNote ? `
+      <div class="sci-note">
+        <span class="label">科學家小筆記：</span>${sciNote}
+      </div>` : ''}
+    </div>
+  </div>`;
+
+  // Section 6: 動動腦
+  const sec6 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">6</div>
+      <div class="hs-title">動動腦－問題與討論</div>
+    </div>
+    <div class="hs-body">
+      ${qaList.filter(q => q.text).map((q, i) => `
+      <div class="qa-item">
+        <strong>問題 ${i+1}－</strong>${q.text}
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  // Section 7: 注意事項
+  const sec7 = `
+  <div class="hs">
+    <div class="hs-header">
+      <div class="hs-num">7</div>
+      <div class="hs-title">注意事項</div>
+    </div>
+    <div class="hs-body">
+      ${safetyList.filter(s => s.text).map((s, i) => `
+      <div class="safety-item">
+        <span class="safety-n">${i+1}.</span>
+        <span>${s.text}</span>
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  // Page 1: 封面
+  // Page 2: S1+S2+S3
+  // Page 3: S4
+  // Page 4: S5+S6+S7
+  const page2 = `
+  <div class="a4-page">
+    <div class="a4-content">
+      ${pageHeader(1)}
+      ${sec1}
+      ${sec2}
+      ${sec3}
+    </div>
+  </div>`;
+
+  const page3 = `
+  <div class="a4-page">
+    <div class="a4-content">
+      ${pageHeader(2)}
+      ${sec4}
+    </div>
+  </div>`;
+
+  const page4 = `
+  <div class="a4-page">
+    <div class="a4-content">
+      ${pageHeader(3)}
+      ${sec5}
+      ${sec6}
+      ${sec7}
+    </div>
+  </div>`;
+
+  document.getElementById('preview-root').innerHTML = coverHtml + page2 + page3 + page4;
+}
+
+// ── Save / Load draft ──
+function saveData() {
+  const draft = {
+    num: document.getElementById('f-num').value,
+    title: document.getElementById('f-title').value,
+    grade: document.getElementById('f-grade').value,
+    date: document.getElementById('f-date').value,
+    cat: document.getElementById('f-cat').value,
+    intro: document.getElementById('f-intro').value,
+    guess: document.getElementById('f-guess').value,
+    observe: document.getElementById('f-observe').value,
+    conclusion: document.getElementById('f-conclusion').value,
+    choices: document.getElementById('f-choices').value,
+    sciNote: document.getElementById('f-sci-note').value,
+    matList, taskList, partList, obsList, qaList, safetyList
+  };
+  localStorage.setItem('handout_draft', JSON.stringify(draft));
+  alert('草稿已儲存！');
+}
+
+function loadData() {
+  const raw = localStorage.getItem('handout_draft');
+  if (!raw) { alert('沒有儲存的草稿'); return; }
+  const d = JSON.parse(raw);
+  document.getElementById('f-num').value      = d.num || '';
+  document.getElementById('f-title').value    = d.title || '';
+  document.getElementById('f-grade').value    = d.grade || '小六升國七';
+  document.getElementById('f-date').value     = d.date || '';
+  document.getElementById('f-cat').value      = d.cat || '物理';
+  document.getElementById('f-intro').value    = d.intro || '';
+  document.getElementById('f-guess').value    = d.guess || '';
+  document.getElementById('f-observe').value  = d.observe || '';
+  document.getElementById('f-conclusion').value = d.conclusion || '';
+  document.getElementById('f-choices').value  = d.choices || '';
+  document.getElementById('f-sci-note').value = d.sciNote || '';
+  matList = d.matList || matList;
+  taskList = d.taskList || taskList;
+  partList = d.partList || partList;
+  obsList = d.obsList || obsList;
+  qaList = d.qaList || qaList;
+  safetyList = d.safetyList || safetyList;
+  renderAll();
+  render();
+  alert('草稿已載入！');
+}
+
+function renderAll() {
+  renderMats(); renderTasks(); renderParts();
+  renderObs(); renderQA(); renderSafety();
+}
+
+// Init
+renderAll();
+render();
+</script>
+</body>
+</html>
