@@ -94,10 +94,24 @@
 .assist-item {
   padding: 0.45rem 0.75rem;
   border-left: 3px solid var(--orange);
-  background: #2A1E10;
+  background: var(--teal-light);
   margin-bottom: 0.4rem;
   font-size: 0.86rem; border-radius: 0 6px 6px 0;
 }
+
+/* Course toggle */
+.course-toggle {
+  display: flex; gap: 0; margin: 0 1.2rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.course-toggle-btn {
+  flex: 1; border: none; cursor: pointer; font-family: inherit;
+  font-size: 0.78rem; font-weight: 600; padding: 0.45rem 0.4rem;
+  background: var(--white); color: var(--text-light);
+  transition: background 0.15s, color 0.15s;
+}
+.course-toggle-btn.active { background: var(--teal); color: #fff; }
+.course-toggle-btn:not(:last-child) { border-right: 1.5px solid var(--border); }
 
 @media print {
   nav, .sidebar, .panel-header button { display: none !important; }
@@ -120,6 +134,11 @@
 
 <div class="tool-layout">
   <div class="sidebar">
+    <div class="sidebar-title" style="margin-bottom:0.6rem">選擇課程</div>
+    <div class="course-toggle">
+      <button class="course-toggle-btn active" id="btn-elementary" onclick="switchCourse('elementary')">🔬 國小</button>
+      <button class="course-toggle-btn" id="btn-middle" onclick="switchCourse('middle')">🧲 國中</button>
+    </div>
     <div class="sidebar-title">選擇堂次</div>
     <div id="sidebar-sessions"></div>
     <div style="padding:1.2rem 1.2rem 0; border-top:1px solid var(--border); margin-top:1rem;">
@@ -137,48 +156,81 @@
 </div>
 
 <script src="js/data.js"></script>
+<script src="js/data-middle.js?v=2"></script>
 <script>
+let currentCourse = 'elementary';
 let currentSession = null;
 
-// Build sidebar
-const sidebar = document.getElementById('sidebar-sessions');
-COURSE.sessions.forEach(s => {
-  const btn = document.createElement('button');
-  btn.className = 'sidebar-btn';
-  btn.dataset.id = s.id;
-  const statusIcon = s.status === 'ready' ? '✅' : '🔧';
-  btn.innerHTML = `${statusIcon} 第 ${s.id} 堂<br><span class="sidebar-status">${s.dateDisplay} ${s.category}</span>`;
-  btn.onclick = () => showSession(s.id);
-  sidebar.appendChild(btn);
-});
+function getCourseData() {
+  return currentCourse === 'middle' ? COURSE_MIDDLE : COURSE;
+}
+function storageKey(type, sessionId) {
+  const prefix = currentCourse === 'middle' ? 'm' : 'e';
+  return `${type}_${prefix}_${sessionId}`;
+}
 
 function getChecks(sessionId) {
-  return JSON.parse(localStorage.getItem(`checks_${sessionId}`) || '{}');
+  return JSON.parse(localStorage.getItem(storageKey('checks', sessionId)) || '{}');
 }
 function saveChecks(sessionId, checks) {
-  localStorage.setItem(`checks_${sessionId}`, JSON.stringify(checks));
+  localStorage.setItem(storageKey('checks', sessionId), JSON.stringify(checks));
 }
 function getNotes(sessionId) {
-  return localStorage.getItem(`notes_${sessionId}`) || '';
+  return localStorage.getItem(storageKey('notes', sessionId)) || '';
 }
 function saveNotes(sessionId, val) {
-  localStorage.setItem(`notes_${sessionId}`, val);
+  localStorage.setItem(storageKey('notes', sessionId), val);
 }
+
+function switchCourse(type) {
+  currentCourse = type;
+  currentSession = null;
+  document.getElementById('btn-elementary').classList.toggle('active', type === 'elementary');
+  document.getElementById('btn-middle').classList.toggle('active', type === 'middle');
+  buildSidebar();
+  showSession(1);
+}
+
+const sidebar = document.getElementById('sidebar-sessions');
+
+function buildSidebar() {
+  sidebar.innerHTML = '';
+  getCourseData().sessions.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'sidebar-btn';
+    btn.dataset.id = s.id;
+    const statusIcon = s.status === 'ready' ? '✅' : '🔧';
+    btn.innerHTML = `${statusIcon} 第 ${s.id} 堂<br><span class="sidebar-status">${s.dateDisplay} ${s.category}</span>`;
+    btn.onclick = () => showSession(s.id);
+    sidebar.appendChild(btn);
+  });
+}
+buildSidebar();
 
 function showSession(id) {
   currentSession = id;
-  const s = COURSE.sessions.find(x => x.id === id);
+  const s = getCourseData().sessions.find(x => x.id === id);
+  if (!s) return;
 
-  // Update sidebar active
   document.querySelectorAll('.sidebar-btn[data-id]').forEach(b => {
     b.classList.toggle('active', parseInt(b.dataset.id) === id);
   });
+
+  // Pending session — show placeholder
+  if (s.status === 'pending') {
+    document.getElementById('main-panel').innerHTML = `
+    <div style="text-align:center;padding:4rem 2rem;color:var(--text-light)">
+      <div style="font-size:2.5rem;margin-bottom:1rem">🔧</div>
+      <div style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">第 ${s.id} 堂｜實驗尚未確認</div>
+      <div style="font-size:0.88rem">此堂次的實驗內容尚未規劃，課前準備內容待補充。</div>
+    </div>`;
+    return;
+  }
 
   const checks = getChecks(id);
   const checkedCount = Object.values(checks).filter(Boolean).length;
   const total = s.materials.length;
 
-  // Group materials by prepBy
   const byFuda = s.materials.filter(m => m.prepBy === '福大老師');
   const byZhou = s.materials.filter(m => m.prepBy !== '福大老師');
 
@@ -294,8 +346,7 @@ function toggleCheck(sessionId, key, val) {
   const idx   = key.split('_')[1];
   const item  = document.getElementById(`item_${group}_${idx}`);
   if (item) item.classList.toggle('done', val);
-  // Update progress
-  const s = COURSE.sessions.find(x => x.id === sessionId);
+  const s = getCourseData().sessions.find(x => x.id === sessionId);
   const checkedCount = Object.values(checks).filter(Boolean).length;
   const pct = Math.round(checkedCount / s.materials.length * 100);
   const fill = document.getElementById('prog-fill');
@@ -316,9 +367,20 @@ function printMaterials() {
   window.print();
 }
 
-// Auto-select session from URL param ?s=N, else first session
-const _urlSession = parseInt(new URLSearchParams(window.location.search).get('s'));
-showSession(_urlSession && _urlSession >= 1 && _urlSession <= COURSE.sessions.length ? _urlSession : 1);
+// Auto-select course and session from URL params ?course=middle&s=N
+const _urlParams = new URLSearchParams(window.location.search);
+const _urlS = parseInt(_urlParams.get('s')) || 1;
+if (_urlParams.get('course') === 'middle') {
+  currentCourse = 'middle';
+  document.getElementById('btn-elementary').classList.remove('active');
+  document.getElementById('btn-middle').classList.add('active');
+  buildSidebar();
+  const _maxM = COURSE_MIDDLE.sessions.length;
+  showSession(_urlS >= 1 && _urlS <= _maxM ? _urlS : 1);
+} else {
+  const _maxE = COURSE.sessions.length;
+  showSession(_urlS >= 1 && _urlS <= _maxE ? _urlS : 1);
+}
 </script>
 </body>
 </html>
