@@ -1,17 +1,17 @@
 :root {
-  --teal: #1ABFBF;
-  --teal-dark: #0F9090;
-  --teal-light: #E6F9F9;
-  --teal-mid: #A8E6E6;
-  --red: #E05252;
+  --teal: #C8A84B;
+  --teal-dark: #8B6E2A;
+  --teal-light: #FBF5E4;
+  --teal-mid: #DDB860;
+  --red: #8B1010;
   --orange: #E89020;
   --green: #3BB57F;
   --text: #2C3E50;
   --text-light: #5A7085;
-  --border: #D0E6E6;
-  --bg: #F4FAFA;
+  --border: #E0D0A0;
+  --bg: #FAF7F0;
   --white: #FFFFFF;
-  --shadow: 0 2px 12px rgba(26,191,191,0.10);
+  --shadow: 0 2px 12px rgba(155,120,50,0.12);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,6 +42,14 @@ nav .brand {
   font-size: 1rem;
   letter-spacing: 0.03em;
   margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+nav .brand img {
+  height: 30px;
+  width: auto;
+  display: block;
 }
 nav a {
   color: rgba(255,255,255,0.85);
@@ -97,7 +105,7 @@ nav a:hover, nav a.active {
   overflow: hidden;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.session-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,191,191,0.18); }
+.session-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196,168,75,0.18); }
 .session-card.risk-high { border-left-color: var(--red); }
 .session-card.risk-med  { border-left-color: var(--orange); }
 
@@ -249,7 +257,7 @@ nav a:hover, nav a.active {
 .form-group select:focus {
   outline: none;
   border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(26,191,191,0.12);
+  box-shadow: 0 0 0 3px rgba(196,168,75,0.12);
 }
 .form-group textarea { resize: vertical; min-height: 80px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
