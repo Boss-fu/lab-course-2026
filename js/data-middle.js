@@ -1,9 +1,10 @@
 const COURSE_MIDDLE = {
-  name: "茲茲國中實驗課",
+  name: "茲茲國中部暑期實驗課",
   year: 2026,
-  grade: "國中生（含升國一）",
-  students: "10–15 人",
-  time: "每次 10:00–12:00（共 120 分鐘）",
+  grade: "小六升國七、國七生國八",
+  students: "約 20 人",
+  time: "每次 1.5–2 小時",
+  period: "2026 年暑期",
   teacher: "福大老師",
   sessions: [
     {

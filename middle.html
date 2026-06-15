@@ -25,13 +25,14 @@
     <span id="hero-grade"></span>
     <span id="hero-students"></span>
     <span id="hero-time"></span>
+    <span id="hero-period"></span>
   </div>
 </div>
 
 <div class="summary-bar">
   <div class="summary-item"><span class="dot dot-green"></span> <span id="count-ready"></span> 堂講義已完成</div>
   <div class="summary-item"><span class="dot dot-orange"></span> <span id="count-pending"></span> 堂講義製作中</div>
-  <div class="summary-item"><span class="dot dot-teal"></span> 共 5 堂</div>
+  <div class="summary-item"><span class="dot dot-teal"></span> 共 5 堂 ｜ 2026 暑期</div>
 </div>
 
 <div class="container">
@@ -46,6 +47,7 @@
         <th>日期</th>
         <th>課程主題</th>
         <th>講義狀態</th>
+        <th>預計完成</th>
       </tr>
     </thead>
     <tbody id="progress-body"></tbody>
@@ -55,9 +57,10 @@
 <script src="js/data-middle.js"></script>
 <script>
 const c = COURSE_MIDDLE;
-document.getElementById('hero-grade').textContent = c.grade;
+document.getElementById('hero-grade').textContent   = c.grade;
 document.getElementById('hero-students').textContent = c.students;
-document.getElementById('hero-time').textContent = c.time.replace('每次 ', '');
+document.getElementById('hero-time').textContent    = c.time.replace('每次 ', '');
+document.getElementById('hero-period').textContent  = c.period;
 
 const ready   = c.sessions.filter(s => s.status === 'ready').length;
 const pending = c.sessions.filter(s => s.status === 'pending').length;
@@ -72,12 +75,20 @@ function riskClass(level) {
 
 const grid = document.getElementById('sessions-grid');
 c.sessions.forEach(s => {
+  const isPending = s.status === 'pending';
+
   const handoutBtn = s.handout
     ? `<a href="${s.handout}" target="_blank">📄 開啟講義</a>`
-    : `<span class="no-handout">⏳ 講義製作中${s.handoutDeadline ? '（' + s.handoutDeadline + '）' : ''}</span>`;
+    : `<span class="no-handout">⏳ ${isPending && !s.title.includes('確認') ? '講義製作中' : '實驗尚未確認'}</span>`;
 
-  const riskLabel = ['', '低', '中', '中高', '高'][s.riskLevel];
+  const riskLabel   = s.riskLevel ? ['', '低', '中', '中高', '高'][s.riskLevel] : '—';
   const riskBadgeClass = s.riskLevel >= 3 ? 'high' : '';
+  const catBadge    = s.category !== '待定' ? s.category : '待定';
+  const diffBadge   = s.difficulty !== '—' ? s.difficulty : '—';
+
+  const takeHomeStr = (!s.takeHome || s.takeHome === '—' || s.takeHome === '無')
+    ? (s.takeHome === '無' ? '無成品帶回' : '待定')
+    : '帶回：' + s.takeHome;
 
   grid.innerHTML += `
   <div class="session-card ${riskClass(s.riskLevel)}">
@@ -89,8 +100,8 @@ c.sessions.forEach(s => {
       </div>
     </div>
     <div class="card-badges">
-      <span class="badge badge-cat">${s.category}</span>
-      <span class="badge badge-diff">難度：${s.difficulty}</span>
+      <span class="badge badge-cat">${catBadge}</span>
+      <span class="badge badge-diff">難度：${diffBadge}</span>
       <span class="badge badge-risk ${riskBadgeClass}">風險：${riskLabel}</span>
       <span class="badge ${s.status === 'ready' ? 'badge-ready' : 'badge-pending'}">
         ${s.status === 'ready' ? '✅ 講義完成' : '🔧 製作中'}
@@ -101,7 +112,7 @@ c.sessions.forEach(s => {
     </div>
     <div class="card-footer">
       ${handoutBtn}
-      <span class="take-home">🎁 ${s.takeHome !== '無' ? '帶回：' + s.takeHome : '無成品帶回'}</span>
+      <span class="take-home">🎁 ${takeHomeStr}</span>
     </div>
   </div>`;
 });
@@ -111,12 +122,14 @@ c.sessions.forEach(s => {
   const statusHtml = s.status === 'ready'
     ? '<span class="progress-status status-ready">✅ 已完成</span>'
     : '<span class="progress-status status-pending">🔧 製作中</span>';
+  const deadline = s.status === 'ready' ? '—' : (s.handoutDeadline || '待定');
   tbody.innerHTML += `
   <tr>
     <td>第 ${s.id} 堂</td>
     <td>${s.dateDisplay}</td>
     <td>${s.title}</td>
     <td>${statusHtml}</td>
+    <td>${deadline}</td>
   </tr>`;
 });
 </script>
