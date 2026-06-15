@@ -100,6 +100,16 @@
 .cat-玻璃實驗器材 { background: #E8FFF0; color: #1A7040; }
 .cat-非玻璃實驗器材 { background: #E0F8FF; color: #1A6677; }
 .cat-一次性食材  { background: #FFFFF0; color: #777700; }
+
+/* Edit mode */
+.mat-edit-banner { background:#FFF8E0; border:1.5px solid #E8C840; border-radius:8px; padding:0.5rem 1rem; margin:0.8rem 2rem; display:flex; align-items:center; justify-content:space-between; font-size:0.83rem; color:#7A5000; gap:0.5rem; flex-wrap:wrap; }
+.edit-cell-inp { padding:0.28rem 0.45rem; border:1.5px solid var(--border); border-radius:5px; font-family:inherit; font-size:0.82rem; color:var(--text); background:var(--white); width:100%; box-sizing:border-box; }
+.edit-cell-inp:focus { outline:none; border-color:var(--teal); }
+.row-del-btn { background:none; border:1.5px solid #EEB0B0; color:#CC3333; border-radius:4px; padding:0.15rem 0.45rem; font-size:0.75rem; cursor:pointer; white-space:nowrap; }
+.row-del-btn:hover { background:#FFE8E8; }
+.row-add-btn { background:none; border:1.5px dashed var(--teal); color:var(--teal-dark); border-radius:6px; padding:0.3rem; font-size:0.82rem; cursor:pointer; width:100%; margin-top:0.5rem; font-family:inherit; }
+.row-add-btn:hover { background:var(--teal-light); }
+.mat-edit-active { background:var(--teal); color:#fff; border-color:var(--teal); }
 </style>
 </head>
 <body>
@@ -122,8 +132,16 @@
 <div class="stats-bar" id="stats-bar"></div>
 
 <div class="tabs" style="padding:0 2rem;background:var(--white);border-bottom:2px solid var(--border)">
-  <button class="tab active" onclick="switchTab('purchase', this)">採購清單</button>
+  <button class="tab active" onclick="switchTab('purchase', this)">實驗器材清單</button>
   <button class="tab" onclick="switchTab('experiments', this)">實驗總表</button>
+  <button class="tab" id="mat-edit-btn" onclick="toggleMatEdit(this)" style="margin-left:auto">✏️ 編輯器材</button>
+</div>
+<div class="mat-edit-banner" id="mat-edit-banner" style="display:none">
+  <span>✏️ 編輯模式 — 點格子直接修改，離開格子自動儲存</span>
+  <div style="display:flex;gap:0.4rem">
+    <button class="btn" style="font-size:0.81rem" onclick="exportMatData()">📥 匯出 JS 檔</button>
+    <button class="btn btn-outline" style="font-size:0.81rem" onclick="resetMatData()">↩️ 還原預設</button>
+  </div>
 </div>
 
 <!-- 採購清單 tab -->
@@ -179,56 +197,156 @@
 <script src="js/materials-data.js?v=2"></script>
 <script>
 
+// ── Data layer (localStorage > JS default) ──
+let _matCache = null;
+let matEditMode = false;
+
+function getMatData() {
+  if (_matCache) return _matCache;
+  const saved = localStorage.getItem('materialsEdit');
+  _matCache = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(MATERIALS_LIST));
+  return _matCache;
+}
+
+function saveMatData() {
+  localStorage.setItem('materialsEdit', JSON.stringify(_matCache));
+}
+
+function resetMatData() {
+  if (!confirm('確定還原所有器材清單到預設值？所有修改將消失。')) return;
+  localStorage.removeItem('materialsEdit');
+  _matCache = null;
+  renderStats();
+  renderTable();
+}
+
+function exportMatData() {
+  const data = getMatData();
+  const content = `const MATERIALS_LIST = ${JSON.stringify(data, null, 2)};\n`;
+  const blob = new Blob([content], {type: 'text/javascript'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'materials-data-export.js';
+  a.click();
+}
+
+function toggleMatEdit(btn) {
+  matEditMode = !matEditMode;
+  btn.textContent = matEditMode ? '👁 預覽' : '✏️ 編輯器材';
+  btn.classList.toggle('mat-edit-active', matEditMode);
+  document.getElementById('mat-edit-banner').style.display = matEditMode ? '' : 'none';
+  renderTable();
+  renderStats();
+}
+
 // ── Stats ──
 function renderStats() {
-  const total   = MATERIALS_LIST.length;
-  const bought  = MATERIALS_LIST.filter(m => m.purchaseStatus && m.purchaseStatus.includes('已購買')).length;
-  const arrived = MATERIALS_LIST.filter(m => m.arrivalStatus && m.arrivalStatus.includes('已到貨')).length;
+  const list = getMatData();
+  const total   = list.length;
+  const bought  = list.filter(m => m.purchaseStatus && m.purchaseStatus.includes('已購買')).length;
+  const arrived = list.filter(m => m.arrivalStatus && m.arrivalStatus.includes('已到貨')).length;
   const pending = total - bought;
   document.getElementById('stats-bar').innerHTML = `
     <div class="stat">共 <strong>${total}</strong> 項器材</div>
     <div class="stat"><span class="s-bought">已購買</span> <strong>${bought}</strong> 項</div>
     <div class="stat"><span class="s-arrived">已到貨</span> <strong>${arrived}</strong> 項</div>
     <div class="stat"><span class="s-pending">待購買</span> <strong>${pending}</strong> 項</div>
+    ${matEditMode ? `<div class="stat" style="margin-left:auto"><button class="btn" style="font-size:0.8rem" onclick="addMatRow()">＋ 新增器材</button></div>` : ''}
   `;
 }
 
 // ── Materials table ──
-function renderTable() {
+const CAT_LIST = ['耗材','工具','文具','安全','粉狀藥品','液體藥品','玻璃實驗器材','非玻璃實驗器材','一次性食材'];
+const STATUS_LIST = ['','已購買','補習班準備','俊瑋已購買','福大可借到'];
+const ARRIVAL_LIST = ['','已到貨'];
+
+function saveMatRow(i, field, value) {
+  getMatData()[i][field] = value || null;
+  saveMatData();
+  if (['purchaseStatus','arrivalStatus'].includes(field)) renderStats();
+}
+
+function deleteMatRow(i) {
+  if (!confirm(`確定刪除「${getMatData()[i].name}」？`)) return;
+  getMatData().splice(i, 1);
+  saveMatData();
+  renderStats();
+  renderTable();
+}
+
+function addMatRow() {
+  getMatData().push({name:'新器材',spec:null,qty:null,cat:'耗材',unitPrice:null,shares:null,note:null,purchaseStatus:null,arrivalStatus:null,channel:null});
+  saveMatData();
+  renderStats();
+  renderTable();
+  // Scroll to bottom
   const tbody = document.getElementById('mat-tbody');
-  tbody.innerHTML = MATERIALS_LIST.map((m, i) => {
-    const purchaseBadge = m.purchaseStatus
-      ? m.purchaseStatus.includes('已購買') ? `<span class="s-bought">${m.purchaseStatus}</span>`
-      : `<span class="s-school">${m.purchaseStatus}</span>`
-      : '<span class="s-pending">待購買</span>';
+  tbody.lastElementChild?.scrollIntoView({block:'center'});
+}
 
-    const arrivalBadge = m.arrivalStatus
-      ? `<span class="s-arrived">${m.arrivalStatus}</span>`
-      : '—';
+function renderTable() {
+  const list = getMatData();
+  const tbody = document.getElementById('mat-tbody');
 
-    let channel = '—';
-    if (m.channel) {
-      if (m.channel.startsWith('http')) {
-        channel = `<a href="${m.channel}" target="_blank" style="color:var(--teal-dark);font-size:0.78rem">🔗 購買連結</a>`;
-      } else {
-        channel = m.channel;
-      }
+  if (matEditMode) {
+    const catOpts = CAT_LIST.map(c=>`<option>${c}</option>`).join('');
+    tbody.innerHTML = list.map((m, i) => {
+      const purchaseOpts = STATUS_LIST.map(s=>`<option ${m.purchaseStatus===s?'selected':''}>${s}</option>`).join('');
+      const arrivalOpts  = ARRIVAL_LIST.map(s=>`<option ${m.arrivalStatus===s?'selected':''}>${s}</option>`).join('');
+      const catOptsSel   = CAT_LIST.map(c=>`<option ${m.cat===c?'selected':''}>${c}</option>`).join('');
+      return `
+      <tr data-name="${m.name||''}" data-cat="${m.cat||''}" data-bought="${m.purchaseStatus||''}" data-arrived="${m.arrivalStatus||''}">
+        <td><input class="edit-cell-inp" value="${m.name||''}" placeholder="名稱" onchange="saveMatRow(${i},'name',this.value)"></td>
+        <td><input class="edit-cell-inp" style="width:120px" value="${m.spec||''}" placeholder="規格" onchange="saveMatRow(${i},'spec',this.value)"></td>
+        <td><select class="edit-cell-inp" style="width:100px" onchange="saveMatRow(${i},'cat',this.value)">${catOptsSel}</select></td>
+        <td><input class="edit-cell-inp" style="width:60px" value="${m.qty||''}" placeholder="數量" onchange="saveMatRow(${i},'qty',this.value)"></td>
+        <td style="white-space:normal;min-width:120px"><input class="edit-cell-inp" value="${m.note||''}" placeholder="備註/儲存位置" onchange="saveMatRow(${i},'note',this.value)"></td>
+        <td><select class="edit-cell-inp" style="width:110px" onchange="saveMatRow(${i},'purchaseStatus',this.value)">${purchaseOpts}</select></td>
+        <td><select class="edit-cell-inp" style="width:80px" onchange="saveMatRow(${i},'arrivalStatus',this.value)">${arrivalOpts}</select></td>
+        <td><input class="edit-cell-inp" style="width:100px" value="${m.channel||''}" placeholder="通路/URL" onchange="saveMatRow(${i},'channel',this.value)"></td>
+        <td><button class="row-del-btn" onclick="deleteMatRow(${i})">🗑 刪除</button></td>
+      </tr>`;
+    }).join('');
+    // Edit mode: add delete column header
+    const thead = document.querySelector('#mat-table thead tr');
+    if (thead && !thead.querySelector('.del-th')) {
+      const th = document.createElement('th');
+      th.className = 'del-th';
+      th.style.background = 'var(--red)';
+      th.textContent = '操作';
+      thead.appendChild(th);
     }
+  } else {
+    // Remove delete column header if present
+    const delTh = document.querySelector('#mat-table thead .del-th');
+    if (delTh) delTh.remove();
 
-    return `
-    <tr data-name="${m.name}" data-cat="${m.cat}"
-        data-bought="${m.purchaseStatus || ''}"
-        data-arrived="${m.arrivalStatus || ''}">
-      <td><strong>${m.name}</strong></td>
-      <td>${m.spec || '—'}</td>
-      <td><span class="cat-tag cat-${m.cat}">${m.cat}</span></td>
-      <td>${m.qty || '—'}</td>
-      <td style="white-space:normal;max-width:180px;font-size:0.8rem">${m.note || '—'}</td>
-      <td>${purchaseBadge}</td>
-      <td>${arrivalBadge}</td>
-      <td style="font-size:0.8rem">${channel}</td>
-    </tr>`;
-  }).join('');
+    tbody.innerHTML = list.map((m, i) => {
+      const purchaseBadge = m.purchaseStatus
+        ? m.purchaseStatus.includes('已購買')
+          ? `<span class="s-bought">${m.purchaseStatus}</span>`
+          : `<span class="s-school">${m.purchaseStatus}</span>`
+        : '<span class="s-pending">待購買</span>';
+      const arrivalBadge = m.arrivalStatus ? `<span class="s-arrived">${m.arrivalStatus}</span>` : '—';
+      let channel = '—';
+      if (m.channel) {
+        channel = m.channel.startsWith('http')
+          ? `<a href="${m.channel}" target="_blank" style="color:var(--teal-dark);font-size:0.78rem">🔗 購買連結</a>`
+          : m.channel;
+      }
+      return `
+      <tr data-name="${m.name||''}" data-cat="${m.cat||''}" data-bought="${m.purchaseStatus||''}" data-arrived="${m.arrivalStatus||''}">
+        <td><strong>${m.name}</strong></td>
+        <td>${m.spec||'—'}</td>
+        <td><span class="cat-tag cat-${m.cat}">${m.cat}</span></td>
+        <td>${m.qty||'—'}</td>
+        <td style="white-space:normal;max-width:180px;font-size:0.8rem">${m.note||'—'}</td>
+        <td>${purchaseBadge}</td>
+        <td>${arrivalBadge}</td>
+        <td style="font-size:0.8rem">${channel}</td>
+      </tr>`;
+    }).join('');
+  }
   updateCount();
 }
 
@@ -236,20 +354,17 @@ function filterTable() {
   const search = document.getElementById('search').value.toLowerCase();
   const cat    = document.getElementById('filter-cat').value;
   const status = document.getElementById('filter-status').value;
-  const rows   = document.querySelectorAll('#mat-tbody tr');
-  rows.forEach(row => {
-    const name    = row.dataset.name.toLowerCase();
+  document.querySelectorAll('#mat-tbody tr').forEach(row => {
+    const name    = (row.dataset.name||'').toLowerCase();
     const rowCat  = row.dataset.cat;
     const bought  = row.dataset.bought;
     const arrived = row.dataset.arrived;
-
     const matchSearch = !search || name.includes(search);
     const matchCat    = !cat || rowCat === cat;
     let   matchStatus = true;
     if (status === 'bought')  matchStatus = bought.includes('已購買');
     if (status === 'arrived') matchStatus = arrived.includes('已到貨');
     if (status === 'pending') matchStatus = !bought.includes('已購買');
-
     row.classList.toggle('hidden', !(matchSearch && matchCat && matchStatus));
   });
   updateCount();
@@ -305,6 +420,7 @@ function switchTab(name, btn) {
 }
 
 // Init
+getMatData(); // warm cache
 renderStats();
 renderTable();
 renderExperiments();
