@@ -178,9 +178,8 @@ const COURSE = {
       risk: "低",
       riskLevel: 1,
       takeHome: "飛天杯",
-      status: "pending",
-      handout: null,
-      handoutDeadline: "8/6 前",
+      status: "ready",
+      handout: "handouts/茲茲銜國小實驗4_風的掌控者：人造雲與轉轉飛天杯.pdf",
       experiments: ["人造雲", "白努利實驗", "轉轉飛天杯（馬格努斯效應）"],
       objectives: [
         "理解絕熱膨脹與人造雲的成因",
@@ -237,9 +236,8 @@ const COURSE = {
       risk: "低",
       riskLevel: 1,
       takeHome: "熔岩燈",
-      status: "pending",
-      handout: null,
-      handoutDeadline: "8/20 前",
+      status: "ready",
+      handout: "handouts/茲茲銜國小實驗5_科學小廚房：深海熔岩燈與爆漿水怪蛋.pdf",
       experiments: ["繽紛極光熔岩燈", "合成外星水怪蛋"],
       objectives: [
         "理解海藻酸鈉遇到鈣離子會形成「外膜（交聯作用）」的科學原理",
