@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>茲茲銜接實驗5｜「粗」類拔「萃」：DNA粗萃取</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #C0C0C0; font-family: "PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+
+.a4-page {
+  width: 794px; min-height: 1123px; background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  margin: 2rem auto; font-size: 13px; line-height: 1.55; color: #222; position: relative;
+}
+.a4-cover {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  height: 1123px; padding: 80px; position: relative; overflow: hidden;
+}
+.cover-stripe { position:absolute;left:0;right:0;height:10px;background:linear-gradient(to right,#C8A84B 65%,transparent); }
+.cover-stripe-mid { position:absolute;left:0;right:0;height:4px;background:linear-gradient(to right,#2C2010 45%,transparent); }
+.cover-tag { font-size:13px;font-weight:700;color:#888;letter-spacing:0.1em;margin-top:5rem; }
+.cover-exp-num { font-size:40px;font-weight:800;color:#C8A84B;-webkit-text-stroke:2px #C8A84B;margin-top:0.8rem;font-style:italic; }
+.cover-title { font-size:24px;font-weight:800;color:#2C2010;margin-top:0.5rem; }
+.cover-sub { font-size:14px;color:#888;margin-top:0.3rem; }
+.cover-meta { margin-top:2.5rem;font-size:12px;color:#555;line-height:2.2; }
+.cover-bottom { position:absolute;bottom:60px;left:80px;font-size:11px;color:#aaa; }
+
+.a4-content { padding: 36px 48px; }
+.page-header { display:flex;align-items:center;margin-bottom:14px; }
+.page-header-org { font-size:11px;color:#888;margin-right:auto; }
+.page-header-title { background:#C8A84B;color:#fff;padding:5px 18px;font-size:11px;font-weight:600; }
+.page-header-icon { background:#2C2010;color:#fff;padding:5px 10px;font-size:11px; }
+
+.hs { margin-bottom: 15px; }
+.hs-header { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+.hs-num { width:28px;height:28px;border-radius:50%;background:#C8A84B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0; }
+.hs-title { font-size:15px;font-weight:700;color:#2C2010; }
+.hs-body { padding-left:38px; font-size:12px; }
+
+.info-box { background:#FBF5E4;border-left:4px solid #C8A84B;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:1.7; }
+.info-box strong { color:#7A5C20; }
+.guess-box { background:#FFF8F0;border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;font-size:12px;line-height:1.8;margin-top:6px; }
+.guess-box .g-label { font-weight:700;color:#C8A84B; }
+.guess-line { border-bottom:1px solid #C8A84B;margin-top:14px;height:18px; }
+
+.hs-table { width:100%;border-collapse:collapse;font-size:12px; }
+.hs-table th { background:#C8A84B;color:#fff;padding:6px 10px;text-align:left;font-weight:600; }
+.hs-table td { padding:6px 10px;border-bottom:1px solid #E8DCC0; }
+.hs-table tr:last-child td { border-bottom:none; }
+.hs-table .chk { width:20px;text-align:center; }
+
+.step-item { display:flex;gap:8px;margin-bottom:5px;font-size:12px;align-items:flex-start; }
+.step-n { color:#C8A84B;font-weight:800;font-size:13px;min-width:20px;flex-shrink:0; }
+.fill-purpose { display:flex;align-items:baseline;gap:6px;margin:3px 0 7px 24px;font-size:11px;color:#666; }
+.fill-line { flex:1;border-bottom:1px solid #C8A84B;min-width:250px;height:14px; }
+.divider { border:none;border-top:1.5px dashed #E8DCC0;margin:10px 0; }
+
+.alert-box { background:#FFFDE7;border:2px solid #C8A84B;border-radius:8px;padding:9px 14px;margin:8px 0;font-size:12px;line-height:1.7; }
+.alert-box strong { color:#7A5C20; }
+.sci-note { background:#FBF5E4;border-radius:6px;padding:8px 12px;font-size:11.5px;line-height:1.7;margin-top:6px; }
+.sci-note strong { color:#7A5C20; }
+.qa-item { border:1.5px dashed #C8A84B;border-radius:6px;padding:9px 12px;margin-bottom:7px;font-size:12px;min-height:56px; }
+.qa-q { font-weight:700;margin-bottom:3px; }
+.qa-tag { float:right;font-size:10px;background:#E8DCC0;color:#7A5C20;padding:1px 6px;border-radius:4px;font-weight:700; }
+.draw-box { border:1.5px solid #E8DCC0;border-radius:6px;height:80px;margin:6px 0;padding:6px 10px;font-size:11px;color:#ccc; }
+
+@media print {
+  body { background:none; }
+  .a4-page { box-shadow:none;margin:0;page-break-after:always;width:100%; }
+  .print-btn { display:none !important; }
+}
+.print-btn { position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;background:#C8A84B;color:#fff;border:none;padding:0.65rem 1.4rem;border-radius:8px;font-size:0.9rem;font-weight:700;cursor:pointer;box-shadow:0 3px 16px rgba(0,0,0,0.25); }
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+
+<!-- ══════════ 封面 ══════════ -->
+<div class="a4-page">
+  <div class="a4-cover">
+    <div class="cover-stripe" style="top:140px"></div>
+    <div class="cover-stripe-mid" style="top:155px"></div>
+    <div class="cover-stripe" style="bottom:140px"></div>
+    <div class="cover-stripe-mid" style="bottom:125px"></div>
+    <div class="cover-tag">茲茲實驗課 ｜ 國中銜接組</div>
+    <div class="cover-exp-num">Exp. 05</div>
+    <div class="cover-title">「粗」類拔「萃」：DNA粗萃取</div>
+    <div class="cover-sub">DNA Extraction — 親眼看見自己的遺傳密碼</div>
+    <div class="cover-meta">
+      分類：生物 ｜ 難度：⭐⭐ ｜ 風險：低（酒精易燃，勿近明火）<br>
+      核心概念：細胞裂解 · 界面活性劑 · 鹽析效應 · 乙醇沉澱 DNA<br>
+      帶回家：DNA樣品（裝入試管帶回）
+    </div>
+    <div style="margin-top:2rem;font-size:12px;color:#555;line-height:2">
+      姓名：_______________　　組別：_______________
+    </div>
+    <div class="cover-bottom">茲茲實驗課 2026 ｜ 設計 / 授課：福大老師</div>
+  </div>
+</div>
+
+<!-- ══════════ 頁 2：引言 + 材料 ══════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">「粗」類拔「萃」：DNA粗萃取</div>
+      <div class="page-header-icon">🧬</div>
+    </div>
+
+    <div class="hs">
+      <div class="hs-header"><div class="hs-num">1</div><div class="hs-title">今天我們要做什麼？</div></div>
+      <div class="hs-body">
+        <div class="info-box">
+          你身體每一個細胞裡都有 DNA——它是決定你長相、體質、甚至某些個性的遺傳密碼。DNA 平常藏在細胞核中，肉眼看不見。<br>
+          今天你要用<strong>廚房常見的材料</strong>（洗碗精、食鹽水、冰酒精）對奇異果進行「粗萃取」，在試管裡看到真實的 DNA 以白色絲狀物浮現——這是屬於奇異果的遺傳密碼！
+        </div>
+        <div class="guess-box">
+          <div class="g-label">先猜猜看 🤔</div>
+          <div style="margin-top:6px">Q1. DNA 藏在細胞的哪個部位？（細胞核 / 細胞膜 / 細胞質）</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q2. 你覺得洗碗精在實驗中有什麼作用？（提示：洗碗精能做什麼？）</div>
+          <div class="guess-line"></div>
+          <div style="margin-top:8px">Q3. 萃取出來的 DNA 外觀是什麼樣子？（固體？液體？纖維狀？）</div>
+          <div class="guess-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hs">
+      <div class="hs-header"><div class="hs-num">2</div><div class="hs-title">我的材料（打勾確認）</div></div>
+      <div class="hs-body">
+        <table class="hs-table">
+          <thead><tr><th class="chk">✓</th><th>材料名稱</th><th>數量</th><th>備註</th></tr></thead>
+          <tbody>
+            <tr><td class="chk">□</td><td>奇異果</td><td>1 顆</td><td>熟成的較易萃取</td></tr>
+            <tr><td class="chk">□</td><td>透明夾鏈袋</td><td>1 個</td><td>裝入水果並搗碎</td></tr>
+            <tr><td class="chk">□</td><td>洗碗精（界面活性劑）</td><td>約 5mL</td><td>幫助溶解細胞膜</td></tr>
+            <tr><td class="chk">□</td><td>5M 食鹽水</td><td>約 5mL</td><td>幫助 DNA 聚集</td></tr>
+            <tr><td class="chk">□</td><td>嫩精 or 鳳梨汁</td><td>約 5g</td><td>分解蛋白質</td></tr>
+            <tr><td class="chk">□</td><td>水（純水或蒸餾水）</td><td>約 50mL</td><td></td></tr>
+            <tr><td class="chk">□</td><td>紗布</td><td>1 組</td><td>過濾碎果泥</td></tr>
+            <tr><td class="chk">□</td><td>燒杯（250mL）</td><td>1 個</td><td>收集濾液用</td></tr>
+            <tr><td class="chk">□</td><td>透明塑膠杯</td><td>1 個</td><td></td></tr>
+            <tr><td class="chk">□</td><td>塑膠漏斗</td><td>1 個</td><td></td></tr>
+            <tr><td class="chk">□</td><td>試管</td><td>1 支</td><td>最終觀察 DNA 用</td></tr>
+            <tr><td class="chk">□</td><td>95% 冰酒精</td><td>約 10mL</td><td>⚠ 提前冷藏效果較佳；遠離明火</td></tr>
+            <tr><td class="chk">□</td><td>滴管或牙籤</td><td>1 支</td><td>收集 DNA 用</td></tr>
+          </tbody>
+        </table>
+        <div class="alert-box" style="margin-top:8px">
+          <strong>⚠ 注意：</strong>95% 酒精易燃，實驗全程遠離明火、電熱設備，用後立即蓋緊瓶蓋。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 頁 3：實驗步驟 ══════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">「粗」類拔「萃」：DNA粗萃取</div>
+      <div class="page-header-icon">🧬</div>
+    </div>
+
+    <div class="hs">
+      <div class="hs-header"><div class="hs-num">3</div><div class="hs-title">實驗步驟（每步完成後填寫「目的」）</div></div>
+      <div class="hs-body">
+        <div class="step-item"><div class="step-n">1.</div><div>在透明夾鏈袋中加入奇異果、少許水，封好袋口，用手輕壓搗碎成泥狀，靜置 1 分鐘。</div></div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">2.</div><div>將奇異果泥汁倒入塑膠量杯，加入 5mL 洗碗精（界面活性劑），用筷子攪拌 5 分鐘。</div></div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">3.</div><div>加入 5mL 的 5M 食鹽水，繼續攪拌 5 分鐘。</div></div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">4.</div><div>再加入嫩精 5g（或鳳梨汁 5g），持續攪拌 5 分鐘。</div></div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">5.</div><div>以紗布鋪在塑膠漏斗上，將混合液過濾，收集濾液至燒杯中。</div></div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">6.</div>
+          <div>取濾液 10mL 放入乾淨試管，再<strong>沿著試管壁緩慢倒入 10mL 冰酒精（不攪拌！）</strong>，讓兩層液體分層。觀察交界處出現的<strong>白色棉絮狀物質</strong>——這就是 DNA！</div>
+        </div>
+        <div class="fill-purpose">目的：<div class="fill-line"></div></div>
+
+        <div class="step-item"><div class="step-n">7.</div><div>靜置幾分鐘後，可見上方白色絲狀物浮出，以牙籤或滴管可捲出 DNA，裝入小試管帶回！</div></div>
+
+        <div class="alert-box" style="margin-top:10px">
+          <strong>🔑 關鍵提醒：</strong>
+          步驟 6 倒入酒精時<strong>一定要沿壁緩慢倒入、不可攪拌</strong>，才能形成清楚的分層。攪拌會讓 DNA 再度溶解，看不到白色絲狀物。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 頁 4：實驗原理 + 問題討論 ══════════ -->
+<div class="a4-page">
+  <div class="a4-content">
+    <div class="page-header">
+      <div class="page-header-org">茲茲實驗課 2026 ｜ 國中銜接組</div>
+      <div class="page-header-title">「粗」類拔「萃」：DNA粗萃取</div>
+      <div class="page-header-icon">🧬</div>
+    </div>
+
+    <div class="hs">
+      <div class="hs-header"><div class="hs-num">4</div><div class="hs-title">實驗原理</div></div>
+      <div class="hs-body">
+        <div class="sci-note">
+          <strong>三步驟原理：</strong><br>
+          ① <strong>細胞裂解</strong>：洗碗精（界面活性劑）溶解細胞膜上的磷脂雙層，讓細胞破裂、DNA 釋出。<br>
+          ② <strong>鹽析聚集</strong>：食鹽（NaCl）中的 Na⁺ 可中和 DNA 磷酸根（帶負電）的靜電排斥力，讓 DNA 分子彼此聚集，不再散開。嫩精/鳳梨汁中的蛋白酶能分解干擾 DNA 的蛋白質。<br>
+          ③ <strong>乙醇沉澱</strong>：DNA 可溶於水但<strong>不溶於酒精</strong>。冰酒精緩慢倒入後，在水層與酒精層交界處，DNA 因溶解度急劇下降而析出，形成肉眼可見的<strong>白色絲狀物</strong>。
+        </div>
+      </div>
+    </div>
+
+    <div class="hs">
+      <div class="hs-header"><div class="hs-num">5</div><div class="hs-title">問題與討論</div></div>
+      <div class="hs-body">
+        <div class="qa-item">
+          <div class="qa-q">問題 1｜DNA 是存在於細胞的哪個部位？<span class="qa-tag">國七生物</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 2｜洗碗精與鳳梨汁（嫩精）在本次實驗中分別有什麼作用？<span class="qa-tag">國七生物</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 3｜為什麼要使用 95% 冰酒精而不是常溫酒精？它的作用是什麼？<span class="qa-tag">國八理化</span></div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 4｜你觀察到的 DNA 外觀是什麼樣子？請簡述並畫出來。<span class="qa-tag">國七生物</span></div>
+          <div class="draw-box">（在這裡畫出你看到的白色 DNA 絲狀物外觀，並描述顏色、質地）</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">問題 5｜如果你要改用其他水果進行萃取，你會選哪種？為什麼？<span class="qa-tag">綜合討論</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

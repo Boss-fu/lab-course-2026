@@ -224,37 +224,95 @@ const COURSE_MIDDLE = {
       id: 4,
       date: null,
       dateDisplay: "待定",
-      title: "實驗尚未確認",
-      category: "待定",
-      difficulty: "—",
-      risk: "—",
-      riskLevel: 0,
-      takeHome: "—",
-      status: "pending",
-      handout: null,
-      experiments: ["實驗內容待定"],
-      objectives: [],
-      timeline: [],
-      materials: [],
-      assistantNotes: []
+      title: "茲茲福爾摩斯：血跡的檢驗",
+      category: "化學",
+      difficulty: "中高",
+      risk: "中",
+      riskLevel: 2,
+      takeHome: "無（暗室效果，拍照留念）",
+      status: "ready",
+      handout: "handouts/茲茲銜國中實驗4-茲茲福爾摩斯：血跡的檢驗.html",
+      experiments: ["魯米諾試劑製備與化學發光", "赤血鹽 vs 紅墨水血跡辨識"],
+      objectives: [
+        "認識鑑識科學的功能與解題策略對結果的影響",
+        "瞭解魯米諾試劑化學發光的反應原理",
+        "瞭解血跡檢測於犯罪現場的採證與應用",
+        "以表格記錄並比較不同樣品的陽性/陰性結果"
+      ],
+      timeline: [
+        { time: "10:00–10:15", activity: "導入：鑑識科學背景故事，介紹魯米諾原理", warning: false, note: "" },
+        { time: "10:15–10:40", activity: "Part 1 化學的浪漫：配製魯米諾溶液 + 赤血鹽溶液，暗房觀察化學發光", warning: true, note: "⚠ NaOH 強鹼戴手套；全程護目鏡；通風操作" },
+        { time: "10:40–11:15", activity: "Part 2 人人都是福爾摩斯：布/紙巾上設置赤血鹽與紅墨水，暗室噴灑魯米諾檢測", warning: true, note: "⚠ 噴霧僅對檢測面，勿對人；記錄陽性/陰性結果" },
+        { time: "11:15–11:45", activity: "問題與討論：填寫觀察記錄、4 題動動腦，清潔整理", warning: false, note: "" }
+      ],
+      materials: [
+        { name: "氫氧化鈉（NaOH）", qty: "1g/組", unit: "g", note: "強鹼，小心使用；戴手套", prepBy: "福大老師" },
+        { name: "魯米諾（C₈H₇N₃O₂）", qty: "0.3g/組", unit: "g", note: "", prepBy: "福大老師" },
+        { name: "赤血鹽（K₃Fe(CN)₆）", qty: "1g/組", unit: "g", note: "提供鐵離子，模擬血液", prepBy: "福大老師" },
+        { name: "7.5% 雙氧水（H₂O₂）", qty: "20mL/組", unit: "mL", note: "氧化劑", prepBy: "福大老師" },
+        { name: "蒸餾水", qty: "260mL/組", unit: "mL", note: "魯米諾用180mL + 赤血鹽用80mL", prepBy: "福大老師" },
+        { name: "燒杯 250mL、玻棒、量筒、滴管", qty: "各1", unit: "個", note: "", prepBy: "福大老師" },
+        { name: "試管", qty: 2, unit: "支", note: "", prepBy: "福大老師" },
+        { name: "紅墨水", qty: "1–2 滴", unit: "", note: "對照組", prepBy: "福大老師" },
+        { name: "布或紙巾、棉花棒", qty: "各1", unit: "件", note: "血跡模擬", prepBy: "福大老師" },
+        { name: "噴霧罐", qty: 1, unit: "瓶", note: "裝魯米諾溶液", prepBy: "福大老師" },
+        { name: "電子天平", qty: 1, unit: "台", note: "", prepBy: "補習班準備" },
+        { name: "手套、護目鏡", qty: "各1副/人", unit: "", note: "全程佩戴", prepBy: "福大老師" }
+      ],
+      assistantNotes: [
+        "需要可完全遮光的暗室（關燈+遮光布），Part 1 和 Part 2 均需暗室觀察",
+        "魯米諾溶液當天配製：1g NaOH + 180mL 水溶解後加入 0.3g 魯米諾攪拌溶解",
+        "赤血鹽溶液：1g K₃Fe(CN)₆ + 80mL 水 + 20mL 雙氧水",
+        "Part 2 布/紙巾提前標記格子，讓學生知道哪格沾了什麼，進暗室前先記錄位置",
+        "提醒：魯米諾發光約 30 秒後會淡出，要快速拍照"
+      ]
     },
     {
       id: 5,
       date: null,
       dateDisplay: "待定",
-      title: "實驗尚未確認",
-      category: "待定",
-      difficulty: "—",
-      risk: "—",
-      riskLevel: 0,
-      takeHome: "—",
-      status: "pending",
-      handout: null,
-      experiments: ["實驗內容待定"],
-      objectives: [],
-      timeline: [],
-      materials: [],
-      assistantNotes: []
+      title: "「粗」類拔「萃」：DNA粗萃取",
+      category: "生物",
+      difficulty: "中",
+      risk: "低",
+      riskLevel: 1,
+      takeHome: "DNA 樣品（裝入試管帶回）",
+      status: "ready",
+      handout: "handouts/茲茲銜國中實驗5-粗類拔萃：DNA粗萃取.html",
+      experiments: ["奇異果 DNA 粗萃取", "乙醇沉澱法觀察 DNA"],
+      objectives: [
+        "理解細胞裂解的原理：洗碗精溶解細胞膜磷脂雙層",
+        "了解鹽析效應：NaCl 中和 DNA 負電荷使其聚集",
+        "觀察乙醇沉澱 DNA 的現象：白色絲狀物在酒精層出現",
+        "連結生物概念：DNA 存在於細胞核，是所有生物的遺傳物質"
+      ],
+      timeline: [
+        { time: "10:00–10:10", activity: "導入：DNA 是什麼？為什麼能從水果中萃取？填寫先猜猜看", warning: false, note: "" },
+        { time: "10:10–10:40", activity: "步驟 1–4：搗碎奇異果 → 加洗碗精 → 加食鹽水 → 加嫩精，各攪拌 5 分鐘", warning: false, note: "每步驟讓學生先猜目的再操作，操作完再填寫目的欄" },
+        { time: "10:40–10:55", activity: "步驟 5–6：紗布過濾 → 取濾液倒入試管，沿壁緩慢加入冰酒精", warning: true, note: "⚠ 冰酒精易燃，遠離明火；倒入時不可攪拌，才能觀察分層" },
+        { time: "10:55–11:20", activity: "步驟 7：觀察白色 DNA 絲狀物浮現，用牙籤捲出，裝入試管帶回", warning: false, note: "" },
+        { time: "11:20–11:50", activity: "問題與討論：填寫 5 題、畫出 DNA 外觀，清潔整理", warning: false, note: "" }
+      ],
+      materials: [
+        { name: "奇異果", qty: "1顆/人", unit: "顆", note: "熟成的較易萃取", prepBy: "福大老師" },
+        { name: "透明夾鏈袋", qty: 1, unit: "個/人", note: "裝水果搗碎用", prepBy: "福大老師" },
+        { name: "洗碗精", qty: "5mL/人", unit: "mL", note: "一般廚房洗碗精即可", prepBy: "福大老師" },
+        { name: "5M 食鹽水", qty: "5mL/人", unit: "mL", note: "課前配製：292g NaCl + 1L 水", prepBy: "福大老師" },
+        { name: "嫩精 or 鳳梨汁", qty: "5g/人", unit: "g", note: "蛋白酶來源；鳳梨汁更易取得", prepBy: "福大老師" },
+        { name: "蒸餾水", qty: "50mL/人", unit: "mL", note: "", prepBy: "福大老師" },
+        { name: "紗布", qty: "1組/人", unit: "組", note: "過濾果泥", prepBy: "福大老師" },
+        { name: "燒杯 250mL、透明塑膠杯、塑膠漏斗", qty: "各1", unit: "個", note: "", prepBy: "福大老師" },
+        { name: "試管", qty: 1, unit: "支/人", note: "最終觀察 DNA 用", prepBy: "福大老師" },
+        { name: "95% 冰酒精", qty: "10mL/人", unit: "mL", note: "課前放冰箱冷藏；效果更好；遠離明火", prepBy: "福大老師" },
+        { name: "滴管或牙籤", qty: 1, unit: "支/人", note: "捲出 DNA 用", prepBy: "福大老師" }
+      ],
+      assistantNotes: [
+        "課前冷藏 95% 酒精（冰酒精效果明顯優於常溫）",
+        "課前配製 5M 食鹽水：292g NaCl 溶於 1L 水（或直接買飽和鹽水）",
+        "奇異果選熟成偏軟的，DNA 含量較高、搗碎容易",
+        "步驟 6 關鍵：沿試管壁緩慢倒入酒精，動作要輕、慢，這是成功的核心",
+        "如果白色物質不明顯，可能是酒精加得太快或量不夠；試著再加 5mL 冰酒精"
+      ]
     }
   ]
 };
