@@ -231,7 +231,7 @@ const COURSE_MIDDLE = {
       riskLevel: 2,
       takeHome: "無（暗室效果，拍照留念）",
       status: "ready",
-      handout: "handouts/茲茲銜國中實驗4-茲茲福爾摩斯：血跡的檢驗.html",
+      handout: "handouts/茲茲銜國中實驗4-茲茲福爾摩斯：血跡的檢驗.pdf",
       experiments: ["魯米諾試劑製備與化學發光", "赤血鹽 vs 紅墨水血跡辨識"],
       objectives: [
         "認識鑑識科學的功能與解題策略對結果的影響",
@@ -278,7 +278,7 @@ const COURSE_MIDDLE = {
       riskLevel: 1,
       takeHome: "DNA 樣品（裝入試管帶回）",
       status: "ready",
-      handout: "handouts/茲茲銜國中實驗5-粗類拔萃：DNA粗萃取.html",
+      handout: "handouts/茲茲銜國中實驗5-粗類拔萃：DNA粗萃取.pdf",
       experiments: ["奇異果 DNA 粗萃取", "乙醇沉澱法觀察 DNA"],
       objectives: [
         "理解細胞裂解的原理：洗碗精溶解細胞膜磷脂雙層",
