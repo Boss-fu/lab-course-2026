@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>講義生成器 — 茲茲實驗課</title>
 <link rel="stylesheet" href="css/style2.css">
+<link rel="stylesheet" href="css/app.css">
 <style>
 /* ── Layout ── */
 .gen-layout {
   display: grid;
   grid-template-columns: 420px 1fr;
-  height: calc(100vh - 52px);
+  height: calc(100vh - var(--topbar-h));
 }
 .gen-form {
   overflow-y: auto;
@@ -283,16 +284,9 @@
 </head>
 <body>
 
-<nav>
-  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
-  <a href="index.html">首頁</a>
-  <a href="library.html">實驗大全</a>
-  <a href="elementary.html">國小課程</a>
-  <a href="middle.html">國中課程</a>
-  <a href="materials.html">實驗與器材</a>
-  <a href="teacher.html">課前準備</a>
-  <a href="generator.html" class="active">講義生成器</a>
-</nav>
+<div id="app-shell" data-active="generator"></div>
+
+<main class="app-main">
 
 <div class="gen-layout">
 
@@ -820,5 +814,8 @@ function renderAll() {
 renderAll();
 render();
 </script>
+</main>
+
+<script src="js/shell.js?v=1"></script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 <title>實驗與器材 — 茲茲實驗課</title>
 <link rel="icon" href="茲茲icon.png">
 <link rel="stylesheet" href="css/style2.css">
+<link rel="stylesheet" href="css/app.css">
 <style>
 /* ── Toolbar ── */
 .toolbar {
@@ -34,7 +35,7 @@
 .inv-table thead th {
   background: var(--tzu-gold-soft); color: var(--tzu-gold-dark);
   font-size: 0.8rem; text-align: left; padding: 0.6rem 0.7rem;
-  border-bottom: 2px solid var(--border); white-space: nowrap; position: sticky; top: 52px; z-index: 5;
+  border-bottom: 2px solid var(--border); white-space: nowrap; position: sticky; top: 0; z-index: 5;
 }
 .inv-table tbody td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #F0EBE0; vertical-align: middle; }
 .inv-table tbody tr:hover { background: #FBF7F0; }
@@ -90,7 +91,7 @@
 
 @media (max-width: 640px) {
   .toolbar, .inv-wrap, .exp-grid, .stats-bar { padding-left: 1rem; padding-right: 1rem; }
-  .inv-table thead th { top: 52px; }
+  .inv-table thead th { top: 0; }
 }
 @media print {
   .toolbar, .cart-fab, .tabs, .stats-bar, .no-print { display: none !important; }
@@ -101,16 +102,9 @@
 </head>
 <body>
 
-<nav>
-  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
-  <a href="index.html">首頁</a>
-  <a href="library.html">實驗大全</a>
-  <a href="elementary.html">國小課程</a>
-  <a href="middle.html">國中課程</a>
-  <a href="materials.html" class="active">實驗與器材</a>
-  <a href="teacher.html">課前準備</a>
-  <a href="generator.html">講義生成器</a>
-</nav>
+<div id="app-shell" data-active="materials"></div>
+
+<main class="app-main">
 
 <div class="hero" style="padding:1.8rem 2rem 1.6rem">
   <h1>實驗與器材</h1>
@@ -345,5 +339,8 @@ populateFilters();
 renderTable();
 saveCart();
 </script>
+</main>
+
+<script src="js/shell.js?v=1"></script>
 </body>
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>課綱實驗 · 茲茲實驗課務系統</title>
+<link rel="icon" href="茲茲icon.png">
+<link rel="stylesheet" href="css/style2.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+.filter-bar { display:flex; flex-wrap:wrap; gap:0.6rem; align-items:center; margin-bottom:1rem; }
+.filter-bar input[type=text]{ flex:1; min-width:200px; padding:0.5rem 0.8rem; border:1.5px solid var(--border); border-radius:9px; font-family:inherit; font-size:0.88rem; background:var(--white); }
+.filter-bar input[type=text]:focus{ outline:none; border-color:var(--tzu-red); box-shadow:0 0 0 3px rgba(133,1,3,.1); }
+.filter-bar select{ padding:0.5rem 0.7rem; border:1.5px solid var(--border); border-radius:9px; font-family:inherit; font-size:0.86rem; background:var(--white); cursor:pointer; }
+.filter-bar select:focus{ outline:none; border-color:var(--tzu-red); }
+.count-pill{ font-size:0.82rem; color:var(--text-light); margin-left:auto; }
+.info-box{ background:#FFFBEB; border:1.5px solid #FCD34D; color:#92400E; border-radius:10px; padding:0.7rem 1rem; font-size:0.83rem; margin-bottom:1.2rem; line-height:1.7; }
+.sub-block{ margin-bottom:1.6rem; }
+.sub-head{ display:flex; align-items:center; gap:0.5rem; font-weight:800; font-size:1rem; margin:0.4rem 0 0.7rem; }
+.sub-pill{ font-size:0.72rem; font-weight:700; padding:0.14rem 0.6rem; border-radius:20px; }
+.cur-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.8rem; }
+.cur-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid #ccc; border-radius:12px; box-shadow:var(--shadow-sm); padding:0.85rem 1rem; }
+.cur-top{ display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.35rem; }
+.stage-tag{ font-size:0.7rem; font-weight:700; padding:0.1rem 0.5rem; border-radius:5px; background:var(--tzu-red); color:#fff; }
+.stage-tag.高中{ background:#3E6FB0; }
+.grade-tag{ font-size:0.7rem; color:var(--text-light); font-weight:600; }
+.cur-name{ font-size:0.92rem; font-weight:800; color:var(--text); line-height:1.35; }
+.cur-topic{ font-size:0.78rem; color:var(--text-light); margin-top:0.3rem; line-height:1.6; }
+.cur-foot{ display:flex; align-items:center; gap:0.4rem; margin-top:0.5rem; flex-wrap:wrap; }
+.nat-chip{ font-size:0.7rem; padding:0.12rem 0.5rem; border-radius:20px; background:#F4EFE6; color:var(--text-light); font-weight:600; }
+.link-creative{ font-size:0.72rem; font-weight:700; color:var(--tzu-gold-dark); background:var(--tzu-gold-soft); padding:0.12rem 0.5rem; border-radius:20px; text-decoration:none; }
+.link-creative:hover{ background:#F5E9C8; }
+.empty-note{ padding:2.5rem; text-align:center; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<div id="app-shell" data-active="curriculum"></div>
+
+<main class="app-main">
+  <div class="page-head">
+    <h1>📗 課綱實驗</h1>
+    <p>國中＋高中 108 課綱標準實驗清單專區 — 教學骨架，與創意實驗互補</p>
+  </div>
+  <div class="page-body">
+    <div class="info-box">
+      📌 此為依十二年國教自然科學領域整理的<strong>標準參考清單</strong>（持續擴充、可再細修），非特定教科書版本。標有 🎨 的項目，茲茲已有對應的創意實驗版本可直接連結使用。
+    </div>
+
+    <div class="filter-bar">
+      <input type="text" id="search" placeholder="🔍 搜尋實驗名稱、科學觀念…">
+      <select id="fStage"><option value="">全部學制</option><option>國中</option><option>高中</option></select>
+      <select id="fSubject"><option value="">全部科目</option><option>生物</option><option>理化</option><option>物理</option><option>化學</option><option>地球科學</option></select>
+      <select id="fGrade"><option value="">全部年級</option></select>
+      <span class="count-pill" id="countPill"></span>
+    </div>
+
+    <div id="blocks"></div>
+    <div class="empty-note" id="emptyNote" style="display:none">沒有符合條件的實驗</div>
+  </div>
+</main>
+
+<script src="js/experiments.js?v=2"></script>
+<script src="js/curriculum.js?v=1"></script>
+<script src="js/shell.js?v=1"></script>
+<script>
+const creativeName = {}; EXPERIMENTS.forEach(e=>creativeName[e.id]=e.name);
+// populate grade filter
+const grades=[...new Set(CURRICULUM.map(c=>c.grade))];
+document.getElementById('fGrade').innerHTML='<option value="">全部年級</option>'+grades.map(g=>`<option>${g}</option>`).join('');
+
+function card(c){
+  const col=SUBJECT_COLOR[c.subject]||{bg:'#eee',fg:'#555'};
+  const link = c.creativeId && creativeName[c.creativeId]
+    ? `<a class="link-creative" href="library.html" title="已有創意版">🎨 ${creativeName[c.creativeId]}</a>` : '';
+  return `<div class="cur-card" style="border-left-color:${col.fg}">
+    <div class="cur-top"><span class="stage-tag ${c.stage}">${c.stage}</span>
+      <span class="sub-pill" style="background:${col.bg};color:${col.fg}">${c.subject}</span>
+      <span class="grade-tag">${c.grade}</span></div>
+    <div class="cur-name">${c.name}</div>
+    <div class="cur-topic">${c.topic}</div>
+    <div class="cur-foot"><span class="nat-chip">${c.nature}</span>${link}</div>
+  </div>`;
+}
+
+function render(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const fst=document.getElementById('fStage').value, fsu=document.getElementById('fSubject').value, fg=document.getElementById('fGrade').value;
+  const rows=CURRICULUM.filter(c=>{
+    if(fst&&c.stage!==fst) return false;
+    if(fsu&&c.subject!==fsu) return false;
+    if(fg&&c.grade!==fg) return false;
+    if(q&&!(`${c.name} ${c.topic}`.toLowerCase().includes(q))) return false;
+    return true;
+  });
+  // group by stage>subject
+  const order=['國中','高中'];
+  const box=document.getElementById('blocks'); box.innerHTML='';
+  order.forEach(stage=>{
+    const subs=[...new Set(rows.filter(r=>r.stage===stage).map(r=>r.subject))];
+    subs.forEach(sub=>{
+      const items=rows.filter(r=>r.stage===stage&&r.subject===sub);
+      if(!items.length) return;
+      const col=SUBJECT_COLOR[sub];
+      box.innerHTML += `<div class="sub-block"><div class="sub-head">
+        <span class="stage-tag ${stage}">${stage}</span>
+        <span class="sub-pill" style="background:${col.bg};color:${col.fg}">${sub}</span>
+        <span style="color:var(--text-light);font-size:0.8rem;font-weight:600">${items.length} 個</span></div>
+        <div class="cur-grid">${items.map(card).join('')}</div></div>`;
+    });
+  });
+  document.getElementById('emptyNote').style.display = rows.length?'none':'block';
+  document.getElementById('countPill').textContent = `顯示 ${rows.length} / ${CURRICULUM.length} 個實驗`;
+}
+['search','fStage','fSubject','fGrade'].forEach(id=>document.getElementById(id).addEventListener(id==='search'?'input':'change', render));
+render();
+</script>
+</body>
+</html>

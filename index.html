@@ -3,166 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>茲茲實驗課 · 實驗系統</title>
+<title>總覽 · 茲茲實驗課務系統</title>
 <link rel="icon" href="茲茲icon.png">
 <link rel="stylesheet" href="css/style2.css">
-<style>
-.landing {
-  min-height: calc(100vh - 52px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1.5rem 4rem;
-  text-align: center;
-}
-.landing-logo { width: 88px; height: 88px; margin-bottom: 1.1rem; filter: drop-shadow(0 6px 16px rgba(133,1,3,0.18)); }
-.landing-title {
-  font-size: 2.1rem;
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: 0.02em;
-}
-.landing-title .accent { color: var(--tzu-red); }
-.landing-en {
-  font-size: 0.8rem;
-  color: var(--text-light);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  margin-top: 0.5rem;
-  font-weight: 600;
-}
-.landing-desc {
-  max-width: 540px;
-  color: var(--text-light);
-  font-size: 0.95rem;
-  line-height: 1.9;
-  margin: 1.2rem auto 2.6rem;
-}
-.landing-desc strong { color: var(--tzu-red); font-weight: 700; }
-
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
-  gap: 1.5rem;
-  justify-content: center;
-  width: 100%;
-  max-width: 780px;
-}
-.category-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-top: 4px solid var(--tzu-gold);
-  border-radius: var(--radius);
-  padding: 2.2rem 1.8rem;
-  text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.9rem;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-.category-card.mid { border-top-color: var(--tzu-red); }
-.category-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow);
-}
-.category-icon {
-  font-size: 2.6rem; line-height: 1;
-  width: 72px; height: 72px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--tzu-gold-soft);
-}
-.category-card.mid .category-icon { background: var(--tzu-red-soft); }
-.category-label {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: 0.04em;
-}
-.category-desc {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  text-align: center;
-  line-height: 1.85;
-}
-.category-badge {
-  font-size: 0.75rem;
-  padding: 0.28rem 0.95rem;
-  border-radius: 20px;
-  font-weight: 700;
-  background: var(--tzu-gold-soft);
-  color: var(--tzu-gold-dark);
-}
-.category-card.mid .category-badge { background: var(--tzu-red-soft); color: var(--tzu-red); }
-
-.quick-links {
-  display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
-  margin-top: 2.6rem;
-}
-.quick-link {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  background: var(--white); border: 1px solid var(--border);
-  color: var(--text); text-decoration: none;
-  padding: 0.55rem 1.1rem; border-radius: 30px;
-  font-size: 0.85rem; font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.15s, color 0.15s, transform 0.15s;
-}
-.quick-link:hover { border-color: var(--tzu-red); color: var(--tzu-red); transform: translateY(-2px); }
-</style>
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
-<nav>
-  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
-  <a href="library.html">實驗大全</a>
-  <a href="elementary.html">國小課程</a>
-  <a href="middle.html">國中課程</a>
-  <a href="materials.html">實驗與器材</a>
-  <a href="teacher.html">課前準備</a>
-  <a href="generator.html">講義生成器</a>
-</nav>
+<div id="app-shell" data-active="dashboard"></div>
 
-<div class="landing">
-  <img src="茲茲icon.png" alt="茲茲文教" class="landing-logo">
-  <div class="landing-title">茲茲<span class="accent">實驗課</span>系統</div>
-  <div class="landing-en">Tzu Tzu Science Lab System</div>
-  <div class="landing-desc">
-    茲茲文教的<strong>實驗規劃與器材管理系統</strong>。<br>
-    收錄各年段實驗課程、課前準備、器材清單與講義，<br>
-    持續擴充中，任何有連結的人皆可瀏覽。
+<main class="app-main">
+  <div class="page-head">
+    <h1>🏠 總覽</h1>
+    <p>茲茲實驗課務系統 — 實驗規劃、課程組建與器材管理的中心</p>
   </div>
 
-  <div class="category-grid">
-    <a href="elementary.html" class="category-card ele">
-      <div class="category-icon">🔬</div>
-      <div class="category-label">國小實驗課</div>
-      <div class="category-desc">
-        國小五、六年級<br>
-        2026 暑期夏令營 · 7/6 ～ 8/24
-      </div>
-      <div class="category-badge">5 堂 ｜ 全數完成</div>
-    </a>
+  <div class="page-body">
+    <div class="dash-grid">
+      <a class="stat-card gold" href="library.html">
+        <div class="sc-label">🎨 創意實驗</div>
+        <div class="sc-num" id="n-creative">–</div>
+        <div class="sc-sub" id="s-creative">茲茲招牌實驗</div>
+      </a>
+      <a class="stat-card blue" href="curriculum.html">
+        <div class="sc-label">📗 課綱實驗</div>
+        <div class="sc-num" id="n-cur">–</div>
+        <div class="sc-sub">國中＋高中標準實驗</div>
+      </a>
+      <a class="stat-card red" href="courses.html">
+        <div class="sc-label">🎒 課程方案</div>
+        <div class="sc-num" id="n-prog">–</div>
+        <div class="sc-sub" id="s-prog">帶狀班・營隊</div>
+      </a>
+      <a class="stat-card green" href="materials.html">
+        <div class="sc-label">🧰 器材庫存</div>
+        <div class="sc-num" id="n-mat">154</div>
+        <div class="sc-sub">四大分區</div>
+      </a>
+    </div>
 
-    <a href="middle.html" class="category-card mid">
-      <div class="category-icon">🧲</div>
-      <div class="category-label">國中實驗課</div>
-      <div class="category-desc">
-        國中生（含升國一）<br>
-        進階科學探索 · 難度更高、概念更深
-      </div>
-      <div class="category-badge">5 堂 ｜ 全數完成</div>
-    </a>
+    <div class="dash-section-title">快速前往</div>
+    <div class="quick-tiles">
+      <a class="q-tile" href="library.html"><div class="qt-ico">🎨</div><div class="qt-t">創意實驗</div><div class="qt-d">瀏覽茲茲招牌實驗，可跨年段重複使用</div></a>
+      <a class="q-tile" href="curriculum.html"><div class="qt-ico">📗</div><div class="qt-t">課綱實驗</div><div class="qt-d">國高中課綱標準實驗清單專區</div></a>
+      <a class="q-tile" href="courses.html"><div class="qt-ico">🎒</div><div class="qt-t">課程目錄</div><div class="qt-d">帶狀班、營隊等各套課程方案</div></a>
+      <a class="q-tile" href="materials.html"><div class="qt-ico">🧰</div><div class="qt-t">器材管理</div><div class="qt-d">庫存查詢、勾選建立課堂清單</div></a>
+      <a class="q-tile" href="generator.html"><div class="qt-ico">📝</div><div class="qt-t">講義生成器</div><div class="qt-d">快速產出實驗講義</div></a>
+      <a class="q-tile" href="teacher.html"><div class="qt-ico">✅</div><div class="qt-t">課前準備</div><div class="qt-d">各堂課的流程、器材與助教筆記</div></a>
+    </div>
+
+    <div class="dash-section-title">課程方案</div>
+    <div class="dash-grid" id="prog-preview"></div>
   </div>
+</main>
 
-  <div class="quick-links">
-    <a href="materials.html" class="quick-link">🧪 實驗與器材</a>
-    <a href="teacher.html" class="quick-link">📋 課前準備</a>
-    <a href="generator.html" class="quick-link">📝 講義生成器</a>
-  </div>
-</div>
+<script src="js/experiments.js?v=2"></script>
+<script src="js/curriculum.js?v=1"></script>
+<script src="js/courses.js?v=1"></script>
+<script src="js/shell.js?v=1"></script>
+<script>
+  document.getElementById('n-creative').textContent = EXPERIMENTS.length;
+  const ready = EXPERIMENTS.filter(e=>e.status==='ready').length;
+  document.getElementById('s-creative').textContent = `${ready} 個已完成講義`;
+  document.getElementById('n-cur').textContent = CURRICULUM.length;
+  document.getElementById('n-prog').textContent = COURSE_PROGRAMS.length;
+  const running = COURSE_PROGRAMS.filter(p=>p.status==='開課中').length;
+  const planning = COURSE_PROGRAMS.filter(p=>p.status==='規劃中').length;
+  document.getElementById('s-prog').textContent = `${running} 開課中・${planning} 規劃中`;
 
+  document.getElementById('prog-preview').innerHTML = COURSE_PROGRAMS.map(p=>{
+    const st = (PROGRAM_STATUS_META[p.status]||{}).cls||'st-planned';
+    return `<a class="stat-card ${p.accent}" href="${p.detail||'courses.html'}">
+      <div class="sc-label">${p.type} · ${p.audience}</div>
+      <div style="font-weight:800;color:var(--text);margin-top:0.35rem;font-size:1rem">${p.name}</div>
+      <div class="sc-sub">${p.sessions?p.sessions+' 堂 · ':''}${p.cadence}</div>
+      <div style="margin-top:0.5rem"><span class="progress-status ${st}">${p.status}</span></div>
+    </a>`;
+  }).join('');
+</script>
 </body>
 </html>

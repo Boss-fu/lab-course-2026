@@ -5,19 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>茲茲國小 暑期實驗課 2026</title>
 <link rel="stylesheet" href="css/style2.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
-<nav>
-  <span class="brand"><img src="茲茲icon.png" alt="茲茲">茲茲實驗課</span>
-  <a href="index.html">首頁</a>
-  <a href="library.html">實驗大全</a>
-  <a href="elementary.html" class="active">國小課程</a>
-  <a href="middle.html">國中課程</a>
-  <a href="materials.html">實驗與器材</a>
-  <a href="teacher.html">課前準備</a>
-  <a href="generator.html">講義生成器</a>
-</nav>
+<div id="app-shell" data-active="courses"></div>
+
+<main class="app-main">
 
 <div class="hero">
   <h1>茲茲國小部 暑期實驗課</h1>
@@ -131,5 +125,8 @@ c.sessions.forEach(s => {
   </tr>`;
 });
 </script>
+</main>
+
+<script src="js/shell.js?v=1"></script>
 </body>
 </html>
