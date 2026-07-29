@@ -77,7 +77,10 @@ nav .brand {
   display: flex;
   align-items: center;
   gap: 0.55rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+nav .brand img { flex-shrink: 0; }
 nav .brand img {
   height: 30px;
   width: auto;
