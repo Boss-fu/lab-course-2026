@@ -361,6 +361,8 @@ nav a.active {
   border-bottom: 2.5px solid transparent;
   margin-bottom: -2px; transition: color 0.15s;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .tab.active { color: var(--tzu-red); border-bottom-color: var(--tzu-red); font-weight: 800; }
 .tab:hover { color: var(--tzu-red); }
