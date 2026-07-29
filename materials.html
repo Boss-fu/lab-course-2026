@@ -4,112 +4,99 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>實驗與器材 — 茲茲實驗課</title>
+<link rel="icon" href="茲茲icon.png">
 <link rel="stylesheet" href="css/style2.css">
 <style>
-.filter-bar {
-  display: flex; gap: 0.6rem; flex-wrap: wrap;
-  padding: 1rem 2rem;
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  align-items: center;
+/* ── Toolbar ── */
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;
+  padding: 1rem 2rem 0;
 }
-.filter-bar input {
-  padding: 0.4rem 0.8rem;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-family: inherit; font-size: 0.86rem;
-  min-width: 200px;
+.toolbar input[type=text] {
+  flex: 1; min-width: 200px;
+  padding: 0.5rem 0.8rem; border: 1.5px solid var(--border);
+  border-radius: 9px; font-family: inherit; font-size: 0.88rem; background: var(--white);
 }
-.filter-bar input:focus { outline: none; border-color: var(--teal); }
-.filter-bar select {
-  padding: 0.4rem 0.7rem;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-family: inherit; font-size: 0.86rem;
-  background: var(--white); cursor: pointer;
+.toolbar input[type=text]:focus { outline: none; border-color: var(--tzu-red); box-shadow: 0 0 0 3px rgba(133,1,3,0.10); }
+.toolbar select {
+  padding: 0.5rem 0.7rem; border: 1.5px solid var(--border);
+  border-radius: 9px; font-family: inherit; font-size: 0.86rem; background: var(--white); cursor: pointer;
 }
-.filter-bar select:focus { outline: none; border-color: var(--teal); }
-.filter-label { font-size: 0.82rem; color: var(--text-light); }
+.toolbar select:focus { outline: none; border-color: var(--tzu-red); }
+.chk-flag { display: flex; align-items: center; gap: 0.35rem; font-size: 0.83rem; color: var(--text-light); cursor: pointer; white-space: nowrap; }
+.chk-flag input { accent-color: var(--tzu-red); width: 16px; height: 16px; }
+.count-pill { font-size: 0.82rem; color: var(--text-light); }
 
-/* Status badges */
-.s-bought  { background:#E6F9EF; color:#1A7040; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-arrived { background:#E0EEFF; color:#1A50A0; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-school  { background:#FFF3E0; color:#A05000; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
-.s-pending { background:#F0F0F0; color:#666666; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+/* ── Inventory table ── */
+.inv-wrap { padding: 1rem 2rem 3rem; overflow-x: auto; }
+.inv-table { width: 100%; border-collapse: collapse; background: var(--white);
+  border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); font-size: 0.85rem; }
+.inv-table thead th {
+  background: var(--tzu-gold-soft); color: var(--tzu-gold-dark);
+  font-size: 0.8rem; text-align: left; padding: 0.6rem 0.7rem;
+  border-bottom: 2px solid var(--border); white-space: nowrap; position: sticky; top: 52px; z-index: 5;
+}
+.inv-table tbody td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #F0EBE0; vertical-align: middle; }
+.inv-table tbody tr:hover { background: #FBF7F0; }
+.inv-table tbody tr.flagged { background: #FFF6EC; }
+.inv-table tbody tr.flagged:hover { background: #FEEFD9; }
+.inv-tag { display: inline-block; background: var(--tzu-gold-soft); color: var(--tzu-gold-dark);
+  padding: 0.1rem 0.55rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+.inv-muted { color: #B7AE9C; }
+.flag-tag { display: inline-block; background: var(--tzu-red-soft); color: var(--tzu-red);
+  padding: 0.1rem 0.55rem; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
+.qty-input { width: 58px; padding: 0.25rem 0.4rem; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.83rem; font-family: inherit; }
+.qty-input:focus { outline: none; border-color: var(--tzu-red); }
+.rowchk { accent-color: var(--tzu-red); width: 17px; height: 17px; cursor: pointer; }
+.empty-note { padding: 2.5rem; text-align: center; color: var(--text-light); }
 
-/* Stats bar */
-.stats-bar {
-  display: flex; gap: 1.5rem; flex-wrap: wrap;
-  padding: 0.8rem 2rem;
-  background: var(--teal-light);
-  font-size: 0.84rem;
+/* ── Cart FAB + modal ── */
+.cart-fab {
+  position: fixed; right: 20px; bottom: 20px;
+  background: var(--tzu-red); color: #fff; border: none;
+  border-radius: 30px; padding: 0.8rem 1.2rem;
+  box-shadow: 0 8px 22px rgba(133,1,3,0.35); cursor: pointer;
+  font-size: 0.9rem; font-weight: 700; font-family: inherit; z-index: 40;
+  display: flex; align-items: center; gap: 0.4rem;
 }
-.stat { display: flex; align-items: center; gap: 0.4rem; }
-.stat strong { color: var(--teal-dark); font-size: 1rem; }
+.cart-fab .n { background: var(--tzu-orange); color: #fff; border-radius: 50%;
+  min-width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 0.78rem; padding: 0 0.3rem; }
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(40,30,20,0.5); z-index: 60; }
+.modal-bg.show { display: flex; align-items: flex-start; justify-content: center; padding: 3rem 1rem; overflow: auto; }
+.modal { background: #fff; border-radius: 16px; max-width: 760px; width: 100%; padding: 1.6rem; max-height: 88vh; overflow: auto; box-shadow: var(--shadow); }
+.modal h2 { font-size: 1.15rem; color: var(--tzu-red); margin-bottom: 0.4rem; }
+.lesson-meta { display: flex; gap: 0.6rem; margin: 0.8rem 0 1rem; flex-wrap: wrap; }
+.lesson-meta input { flex: 1; min-width: 160px; padding: 0.5rem 0.7rem; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.85rem; }
+.lesson-meta input:focus { outline: none; border-color: var(--tzu-red); }
+.cart-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.cart-table th { background: var(--tzu-gold-soft); color: var(--tzu-gold-dark); text-align: left; padding: 0.5rem 0.6rem; font-size: 0.78rem; }
+.cart-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid #F0EBE0; }
+.modal-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; flex-wrap: wrap; }
+.mini-del { background: none; border: 1.5px solid #E8C0BC; color: var(--tzu-red); border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.76rem; cursor: pointer; }
+.mini-del:hover { background: var(--tzu-red-soft); }
 
-/* Experiment grid */
-.exp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-}
-.exp-card {
-  background: var(--white);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  padding: 1rem;
-  border-left: 4px solid var(--teal);
-}
-.exp-card.cat-化學 { border-left-color: #E89020; }
-.exp-card.no-id { opacity: 0.6; border-left-style: dashed; }
-.exp-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; }
+/* ── 實驗總表 grid ── */
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; padding: 1rem 2rem 3rem; }
+.exp-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); padding: 1rem; border-left: 4px solid var(--tzu-gold); }
+.exp-card.cat-化學 { border-left-color: var(--tzu-orange); }
+.exp-card.no-id { opacity: 0.72; border-left-style: dashed; }
+.exp-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; }
 .exp-card .meta { font-size: 0.76rem; color: var(--text-light); display: flex; gap: 0.6rem; flex-wrap: wrap; }
-.exp-id { font-size: 0.72rem; font-weight: 700; background: var(--teal); color: #fff; padding: 0.1rem 0.4rem; border-radius: 4px; }
-.exp-id.cat-化學 { background: #E89020; }
-.exp-session-link {
-  display: inline-block; margin-top: 0.6rem;
-  font-size: 0.75rem; font-weight: 600;
-  color: var(--teal-dark); text-decoration: none;
-  border: 1.5px solid var(--teal); border-radius: 6px;
-  padding: 0.15rem 0.55rem;
-  transition: background 0.15s;
-}
-.exp-session-link:hover { background: var(--teal-light); }
+.exp-id { font-size: 0.72rem; font-weight: 700; background: var(--tzu-red); color: #fff; padding: 0.12rem 0.45rem; border-radius: 5px; }
+.exp-id.cat-化學 { background: var(--tzu-orange); }
 
-/* Table container */
-.table-wrap { overflow-x: auto; }
-.mat-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; white-space: nowrap; }
-.mat-table th {
-  background: var(--teal); color: #fff;
-  padding: 0.55rem 0.8rem; text-align: left;
-  position: sticky; top: 0;
-}
-.mat-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
-.mat-table tr:hover td { background: var(--teal-light); }
-.mat-table tr.hidden { display: none; }
-.cat-tag {
-  font-size: 0.72rem; padding: 0.1rem 0.45rem;
-  border-radius: 4px; font-weight: 600;
-}
-.cat-耗材       { background: #E0EEFF; color: #2255AA; }
-.cat-工具       { background: #F0F0F0; color: #555555; }
-.cat-文具       { background: #FFF0E0; color: #996620; }
-.cat-安全       { background: #FFE8E8; color: #990000; }
-.cat-粉狀藥品   { background: #F0E8FF; color: #662299; }
-.cat-液體藥品   { background: #E8F4FF; color: #1A4A88; }
-.cat-玻璃實驗器材 { background: #E8FFF0; color: #1A7040; }
-.cat-非玻璃實驗器材 { background: #E0F8FF; color: #1A6677; }
-.cat-一次性食材  { background: #FFFFF0; color: #777700; }
+.stats-bar { display: flex; gap: 1.4rem; flex-wrap: wrap; padding: 0.9rem 2rem; background: rgba(255,255,255,0.7); border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.stats-bar .stat strong { color: var(--tzu-red); font-size: 1rem; }
 
-/* Edit mode */
-.mat-edit-banner { background:#FFF8E0; border:1.5px solid #E8C840; border-radius:8px; padding:0.5rem 1rem; margin:0.8rem 2rem; display:flex; align-items:center; justify-content:space-between; font-size:0.83rem; color:#7A5000; gap:0.5rem; flex-wrap:wrap; }
-.edit-cell-inp { padding:0.28rem 0.45rem; border:1.5px solid var(--border); border-radius:5px; font-family:inherit; font-size:0.82rem; color:var(--text); background:var(--white); width:100%; box-sizing:border-box; }
-.edit-cell-inp:focus { outline:none; border-color:var(--teal); }
-.row-del-btn { background:none; border:1.5px solid #EEB0B0; color:#CC3333; border-radius:4px; padding:0.15rem 0.45rem; font-size:0.75rem; cursor:pointer; white-space:nowrap; }
-.row-del-btn:hover { background:#FFE8E8; }
-.row-add-btn { background:none; border:1.5px dashed var(--teal); color:var(--teal-dark); border-radius:6px; padding:0.3rem; font-size:0.82rem; cursor:pointer; width:100%; margin-top:0.5rem; font-family:inherit; }
-.row-add-btn:hover { background:var(--teal-light); }
-.mat-edit-active { background:var(--teal); color:#fff; border-color:var(--teal); }
+@media (max-width: 640px) {
+  .toolbar, .inv-wrap, .exp-grid, .stats-bar { padding-left: 1rem; padding-right: 1rem; }
+  .inv-table thead th { top: 52px; }
+}
+@media print {
+  .toolbar, .cart-fab, .tabs, .stats-bar, .no-print { display: none !important; }
+  .modal-bg { position: static; background: none; padding: 0; display: block; }
+  .modal { box-shadow: none; max-width: none; max-height: none; }
+}
 </style>
 </head>
 <body>
@@ -124,309 +111,238 @@
   <a href="generator.html">講義生成器</a>
 </nav>
 
-<div class="hero" style="padding:1.5rem 2rem">
+<div class="hero" style="padding:1.8rem 2rem 1.6rem">
   <h1>實驗與器材</h1>
-  <p>採購進度追蹤 ｜ 實驗總表 ｜ 器材清單</p>
+  <p>茲茲實驗室器材庫存 ｜ 勾選建立課堂清單 ｜ 實驗總表</p>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
 
-<div class="tabs" style="padding:0 2rem;background:var(--white);border-bottom:2px solid var(--border)">
-  <button class="tab active" onclick="switchTab('purchase', this)">實驗器材清單</button>
-  <button class="tab" onclick="switchTab('experiments', this)">實驗總表</button>
-  <button class="tab" id="mat-edit-btn" onclick="toggleMatEdit(this)" style="margin-left:auto">✏️ 編輯器材</button>
-</div>
-<div class="mat-edit-banner" id="mat-edit-banner" style="display:none">
-  <span>✏️ 編輯模式 — 點格子直接修改，離開格子自動儲存</span>
-  <div style="display:flex;gap:0.4rem">
-    <button class="btn" style="font-size:0.81rem" onclick="exportMatData()">📥 匯出 JS 檔</button>
-    <button class="btn btn-outline" style="font-size:0.81rem" onclick="resetMatData()">↩️ 還原預設</button>
+<div class="tabs" id="tabs" style="padding:0 1rem;overflow-x:auto"></div>
+
+<!-- Inventory view -->
+<div id="inventoryView">
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="🔍 搜尋名稱、規格、存放位置、分類…">
+    <select id="catFilter"><option value="">全部分類</option></select>
+    <select id="locFilter"><option value="">全部存放位置</option></select>
+    <label class="chk-flag"><input type="checkbox" id="onlyFlagged"> 只看需人工確認</label>
+    <span class="count-pill" id="countPill"></span>
+  </div>
+  <div class="inv-wrap">
+    <table class="inv-table" id="invTable">
+      <thead><tr id="headRow"></tr></thead>
+      <tbody id="bodyRows"></tbody>
+    </table>
+    <div class="empty-note" id="emptyNote" style="display:none">沒有符合條件的器材</div>
   </div>
 </div>
 
-<!-- 採購清單 tab -->
-<div id="tab-purchase" class="tab-content active">
-  <div style="margin:0.7rem 2rem 0;padding:0.5rem 0.9rem;background:#F0F6FF;border-left:3px solid #7AA8E8;border-radius:0 6px 6px 0;font-size:0.8rem;color:#1A4A88">
-    💡 <strong>器材結構</strong>（新增/刪除/規格/數量）請在 Excel 修改，再告訴 Claude 更新網頁。網頁 edit mode 建議只用來更新<strong>採購狀態</strong>和<strong>到貨狀態</strong>。
-  </div>
-  <div class="filter-bar">
-    <input type="text" id="search" placeholder="🔍 搜尋器材名稱…" oninput="filterTable()">
-    <span class="filter-label">篩選：</span>
-    <select id="filter-cat" onchange="filterTable()">
-      <option value="">所有分類</option>
-      <option>耗材</option><option>工具</option><option>文具</option>
-      <option>安全</option><option>粉狀藥品</option><option>液體藥品</option>
-      <option>玻璃實驗器材</option><option>非玻璃實驗器材</option>
-      <option>一次性食材</option>
-    </select>
-    <select id="filter-status" onchange="filterTable()">
-      <option value="">所有狀態</option>
-      <option value="bought">已購買</option>
-      <option value="arrived">已到貨</option>
-      <option value="pending">待購買</option>
-    </select>
-    <span id="count-display" style="margin-left:auto;font-size:0.82rem;color:var(--text-light)"></span>
-  </div>
-  <div style="padding:1.5rem 2rem">
-    <div class="table-wrap">
-      <table class="mat-table" id="mat-table">
-        <thead>
-          <tr>
-            <th>器材名稱</th>
-            <th>規格</th>
-            <th>分類</th>
-            <th>數量</th>
-            <th>備註</th>
-            <th>採購狀態</th>
-            <th>到貨狀態</th>
-            <th>購買通路</th>
-          </tr>
-        </thead>
-        <tbody id="mat-tbody"></tbody>
+<!-- 實驗總表 view -->
+<div id="expView" style="display:none">
+  <div class="exp-grid" id="exp-grid"></div>
+</div>
+
+<button class="cart-fab no-print" id="cartFab">📋 課堂清單 <span class="n" id="cartCount">0</span></button>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h2 id="modalTitle">📋 本堂課器材清單</h2>
+    <div class="lesson-meta no-print">
+      <input type="text" id="lessonName" placeholder="課程／單元名稱（例：國八 酸鹼中和）">
+      <input type="text" id="lessonDate" placeholder="日期／班級（例：7/30 週三B班）">
+    </div>
+    <div style="overflow-x:auto">
+      <table class="cart-table">
+        <thead><tr><th>名稱</th><th>規格</th><th>需求數量</th><th>單位</th><th>存放位置</th><th>分區</th><th class="no-print"></th></tr></thead>
+        <tbody id="cartRows"></tbody>
       </table>
+    </div>
+    <div class="modal-actions no-print">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+      <button class="btn btn-outline" id="clearCart">清空清單</button>
+      <button class="btn" style="background:#EFEAE0;color:var(--text)" id="closeModal">關閉</button>
     </div>
   </div>
 </div>
 
-<!-- 實驗總表 tab -->
-<div id="tab-experiments" class="tab-content">
-  <div style="padding:1.5rem 2rem">
-    <div class="section-title">已規劃實驗（含未來課程）</div>
-    <div class="exp-grid" id="exp-grid"></div>
-  </div>
-</div>
-
-<script src="js/data.js"></script>
-<script src="js/materials-data.js?v=2"></script>
+<script src="js/materials-data.js?v=3"></script>
+<script src="js/inventory-data.js?v=1"></script>
 <script>
+const CATS = ['工具','耗材','實驗藥品','實驗專用器材'];
+const EXP_TAB = '實驗總表';
+const TAB_ORDER = [...CATS, EXP_TAB];
+let activeTab = CATS[0];
+let cart = {};
 
-// ── Data layer (localStorage > JS default) ──
-let _matCache = null;
-let matEditMode = false;
+function colIndex(cols, name){ return cols.indexOf(name); }
+function escapeAttr(s){ return String(s).replace(/"/g,'&quot;'); }
 
-function getMatData() {
-  if (_matCache) return _matCache;
-  const saved = localStorage.getItem('materialsEdit');
-  _matCache = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(MATERIALS_LIST));
-  return _matCache;
+/* ── Cart persistence ── */
+function loadCart(){ try{ cart = JSON.parse(localStorage.getItem('labInventoryCart')||'{}'); }catch(e){ cart={}; } }
+function saveCart(){ localStorage.setItem('labInventoryCart', JSON.stringify(cart)); document.getElementById('cartCount').textContent = Object.keys(cart).length; }
+
+/* ── Stats ── */
+function renderStats(){
+  const total = CATS.reduce((a,c)=>a+INVENTORY[c].rows.length,0);
+  const flagged = CATS.reduce((a,c)=>{
+    const fi = colIndex(INVENTORY[c].columns,'需人工確認');
+    return a + INVENTORY[c].rows.filter(r=>fi>=0 && r[fi]).length;
+  },0);
+  document.getElementById('stats-bar').innerHTML =
+    `<div class="stat">共 <strong>${total}</strong> 項器材</div>` +
+    CATS.map(c=>`<div class="stat">${c} <strong>${INVENTORY[c].rows.length}</strong></div>`).join('') +
+    (flagged ? `<div class="stat" style="margin-left:auto">⚠️ <strong style="color:var(--red)">${flagged}</strong> 項需人工確認</div>` : '');
 }
 
-function saveMatData() {
-  localStorage.setItem('materialsEdit', JSON.stringify(_matCache));
-}
-
-function resetMatData() {
-  if (!confirm('確定還原所有器材清單到預設值？所有修改將消失。')) return;
-  localStorage.removeItem('materialsEdit');
-  _matCache = null;
-  renderStats();
-  renderTable();
-}
-
-function exportMatData() {
-  const data = getMatData();
-  const content = `const MATERIALS_LIST = ${JSON.stringify(data, null, 2)};\n`;
-  const blob = new Blob([content], {type: 'text/javascript'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'materials-data-export.js';
-  a.click();
-}
-
-function toggleMatEdit(btn) {
-  matEditMode = !matEditMode;
-  btn.textContent = matEditMode ? '👁 預覽' : '✏️ 編輯器材';
-  btn.classList.toggle('mat-edit-active', matEditMode);
-  document.getElementById('mat-edit-banner').style.display = matEditMode ? '' : 'none';
-  renderTable();
-  renderStats();
-}
-
-// ── Stats ──
-function renderStats() {
-  const list = getMatData();
-  const total   = list.length;
-  const bought  = list.filter(m => m.purchaseStatus && m.purchaseStatus.includes('已購買')).length;
-  const arrived = list.filter(m => m.arrivalStatus && m.arrivalStatus.includes('已到貨')).length;
-  const pending = total - bought;
-  document.getElementById('stats-bar').innerHTML = `
-    <div class="stat">共 <strong>${total}</strong> 項器材</div>
-    <div class="stat"><span class="s-bought">已購買</span> <strong>${bought}</strong> 項</div>
-    <div class="stat"><span class="s-arrived">已到貨</span> <strong>${arrived}</strong> 項</div>
-    <div class="stat"><span class="s-pending">待購買</span> <strong>${pending}</strong> 項</div>
-    ${matEditMode ? `<div class="stat" style="margin-left:auto"><button class="btn" style="font-size:0.8rem" onclick="addMatRow()">＋ 新增器材</button></div>` : ''}
-  `;
-}
-
-// ── Materials table ──
-const CAT_LIST = ['耗材','工具','文具','安全','粉狀藥品','液體藥品','玻璃實驗器材','非玻璃實驗器材','一次性食材'];
-const STATUS_LIST = ['','已購買','補習班準備','俊瑋已購買','福大可借到'];
-const ARRIVAL_LIST = ['','已到貨'];
-
-function saveMatRow(i, field, value) {
-  getMatData()[i][field] = value || null;
-  saveMatData();
-  if (['purchaseStatus','arrivalStatus'].includes(field)) renderStats();
-}
-
-function deleteMatRow(i) {
-  if (!confirm(`確定刪除「${getMatData()[i].name}」？`)) return;
-  getMatData().splice(i, 1);
-  saveMatData();
-  renderStats();
-  renderTable();
-}
-
-function addMatRow() {
-  getMatData().push({name:'新器材',spec:null,qty:null,cat:'耗材',unitPrice:null,shares:null,note:null,purchaseStatus:null,arrivalStatus:null,channel:null});
-  saveMatData();
-  renderStats();
-  renderTable();
-  // Scroll to bottom
-  const tbody = document.getElementById('mat-tbody');
-  tbody.lastElementChild?.scrollIntoView({block:'center'});
-}
-
-function renderTable() {
-  const list = getMatData();
-  const tbody = document.getElementById('mat-tbody');
-
-  if (matEditMode) {
-    const catOpts = CAT_LIST.map(c=>`<option>${c}</option>`).join('');
-    tbody.innerHTML = list.map((m, i) => {
-      const purchaseOpts = STATUS_LIST.map(s=>`<option ${m.purchaseStatus===s?'selected':''}>${s}</option>`).join('');
-      const arrivalOpts  = ARRIVAL_LIST.map(s=>`<option ${m.arrivalStatus===s?'selected':''}>${s}</option>`).join('');
-      const catOptsSel   = CAT_LIST.map(c=>`<option ${m.cat===c?'selected':''}>${c}</option>`).join('');
-      return `
-      <tr data-name="${m.name||''}" data-cat="${m.cat||''}" data-bought="${m.purchaseStatus||''}" data-arrived="${m.arrivalStatus||''}">
-        <td><input class="edit-cell-inp" value="${m.name||''}" placeholder="名稱" onchange="saveMatRow(${i},'name',this.value)"></td>
-        <td><input class="edit-cell-inp" style="width:120px" value="${m.spec||''}" placeholder="規格" onchange="saveMatRow(${i},'spec',this.value)"></td>
-        <td><select class="edit-cell-inp" style="width:100px" onchange="saveMatRow(${i},'cat',this.value)">${catOptsSel}</select></td>
-        <td><input class="edit-cell-inp" style="width:60px" value="${m.qty||''}" placeholder="數量" onchange="saveMatRow(${i},'qty',this.value)"></td>
-        <td style="white-space:normal;min-width:120px"><input class="edit-cell-inp" value="${m.note||''}" placeholder="備註/儲存位置" onchange="saveMatRow(${i},'note',this.value)"></td>
-        <td><select class="edit-cell-inp" style="width:110px" onchange="saveMatRow(${i},'purchaseStatus',this.value)">${purchaseOpts}</select></td>
-        <td><select class="edit-cell-inp" style="width:80px" onchange="saveMatRow(${i},'arrivalStatus',this.value)">${arrivalOpts}</select></td>
-        <td><input class="edit-cell-inp" style="width:100px" value="${m.channel||''}" placeholder="通路/URL" onchange="saveMatRow(${i},'channel',this.value)"></td>
-        <td><button class="row-del-btn" onclick="deleteMatRow(${i})">🗑 刪除</button></td>
-      </tr>`;
-    }).join('');
-    // Edit mode: add delete column header
-    const thead = document.querySelector('#mat-table thead tr');
-    if (thead && !thead.querySelector('.del-th')) {
-      const th = document.createElement('th');
-      th.className = 'del-th';
-      th.style.background = 'var(--red)';
-      th.textContent = '操作';
-      thead.appendChild(th);
+/* ── Tabs ── */
+function renderTabs(){
+  const el = document.getElementById('tabs');
+  el.innerHTML = TAB_ORDER.map(t=>{
+    const n = (t===EXP_TAB) ? ALL_EXPERIMENTS.length : INVENTORY[t].rows.length;
+    return `<button class="tab ${t===activeTab?'active':''}" data-tab="${t}">${t} <span style="opacity:.6;font-weight:600">${n}</span></button>`;
+  }).join('');
+  el.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+    activeTab = b.dataset.tab;
+    renderTabs();
+    if(activeTab===EXP_TAB){
+      document.getElementById('inventoryView').style.display='none';
+      document.getElementById('expView').style.display='block';
+      renderExperiments();
+    } else {
+      document.getElementById('expView').style.display='none';
+      document.getElementById('inventoryView').style.display='block';
+      populateFilters(); renderTable();
     }
-  } else {
-    // Remove delete column header if present
-    const delTh = document.querySelector('#mat-table thead .del-th');
-    if (delTh) delTh.remove();
-
-    tbody.innerHTML = list.map((m, i) => {
-      const purchaseBadge = m.purchaseStatus
-        ? m.purchaseStatus.includes('已購買')
-          ? `<span class="s-bought">${m.purchaseStatus}</span>`
-          : `<span class="s-school">${m.purchaseStatus}</span>`
-        : '<span class="s-pending">待購買</span>';
-      const arrivalBadge = m.arrivalStatus ? `<span class="s-arrived">${m.arrivalStatus}</span>` : '—';
-      let channel = '—';
-      if (m.channel) {
-        channel = m.channel.startsWith('http')
-          ? `<a href="${m.channel}" target="_blank" style="color:var(--teal-dark);font-size:0.78rem">🔗 購買連結</a>`
-          : m.channel;
-      }
-      return `
-      <tr data-name="${m.name||''}" data-cat="${m.cat||''}" data-bought="${m.purchaseStatus||''}" data-arrived="${m.arrivalStatus||''}">
-        <td><strong>${m.name}</strong></td>
-        <td>${m.spec||'—'}</td>
-        <td><span class="cat-tag cat-${m.cat}">${m.cat}</span></td>
-        <td>${m.qty||'—'}</td>
-        <td style="white-space:normal;max-width:180px;font-size:0.8rem">${m.note||'—'}</td>
-        <td>${purchaseBadge}</td>
-        <td>${arrivalBadge}</td>
-        <td style="font-size:0.8rem">${channel}</td>
-      </tr>`;
-    }).join('');
-  }
-  updateCount();
-}
-
-function filterTable() {
-  const search = document.getElementById('search').value.toLowerCase();
-  const cat    = document.getElementById('filter-cat').value;
-  const status = document.getElementById('filter-status').value;
-  document.querySelectorAll('#mat-tbody tr').forEach(row => {
-    const name    = (row.dataset.name||'').toLowerCase();
-    const rowCat  = row.dataset.cat;
-    const bought  = row.dataset.bought;
-    const arrived = row.dataset.arrived;
-    const matchSearch = !search || name.includes(search);
-    const matchCat    = !cat || rowCat === cat;
-    let   matchStatus = true;
-    if (status === 'bought')  matchStatus = bought.includes('已購買');
-    if (status === 'arrived') matchStatus = arrived.includes('已到貨');
-    if (status === 'pending') matchStatus = !bought.includes('已購買');
-    row.classList.toggle('hidden', !(matchSearch && matchCat && matchStatus));
   });
-  updateCount();
 }
 
-function updateCount() {
-  const visible = document.querySelectorAll('#mat-tbody tr:not(.hidden)').length;
-  document.getElementById('count-display').textContent = `顯示 ${visible} 項`;
+/* ── Filters ── */
+function populateFilters(){
+  const cols = INVENTORY[activeTab].columns;
+  const ci = colIndex(cols,'分類'), li = colIndex(cols,'存放位置');
+  const cats=new Set(), locs=new Set();
+  INVENTORY[activeTab].rows.forEach(r=>{ if(ci>=0&&r[ci])cats.add(r[ci]); if(li>=0&&r[li])locs.add(r[li]); });
+  document.getElementById('catFilter').innerHTML = '<option value="">全部分類</option>' + [...cats].sort().map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('locFilter').innerHTML = '<option value="">全部存放位置</option>' + [...locs].sort().map(c=>`<option>${c}</option>`).join('');
 }
 
-// ── Experiments grid ──
+/* ── Table ── */
+function renderTable(){
+  const meta = INVENTORY[activeTab];
+  const cols = meta.columns.filter(c=>c!=='需人工確認');
+  const flagIdx = colIndex(meta.columns,'需人工確認');
+  const nameI = colIndex(meta.columns,'中文名稱');
+  const specI = colIndex(meta.columns,'規格');
+  const unitI = colIndex(meta.columns,'單位');
+  const locI  = colIndex(meta.columns,'存放位置');
+  const catI  = colIndex(meta.columns,'分類');
+
+  document.getElementById('headRow').innerHTML =
+    '<th class="no-print">選</th>' + cols.map(c=>`<th>${c}</th>`).join('') + '<th class="no-print">課堂數量</th>';
+
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const catF = document.getElementById('catFilter').value;
+  const locF = document.getElementById('locFilter').value;
+  const onlyFlagged = document.getElementById('onlyFlagged').checked;
+
+  const body = document.getElementById('bodyRows');
+  body.innerHTML = '';
+  let shown = 0;
+
+  meta.rows.forEach(r=>{
+    const flagVal = flagIdx>=0 ? (r[flagIdx]||'') : '';
+    if(onlyFlagged && !flagVal) return;
+    if(catF && r[catI]!==catF) return;
+    if(locF && r[locI]!==locF) return;
+    if(q && !r.map(x=>String(x||'')).join(' ').toLowerCase().includes(q)) return;
+    shown++;
+    const key = activeTab+'||'+(r[nameI]||'')+'||'+(r[specI]||'');
+    const inCart = !!cart[key];
+    const tr = document.createElement('tr');
+    if(flagVal) tr.classList.add('flagged');
+
+    let tds = `<td class="no-print"><input type="checkbox" class="rowchk" data-key="${escapeAttr(key)}" ${inCart?'checked':''}></td>`;
+    cols.forEach(c=>{
+      const ci = colIndex(meta.columns,c);
+      let val = r[ci];
+      if(c==='分類' && val) tds += `<td><span class="inv-tag">${val}</span></td>`;
+      else if(c==='需人工確認') {}
+      else if(val===null||val===undefined||val==='') tds += `<td class="inv-muted">—</td>`;
+      else tds += `<td>${val}</td>`;
+    });
+    const defQty = r[colIndex(meta.columns,'數量')] || 1;
+    const qtyVal = inCart ? cart[key].qty : defQty;
+    tds += `<td class="no-print"><input type="number" min="0" class="qty-input rowqty" data-key="${escapeAttr(key)}" value="${qtyVal||''}" ${inCart?'':'disabled'}></td>`;
+    tr.innerHTML = tds;
+    body.appendChild(tr);
+
+    tr.querySelector('.rowchk').addEventListener('change', e=>{
+      const qtyInput = tr.querySelector('.rowqty');
+      if(e.target.checked){
+        qtyInput.disabled=false;
+        cart[key] = { sheet:activeTab, name:r[nameI]||'', spec:r[specI]||'', unit:unitI>=0?(r[unitI]||''):'', loc:locI>=0?(r[locI]||''):'', qty:qtyInput.value||1 };
+      } else { qtyInput.disabled=true; delete cart[key]; }
+      saveCart();
+    });
+    tr.querySelector('.rowqty').addEventListener('input', e=>{ if(cart[key]){ cart[key].qty=e.target.value; saveCart(); } });
+  });
+
+  document.getElementById('emptyNote').style.display = shown===0 ? 'block':'none';
+  document.getElementById('countPill').textContent = `顯示 ${shown} / ${meta.rows.length} 筆`;
+}
+
+/* ── Cart modal ── */
+function renderCart(){
+  const rows = document.getElementById('cartRows');
+  const keys = Object.keys(cart);
+  if(keys.length===0){ rows.innerHTML = '<tr><td colspan="7" class="inv-muted" style="text-align:center;padding:1.5rem">尚未勾選任何器材</td></tr>'; }
+  else rows.innerHTML = keys.map(k=>{
+    const it = cart[k];
+    return `<tr><td>${it.name}</td><td>${it.spec||'—'}</td><td>${it.qty}</td><td>${it.unit||'—'}</td><td>${it.loc||'—'}</td><td>${it.sheet}</td>
+      <td class="no-print"><button class="mini-del" data-key="${escapeAttr(k)}">移除</button></td></tr>`;
+  }).join('');
+  rows.querySelectorAll('.mini-del').forEach(b=>b.onclick=()=>{ delete cart[b.dataset.key]; saveCart(); renderCart(); renderTable(); });
+  const nm = document.getElementById('lessonName').value;
+  document.getElementById('modalTitle').textContent = '📋 本堂課器材清單' + (nm ? '　' + nm : '');
+}
+
+/* ── 實驗總表 ── */
 const SESSION_LINK_MAP = {
-  'P01': 'teacher.html?s=1',
-  'C01': 'teacher.html?s=2',
-  'P02': 'teacher.html?s=3',
-  'P03': 'teacher.html?s=4',
-  'C02': 'teacher.html?s=5',
-  '中1': 'teacher.html?course=middle&s=1',
+  'P01':'teacher.html?s=1','C01':'teacher.html?s=2','P02':'teacher.html?s=4',
+  'P03':'teacher.html?s=5','C02':'teacher.html?s=6','中1':'teacher.html?course=middle&s=1'
 };
-
-function renderExperiments() {
+function renderExperiments(){
   const grid = document.getElementById('exp-grid');
-  grid.innerHTML = ALL_EXPERIMENTS.map(e => {
-    const idBadge = e.id
-      ? `<span class="exp-id cat-${e.cat}">${e.id}</span>`
-      : `<span style="font-size:0.72rem;color:#aaa">規劃中</span>`;
-    const sessionLink = SESSION_LINK_MAP[e.id]
-      ? `<a class="exp-session-link" href="${SESSION_LINK_MAP[e.id]}">📋 課前準備</a>`
-      : '';
-    return `
-    <div class="exp-card cat-${e.cat} ${e.id ? '' : 'no-id'}">
-      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
-        ${idBadge}
-        <span class="badge badge-cat" style="font-size:0.72rem">${e.cat}</span>
-      </div>
+  grid.innerHTML = ALL_EXPERIMENTS.map(e=>{
+    const idBadge = e.id ? `<span class="exp-id cat-${e.cat}">${e.id}</span>` : `<span style="font-size:0.72rem;color:#B7AE9C">規劃中</span>`;
+    const link = SESSION_LINK_MAP[e.id] ? `<a class="card-footer" href="${SESSION_LINK_MAP[e.id]}" style="display:inline-block;margin-top:0.6rem;background:none;padding:0;color:var(--tzu-red);font-size:0.76rem;font-weight:700;text-decoration:none">📋 課前準備 →</a>` : '';
+    return `<div class="exp-card cat-${e.cat} ${e.id?'':'no-id'}">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">${idBadge}
+        <span class="badge badge-cat" style="font-size:0.72rem">${e.cat}</span></div>
       <h4>${e.title}</h4>
-      <div class="meta">
-        <span>⏱ ${e.duration} 分鐘</span>
-        <span>👥 ${e.format}</span>
-      </div>
-      <div style="font-size:0.76rem;color:var(--text-light);margin-top:0.4rem">${e.concept}</div>
-      ${sessionLink}
-    </div>`;
+      <div class="meta"><span>⏱ ${e.duration} 分鐘</span><span>👥 ${e.format}</span></div>
+      <div style="font-size:0.76rem;color:var(--text-light);margin-top:0.4rem">${e.concept}</div>${link}</div>`;
   }).join('');
 }
 
-// ── Tabs ──
-function switchTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-}
+/* ── Wire up ── */
+['search','catFilter','locFilter','onlyFlagged'].forEach(id=>{
+  document.getElementById(id).addEventListener(id==='search'?'input':'change', renderTable);
+});
+document.getElementById('cartFab').addEventListener('click', ()=>{ renderCart(); document.getElementById('modalBg').classList.add('show'); });
+document.getElementById('closeModal').addEventListener('click', ()=>document.getElementById('modalBg').classList.remove('show'));
+document.getElementById('modalBg').addEventListener('click', e=>{ if(e.target.id==='modalBg') e.currentTarget.classList.remove('show'); });
+document.getElementById('clearCart').addEventListener('click', ()=>{ if(confirm('確定清空目前的課堂清單？')){ cart={}; saveCart(); renderCart(); renderTable(); } });
+document.getElementById('lessonName').addEventListener('input', renderCart);
 
-// Init
-getMatData(); // warm cache
+/* ── Init ── */
+loadCart();
 renderStats();
+renderTabs();
+populateFilters();
 renderTable();
-renderExperiments();
+saveCart();
 </script>
 </body>
 </html>
