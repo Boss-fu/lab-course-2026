@@ -118,7 +118,7 @@
 <!-- Inventory view -->
 <div id="inventoryView">
   <div class="toolbar">
-    <input type="text" id="search" placeholder="🔍 搜尋名稱、規格、存放位置、分類…">
+    <input type="text" id="search" placeholder="搜尋名稱、規格、存放位置、分類…">
     <select id="catFilter"><option value="">全部分類</option></select>
     <select id="locFilter"><option value="">全部存放位置</option></select>
     <label class="chk-flag"><input type="checkbox" id="onlyFlagged"> 只看需人工確認</label>
@@ -138,11 +138,11 @@
   <div class="exp-grid" id="exp-grid"></div>
 </div>
 
-<button class="cart-fab no-print" id="cartFab">📋 課堂清單 <span class="n" id="cartCount">0</span></button>
+<button class="cart-fab no-print" id="cartFab">課堂清單 <span class="n" id="cartCount">0</span></button>
 
 <div class="modal-bg" id="modalBg">
   <div class="modal">
-    <h2 id="modalTitle">📋 本堂課器材清單</h2>
+    <h2 id="modalTitle">本堂課器材清單</h2>
     <div class="lesson-meta no-print">
       <input type="text" id="lessonName" placeholder="課程／單元名稱（例：國八 酸鹼中和）">
       <input type="text" id="lessonDate" placeholder="日期／班級（例：7/30 週三B班）">
@@ -154,7 +154,7 @@
       </table>
     </div>
     <div class="modal-actions no-print">
-      <button class="btn btn-primary" onclick="window.print()">🖨️ 列印 / 存 PDF</button>
+      <button class="btn btn-primary" onclick="window.print()">列印 / 存 PDF</button>
       <button class="btn btn-outline" id="clearCart">清空清單</button>
       <button class="btn" style="background:#EFEAE0;color:var(--text)" id="closeModal">關閉</button>
     </div>
@@ -187,7 +187,7 @@ function renderStats(){
   document.getElementById('stats-bar').innerHTML =
     `<div class="stat">共 <strong>${total}</strong> 項器材</div>` +
     CATS.map(c=>`<div class="stat">${c} <strong>${INVENTORY[c].rows.length}</strong></div>`).join('') +
-    (flagged ? `<div class="stat" style="margin-left:auto">⚠️ <strong style="color:var(--red)">${flagged}</strong> 項需人工確認</div>` : '');
+    (flagged ? `<div class="stat" style="margin-left:auto">⚠<strong style="color:var(--red)">${flagged}</strong> 項需人工確認</div>` : '');
 }
 
 /* ── Tabs ── */
@@ -299,7 +299,7 @@ function renderCart(){
   }).join('');
   rows.querySelectorAll('.mini-del').forEach(b=>b.onclick=()=>{ delete cart[b.dataset.key]; saveCart(); renderCart(); renderTable(); });
   const nm = document.getElementById('lessonName').value;
-  document.getElementById('modalTitle').textContent = '📋 本堂課器材清單' + (nm ? '　' + nm : '');
+  document.getElementById('modalTitle').textContent = '本堂課器材清單' + (nm ? '　' + nm : '');
 }
 
 /* ── 實驗總表 ── */
@@ -311,12 +311,12 @@ function renderExperiments(){
   const grid = document.getElementById('exp-grid');
   grid.innerHTML = ALL_EXPERIMENTS.map(e=>{
     const idBadge = e.id ? `<span class="exp-id cat-${e.cat}">${e.id}</span>` : `<span style="font-size:0.72rem;color:#B7AE9C">規劃中</span>`;
-    const link = SESSION_LINK_MAP[e.id] ? `<a class="card-footer" href="${SESSION_LINK_MAP[e.id]}" style="display:inline-block;margin-top:0.6rem;background:none;padding:0;color:var(--tzu-red);font-size:0.76rem;font-weight:700;text-decoration:none">📋 課前準備 →</a>` : '';
+    const link = SESSION_LINK_MAP[e.id] ? `<a class="card-footer" href="${SESSION_LINK_MAP[e.id]}" style="display:inline-block;margin-top:0.6rem;background:none;padding:0;color:var(--tzu-red);font-size:0.76rem;font-weight:700;text-decoration:none">課前準備 →</a>` : '';
     return `<div class="exp-card cat-${e.cat} ${e.id?'':'no-id'}">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">${idBadge}
         <span class="badge badge-cat" style="font-size:0.72rem">${e.cat}</span></div>
       <h4>${e.title}</h4>
-      <div class="meta"><span>⏱ ${e.duration} 分鐘</span><span>👥 ${e.format}</span></div>
+      <div class="meta"><span>${e.duration} 分鐘</span><span>${e.format}</span></div>
       <div style="font-size:0.76rem;color:var(--text-light);margin-top:0.4rem">${e.concept}</div>${link}</div>`;
   }).join('');
 }

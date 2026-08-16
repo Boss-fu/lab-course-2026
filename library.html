@@ -28,12 +28,12 @@
 .chip.grade{ background:var(--tzu-gold-soft); color:var(--tzu-gold-dark); }
 .lib-foot{ display:flex; align-items:center; gap:0.5rem; margin-top:auto; padding-top:0.6rem; border-top:1px solid var(--border); }
 .st{ font-size:0.72rem; font-weight:700; padding:0.16rem 0.55rem; border-radius:20px; }
-.st-ready{ background:#E7F6EE; color:#1E8A52; } .st-draft{ background:#EEF3FB; color:#3E6FB0; } .st-planned{ background:var(--tzu-orange-soft); color:#A9600A; }
+.st-ready{ background:#f1ede6; color:#6f6353; } .st-draft{ background:#f1ede6; color:#6f6353; } .st-planned{ background:var(--tzu-orange-soft); color:#6f6353; }
 .lib-link{ margin-left:auto; font-size:0.76rem; font-weight:700; color:var(--tzu-red); text-decoration:none; }
 .lib-link:hover{ text-decoration:underline; }
 .vid-link{ font-size:0.76rem; color:var(--text-light); text-decoration:none; margin-left:auto; }
 .prog-track{ height:10px; border-radius:6px; background:#EAE3D5; overflow:hidden; display:flex; margin-bottom:0.5rem; }
-.prog-ready{ background:var(--green); } .prog-draft{ background:#5A86C4; } .prog-plan{ background:var(--tzu-orange); }
+.prog-ready{ background:var(--tzu-red); } .prog-draft{ background:#cfc7b6; } .prog-plan{ background:#e6e4de; }
 .prog-legend{ display:flex; gap:1.1rem; flex-wrap:wrap; font-size:0.8rem; color:var(--text-light); margin-bottom:1.2rem; }
 .prog-legend b{ color:var(--text); }
 .empty-note{ padding:2.5rem; text-align:center; color:var(--text-light); }
@@ -45,7 +45,7 @@
 
 <main class="app-main">
   <div class="page-head">
-    <h1>🎨 創意實驗</h1>
+    <h1>創意實驗</h1>
     <p>茲茲招牌創意實驗目錄 — 每個實驗都是課程堂次的積木，可跨年段重複使用</p>
   </div>
   <div class="page-body">
@@ -53,10 +53,10 @@
     <div class="prog-legend" id="prog-legend"></div>
 
     <div class="filter-bar">
-      <input type="text" id="search" placeholder="🔍 搜尋實驗名稱、科學觀念…">
+      <input type="text" id="search" placeholder="搜尋實驗名稱、科學觀念…">
       <select id="fCat"><option value="">全部分類</option><option>物理</option><option>化學</option><option>生物</option><option>跨領域</option></select>
       <select id="fGrade"><option value="">全部年段</option><option>國小</option><option>國七</option><option>國八</option><option>國中</option><option>銜接</option></select>
-      <select id="fStatus"><option value="">全部狀態</option><option value="ready">✅ 講義完成</option><option value="draft">📝 講義草稿</option><option value="planned">🗂 規劃中</option></select>
+      <select id="fStatus"><option value="">全部狀態</option><option value="ready">講義完成</option><option value="draft">講義草稿</option><option value="planned">規劃中</option></select>
       <span class="count-pill" id="countPill"></span>
     </div>
 
@@ -74,7 +74,7 @@ function renderProgress(){
   document.getElementById('prog-track').innerHTML =
     `<div class="prog-ready" style="width:${pct('ready')}"></div><div class="prog-draft" style="width:${pct('draft')}"></div><div class="prog-plan" style="width:${pct('planned')}"></div>`;
   document.getElementById('prog-legend').innerHTML =
-    `<span>共 <b>${total}</b> 個創意實驗</span><span>✅ 講義完成 <b>${n.ready}</b></span><span>📝 草稿 <b>${n.draft}</b></span><span>🗂 規劃中 <b>${n.planned}</b></span>`;
+    `<span>共 <b>${total}</b> 個創意實驗</span><span>講義完成 <b>${n.ready}</b></span><span>草稿 <b>${n.draft}</b></span><span>規劃中 <b>${n.planned}</b></span>`;
 }
 function render(){
   const q=document.getElementById('search').value.trim().toLowerCase();
@@ -90,10 +90,10 @@ function render(){
     const c=CATEGORY_COLOR[e.category]||{bg:'#eee',fg:'#555'}, st=STATUS_META[e.status];
     const noBadge=e.no!=null?`<span class="lib-no">實驗 ${e.no}</span>`:`<span class="lib-no none">未編號</span>`;
     const grades=(e.grades||[]).map(g=>`<span class="chip grade">${g}</span>`).join('');
-    const handout=e.handout?`<a class="lib-link" href="${e.handout}" target="_blank">📄 開啟講義</a>`:(e.video&&e.video.length?`<a class="vid-link" href="${e.video[0]}" target="_blank">▶ 參考影片</a>`:'');
+    const handout=e.handout?`<a class="lib-link" href="${e.handout}" target="_blank">開啟講義</a>`:(e.video&&e.video.length?`<a class="vid-link" href="${e.video[0]}" target="_blank">▶ 參考影片</a>`:'');
     return `<div class="lib-card"><div class="lib-top">${noBadge}<span class="cat-tag" style="background:${c.bg};color:${c.fg}">${e.category}</span></div>
       <div class="lib-name">${e.name}</div><div class="lib-topic">${e.topic}</div>
-      <div class="lib-meta"><span class="chip">⏱ ${e.minutes} 分</span><span class="chip">難度 ${e.difficulty}</span>${grades}${e.takeHome?`<span class="chip">🎁 ${e.takeHome}</span>`:''}</div>
+      <div class="lib-meta"><span class="chip">${e.minutes} 分</span><span class="chip">難度 ${e.difficulty}</span>${grades}${e.takeHome?`<span class="chip">${e.takeHome}</span>`:''}</div>
       <div class="lib-foot"><span class="st ${st.cls}">${st.label}</span>${handout}</div></div>`;
   }).join('');
   document.getElementById('emptyNote').style.display = rows.length?'none':'block';

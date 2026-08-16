@@ -22,14 +22,14 @@
 .cur-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid #ccc; border-radius:12px; box-shadow:var(--shadow-sm); padding:0.85rem 1rem; }
 .cur-top{ display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.35rem; }
 .stage-tag{ font-size:0.7rem; font-weight:700; padding:0.1rem 0.5rem; border-radius:5px; background:var(--tzu-red); color:#fff; }
-.stage-tag.高中{ background:#3E6FB0; }
+.stage-tag.高中{ background:#6f6353; }
 .grade-tag{ font-size:0.7rem; color:var(--text-light); font-weight:600; }
 .cur-name{ font-size:0.92rem; font-weight:800; color:var(--text); line-height:1.35; }
 .cur-topic{ font-size:0.78rem; color:var(--text-light); margin-top:0.3rem; line-height:1.6; }
 .cur-foot{ display:flex; align-items:center; gap:0.4rem; margin-top:0.5rem; flex-wrap:wrap; }
 .nat-chip{ font-size:0.7rem; padding:0.12rem 0.5rem; border-radius:20px; background:#F4EFE6; color:var(--text-light); font-weight:600; }
 .link-creative{ font-size:0.72rem; font-weight:700; color:var(--tzu-gold-dark); background:var(--tzu-gold-soft); padding:0.12rem 0.5rem; border-radius:20px; text-decoration:none; }
-.link-creative:hover{ background:#F5E9C8; }
+.link-creative:hover{ background:#ece4d6; }
 .empty-note{ padding:2.5rem; text-align:center; color:var(--text-light); }
 </style>
 </head>
@@ -39,16 +39,16 @@
 
 <main class="app-main">
   <div class="page-head">
-    <h1>📗 課綱實驗</h1>
+    <h1>課綱實驗</h1>
     <p>國中＋高中 108 課綱標準實驗清單專區 — 教學骨架，與創意實驗互補</p>
   </div>
   <div class="page-body">
     <div class="info-box">
-      📌 此為依十二年國教自然科學領域整理的<strong>標準參考清單</strong>（持續擴充、可再細修），非特定教科書版本。標有 🎨 的項目，茲茲已有對應的創意實驗版本可直接連結使用。
+      此為依十二年國教自然科學領域整理的<strong>標準參考清單</strong>（持續擴充、可再細修），非特定教科書版本。標有 的項目，茲茲已有對應的創意實驗版本可直接連結使用。
     </div>
 
     <div class="filter-bar">
-      <input type="text" id="search" placeholder="🔍 搜尋實驗名稱、科學觀念…">
+      <input type="text" id="search" placeholder="搜尋實驗名稱、科學觀念…">
       <select id="fStage"><option value="">全部學制</option><option>國中</option><option>高中</option></select>
       <select id="fSubject"><option value="">全部科目</option><option>生物</option><option>理化</option><option>物理</option><option>化學</option><option>地球科學</option></select>
       <select id="fGrade"><option value="">全部年級</option></select>
@@ -72,7 +72,7 @@ document.getElementById('fGrade').innerHTML='<option value="">全部年級</opti
 function card(c){
   const col=SUBJECT_COLOR[c.subject]||{bg:'#eee',fg:'#555'};
   const link = c.creativeId && creativeName[c.creativeId]
-    ? `<a class="link-creative" href="library.html" title="已有創意版">🎨 ${creativeName[c.creativeId]}</a>` : '';
+    ? `<a class="link-creative" href="library.html" title="已有創意版">${creativeName[c.creativeId]}</a>` : '';
   return `<div class="cur-card" style="border-left-color:${col.fg}">
     <div class="cur-top"><span class="stage-tag ${c.stage}">${c.stage}</span>
       <span class="sub-pill" style="background:${col.bg};color:${col.fg}">${c.subject}</span>

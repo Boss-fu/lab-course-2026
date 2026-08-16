@@ -4,13 +4,13 @@
         末尾： <script src="js/shell.js"></script>  */
 (function () {
   const NAV = [
-    { key:'dashboard',  href:'index.html',      ico:'🏠', label:'總覽' },
-    { key:'lib',        href:'library.html',    ico:'🎨', label:'創意實驗' },
-    { key:'curriculum', href:'curriculum.html', ico:'📗', label:'課綱實驗' },
-    { key:'courses',    href:'courses.html',    ico:'🎒', label:'課程目錄' },
-    { key:'materials',  href:'materials.html',  ico:'🧰', label:'器材管理' },
-    { key:'generator',  href:'generator.html',  ico:'📝', label:'講義生成器' },
-    { key:'teacher',    href:'teacher.html',    ico:'✅', label:'課前準備' },
+    { key:'dashboard',  href:'index.html',      label:'總覽' },
+    { key:'lib',        href:'library.html',    label:'創意實驗' },
+    { key:'curriculum', href:'curriculum.html', label:'課綱實驗' },
+    { key:'courses',    href:'courses.html',    label:'課程目錄' },
+    { key:'materials',  href:'materials.html',  label:'器材管理' },
+    { key:'generator',  href:'generator.html',  label:'講義生成器' },
+    { key:'teacher',    href:'teacher.html',    label:'課前準備' },
   ];
 
   const mount = document.getElementById('app-shell');
@@ -18,7 +18,7 @@
   const active = mount.dataset.active || '';
 
   const link = (it) =>
-    `<a href="${it.href}" class="nav-link ${it.key===active?'active':''}"><span class="ico">${it.ico}</span>${it.label}</a>`;
+    `<a href="${it.href}" class="nav-link ${it.key===active?'active':''}">${it.label}</a>`;
 
   const navHtml = NAV.map(link).join('');
 

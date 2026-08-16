@@ -75,8 +75,8 @@ function riskClass(level) {
 const grid = document.getElementById('sessions-grid');
 c.sessions.forEach(s => {
   const handoutBtn = s.handout
-    ? `<a href="${s.handout}" target="_blank">📄 下載講義</a>`
-    : `<span class="no-handout">⏳ 講義製作中（${s.handoutDeadline || ''}）</span>`;
+    ? `<a href="${s.handout}" target="_blank">下載講義</a>`
+    : `<span class="no-handout">講義製作中（${s.handoutDeadline || ''}）</span>`;
 
   const riskLabel = ['', '低', '中', '中高', '高'][s.riskLevel];
   const riskBadgeClass = s.riskLevel >= 3 ? 'high' : '';
@@ -87,7 +87,7 @@ c.sessions.forEach(s => {
       <div class="session-num">${s.id}</div>
       <div class="card-title">
         <h3>${s.title}</h3>
-        <div class="date">📅 ${s.dateDisplay}</div>
+        <div class="date">${s.dateDisplay}</div>
       </div>
     </div>
     <div class="card-badges">
@@ -95,15 +95,15 @@ c.sessions.forEach(s => {
       <span class="badge badge-diff">難度：${s.difficulty}</span>
       <span class="badge badge-risk ${riskBadgeClass}">風險：${riskLabel}</span>
       <span class="badge ${s.status === 'ready' ? 'badge-ready' : 'badge-pending'}">
-        ${s.status === 'ready' ? '✅ 講義完成' : '🔧 製作中'}
+        ${s.status === 'ready' ? '講義完成' : '製作中'}
       </span>
     </div>
     <div class="card-experiments">
-      ${s.experiments.map(e => `<span class="exp-chip">⚗️ ${e}</span>`).join('')}
+      ${s.experiments.map(e => `<span class="exp-chip">${e}</span>`).join('')}
     </div>
     <div class="card-footer">
       ${handoutBtn}
-      <span class="take-home">🎁 ${s.takeHome !== '無' ? '帶回：' + s.takeHome : '無成品帶回'}</span>
+      <span class="take-home">${s.takeHome !== '無' ? '帶回：' + s.takeHome : '無成品帶回'}</span>
     </div>
   </div>`;
 });
@@ -112,8 +112,8 @@ c.sessions.forEach(s => {
 const tbody = document.getElementById('progress-body');
 c.sessions.forEach(s => {
   const statusHtml = s.status === 'ready'
-    ? '<span class="progress-status status-ready">✅ 已完成</span>'
-    : '<span class="progress-status status-pending">🔧 製作中</span>';
+    ? '<span class="progress-status status-ready">已完成</span>'
+    : '<span class="progress-status status-pending">製作中</span>';
   const deadline = s.status === 'ready' ? '—' : (s.handoutDeadline || '');
   tbody.innerHTML += `
   <tr>

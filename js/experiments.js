@@ -69,13 +69,13 @@ const EXPERIMENTS = [
 
 /* 分類顏色（供頁面使用） */
 const CATEGORY_COLOR = {
-  '物理': { bg:'#EEF3FB', fg:'#3E6FB0' },
-  '化學': { bg:'#FFF3E0', fg:'#A9600A' },
-  '生物': { bg:'#E7F6EE', fg:'#1E8A52' },
-  '跨領域': { bg:'#F3EEFB', fg:'#7A4FB0' },
+  '物理': { bg:'#f1ede6', fg:'#6f6353' },
+  '化學': { bg:'#f1ede6', fg:'#6f6353' },
+  '生物': { bg:'#f1ede6', fg:'#6f6353' },
+  '跨領域': { bg:'#f1ede6', fg:'#6f6353' },
 };
 const STATUS_META = {
-  ready:   { label:'✅ 講義完成', cls:'st-ready' },
-  draft:   { label:'📝 講義草稿', cls:'st-draft' },
-  planned: { label:'🗂 規劃中',   cls:'st-planned' },
+  ready:   { label:'講義完成', cls:'st-ready' },
+  draft:   { label:'講義草稿', cls:'st-draft' },
+  planned: { label:'規劃中',   cls:'st-planned' },
 };
