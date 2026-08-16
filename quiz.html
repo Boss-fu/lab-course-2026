@@ -53,8 +53,6 @@
 .reveal-btn{ background:var(--tzu-red); color:#fff; border:none; border-radius:8px; padding:0.35rem 0.9rem; font-size:0.78rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s, transform .1s; }
 .reveal-btn:hover{ background:var(--tzu-red-dark); transform:translateY(-1px); }
 .q-card.revealed .reveal-btn{ background:var(--white); color:var(--tzu-red); border:1.5px solid var(--tzu-red); }
-.rel-chip{ font-size:0.72rem; font-weight:700; color:var(--tzu-gold-dark); background:var(--tzu-gold-soft); padding:0.14rem 0.55rem; border-radius:20px; text-decoration:none; }
-.rel-chip:hover{ background:#F5E9C8; }
 .tag-chip{ font-size:0.68rem; color:var(--text-light); background:#F4EFE6; padding:0.1rem 0.45rem; border-radius:20px; }
 .empty-note{ padding:2.5rem; text-align:center; color:var(--text-light); }
 </style>
@@ -70,7 +68,7 @@
   </div>
   <div class="page-body">
     <div class="info-box">
-      📌 此為與課綱實驗對接的<strong>種子題庫</strong>（持續擴充、可再細修）。標有 🔗 的題目，可連結到對應的實驗或課綱項目。點「顯示答案」即可看到正解與解析。
+      📌 此為<strong>種子題庫</strong>（持續擴充、可再細修）。可用上方篩選列依學制、科目、題型、難度快速找題；點「顯示答案」即可看到正解與解析。
     </div>
 
     <div class="qz-stats" id="qzStats"></div>
@@ -133,7 +131,6 @@ function optionsHtml(q){
 }
 
 function card(q){
-  const rel = q.relatedId ? `<a class="rel-chip" href="curriculum.html" title="對應實驗／課綱">🔗 延伸實驗</a>` : '';
   const tags = (q.tags||[]).slice(0,4).map(t=>`<span class="tag-chip">#${t}</span>`).join('');
   return `<div class="q-card ${DIFF_CLASS[q.difficulty]||''}" data-id="${q.id}">
     <div class="q-top">
