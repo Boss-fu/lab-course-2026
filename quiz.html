@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>題庫系統 · 茲茲實驗課務系統</title>
+<link rel="icon" href="茲茲icon.png">
+<link rel="stylesheet" href="css/style2.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+/* ── 題庫系統 · 統計列 ── */
+.qz-stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:0.8rem; margin-bottom:1.2rem; }
+.qz-stat{ background:var(--white); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-sm); padding:0.8rem 0.9rem; border-top:3px solid var(--tzu-red); }
+.qz-stat .n{ font-size:1.5rem; font-weight:900; color:var(--tzu-red); line-height:1; }
+.qz-stat .l{ font-size:0.74rem; color:var(--text-light); margin-top:0.3rem; font-weight:600; }
+
+/* ── 篩選列 ── */
+.filter-bar{ display:flex; flex-wrap:wrap; gap:0.6rem; align-items:center; margin-bottom:1rem; }
+.filter-bar input[type=text]{ flex:1; min-width:200px; padding:0.5rem 0.8rem; border:1.5px solid var(--border); border-radius:9px; font-family:inherit; font-size:0.88rem; background:var(--white); }
+.filter-bar input[type=text]:focus{ outline:none; border-color:var(--tzu-red); box-shadow:0 0 0 3px rgba(133,1,3,.1); }
+.filter-bar select{ padding:0.5rem 0.7rem; border:1.5px solid var(--border); border-radius:9px; font-family:inherit; font-size:0.86rem; background:var(--white); cursor:pointer; }
+.filter-bar select:focus{ outline:none; border-color:var(--tzu-red); }
+.count-pill{ font-size:0.82rem; color:var(--text-light); margin-left:auto; }
+
+.toolbar{ display:flex; gap:0.5rem; align-items:center; margin-bottom:1.1rem; flex-wrap:wrap; }
+.info-box{ background:#FFFBEB; border:1.5px solid #FCD34D; color:#92400E; border-radius:10px; padding:0.7rem 1rem; font-size:0.83rem; margin-bottom:1.2rem; line-height:1.7; }
+
+/* ── 題目卡片 ── */
+.q-list{ display:flex; flex-direction:column; gap:0.9rem; }
+.q-card{ background:var(--white); border:1px solid var(--border); border-left:4px solid var(--tzu-gold); border-radius:12px; box-shadow:var(--shadow-sm); padding:1rem 1.1rem; }
+.q-card.hard{ border-left-color:var(--red); }
+.q-card.mid{ border-left-color:var(--tzu-orange); }
+.q-top{ display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.55rem; }
+.q-badge{ font-size:0.7rem; font-weight:700; padding:0.14rem 0.55rem; border-radius:20px; }
+.b-stage{ background:var(--tzu-red); color:#fff; }
+.b-stage.高中{ background:#3E6FB0; }
+.b-type{ background:var(--tzu-red-soft); color:var(--tzu-red); }
+.b-diff.易{ background:#E7F6EE; color:#1E8A52; }
+.b-diff.中{ background:var(--tzu-orange-soft); color:#A9600A; }
+.b-diff.難{ background:#FDECEA; color:var(--red); }
+.q-grade{ font-size:0.72rem; color:var(--text-light); font-weight:600; margin-left:auto; }
+.q-stem{ font-size:0.95rem; font-weight:700; color:var(--text); line-height:1.6; }
+.q-options{ list-style:none; margin:0.6rem 0 0; padding:0; display:grid; gap:0.35rem; }
+.q-options li{ font-size:0.88rem; color:var(--text); padding:0.35rem 0.6rem; border:1px solid var(--border); border-radius:8px; background:#FCFAF6; display:flex; gap:0.5rem; }
+.q-options li .k{ font-weight:800; color:var(--text-light); flex-shrink:0; }
+.q-card.revealed .q-options li.correct{ background:#E7F6EE; border-color:#8ED3AC; }
+.q-card.revealed .q-options li.correct .k{ color:#1E8A52; }
+.q-answer{ display:none; margin-top:0.7rem; padding:0.7rem 0.9rem; background:var(--tzu-gold-soft); border:1px solid #E9D9A6; border-radius:9px; font-size:0.85rem; line-height:1.7; }
+.q-card.revealed .q-answer{ display:block; }
+.q-answer .ans-label{ font-weight:800; color:var(--tzu-gold-dark); }
+.q-answer .exp{ color:var(--text); margin-top:0.3rem; }
+.q-foot{ display:flex; align-items:center; gap:0.5rem; margin-top:0.7rem; flex-wrap:wrap; }
+.reveal-btn{ background:var(--tzu-red); color:#fff; border:none; border-radius:8px; padding:0.35rem 0.9rem; font-size:0.78rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s, transform .1s; }
+.reveal-btn:hover{ background:var(--tzu-red-dark); transform:translateY(-1px); }
+.q-card.revealed .reveal-btn{ background:var(--white); color:var(--tzu-red); border:1.5px solid var(--tzu-red); }
+.rel-chip{ font-size:0.72rem; font-weight:700; color:var(--tzu-gold-dark); background:var(--tzu-gold-soft); padding:0.14rem 0.55rem; border-radius:20px; text-decoration:none; }
+.rel-chip:hover{ background:#F5E9C8; }
+.tag-chip{ font-size:0.68rem; color:var(--text-light); background:#F4EFE6; padding:0.1rem 0.45rem; border-radius:20px; }
+.empty-note{ padding:2.5rem; text-align:center; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<div id="app-shell" data-active="quiz"></div>
+
+<main class="app-main">
+  <div class="page-head">
+    <h1>📚 題庫系統</h1>
+    <p>依科目、學制、題型與難度整理的練習題庫 — 可即時顯示答案與詳解，適合課後複習與命題參考</p>
+  </div>
+  <div class="page-body">
+    <div class="info-box">
+      📌 此為與課綱實驗對接的<strong>種子題庫</strong>（持續擴充、可再細修）。標有 🔗 的題目，可連結到對應的實驗或課綱項目。點「顯示答案」即可看到正解與解析。
+    </div>
+
+    <div class="qz-stats" id="qzStats"></div>
+
+    <div class="filter-bar">
+      <input type="text" id="search" placeholder="🔍 搜尋題幹、關鍵字…">
+      <select id="fStage"><option value="">全部學制</option><option>國中</option><option>高中</option></select>
+      <select id="fSubject"><option value="">全部科目</option><option>生物</option><option>理化</option><option>物理</option><option>化學</option><option>地球科學</option></select>
+      <select id="fType"><option value="">全部題型</option><option>選擇</option><option>是非</option><option>填充</option><option>簡答</option><option>探究</option></select>
+      <select id="fDiff"><option value="">全部難度</option><option>易</option><option>中</option><option>難</option></select>
+      <span class="count-pill" id="countPill"></span>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-outline" id="revealAll">顯示全部答案</button>
+      <button class="btn btn-outline" id="hideAll">收合全部答案</button>
+    </div>
+
+    <div class="q-list" id="list"></div>
+    <div class="empty-note" id="emptyNote" style="display:none">沒有符合條件的題目</div>
+  </div>
+</main>
+
+<script src="js/quiz-data.js?v=1"></script>
+<script src="js/shell.js?v=1"></script>
+<script>
+const KEY = ['A','B','C','D','E','F'];
+const DIFF_CLASS = { '易':'', '中':'mid', '難':'hard' };
+
+// 統計列
+(function(){
+  const total = QUIZ_BANK.length;
+  const byType = t => QUIZ_BANK.filter(q=>q.type===t).length;
+  const stats = [
+    { n: total, l:'題目總數' },
+    { n: byType('選擇'), l:'選擇題' },
+    { n: QUIZ_BANK.filter(q=>q.stage==='國中').length, l:'國中題' },
+    { n: QUIZ_BANK.filter(q=>q.stage==='高中').length, l:'高中題' },
+    { n: [...new Set(QUIZ_BANK.map(q=>q.subject))].length, l:'涵蓋科目' },
+  ];
+  document.getElementById('qzStats').innerHTML = stats.map(s=>
+    `<div class="qz-stat"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`).join('');
+})();
+
+function answerHtml(q){
+  let ans;
+  if(q.type==='選擇') ans = `${KEY[q.answer]}. ${q.options[q.answer]}`;
+  else if(q.type==='是非') ans = q.answer ? '○（正確）' : '✕（錯誤）';
+  else ans = q.answer;
+  return `<div class="q-answer">
+      <span class="ans-label">✔ 參考答案：</span>${ans}
+      ${q.explanation?`<div class="exp"><strong>解析：</strong>${q.explanation}</div>`:''}
+    </div>`;
+}
+
+function optionsHtml(q){
+  if(q.type!=='選擇' || !q.options || !q.options.length) return '';
+  return `<ul class="q-options">${q.options.map((o,i)=>
+    `<li class="${i===q.answer?'correct':''}"><span class="k">${KEY[i]}</span><span>${o}</span></li>`).join('')}</ul>`;
+}
+
+function card(q){
+  const rel = q.relatedId ? `<a class="rel-chip" href="curriculum.html" title="對應實驗／課綱">🔗 延伸實驗</a>` : '';
+  const tags = (q.tags||[]).slice(0,4).map(t=>`<span class="tag-chip">#${t}</span>`).join('');
+  return `<div class="q-card ${DIFF_CLASS[q.difficulty]||''}" data-id="${q.id}">
+    <div class="q-top">
+      <span class="q-badge b-stage ${q.stage}">${q.stage}</span>
+      <span class="q-badge b-type">${q.type}題</span>
+      <span class="q-badge b-diff ${q.difficulty}">${q.difficulty}</span>
+      <span class="q-grade">${q.subject} · ${q.grade}</span>
+    </div>
+    <div class="q-stem">${q.stem}</div>
+    ${optionsHtml(q)}
+    ${answerHtml(q)}
+    <div class="q-foot">
+      <button class="reveal-btn">顯示答案</button>
+      ${rel}${tags}
+    </div>
+  </div>`;
+}
+
+function render(){
+  const q  = document.getElementById('search').value.trim().toLowerCase();
+  const fst= document.getElementById('fStage').value;
+  const fsu= document.getElementById('fSubject').value;
+  const fty= document.getElementById('fType').value;
+  const fdf= document.getElementById('fDiff').value;
+  const rows = QUIZ_BANK.filter(item=>{
+    if(fst && item.stage!==fst) return false;
+    if(fsu && item.subject!==fsu) return false;
+    if(fty && item.type!==fty) return false;
+    if(fdf && item.difficulty!==fdf) return false;
+    if(q){
+      const hay = `${item.stem} ${(item.tags||[]).join(' ')} ${(item.options||[]).join(' ')}`.toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const box = document.getElementById('list');
+  box.innerHTML = rows.map(card).join('');
+  document.getElementById('emptyNote').style.display = rows.length ? 'none' : 'block';
+  document.getElementById('countPill').textContent = `顯示 ${rows.length} / ${QUIZ_BANK.length} 題`;
+  // 綁定顯示答案
+  box.querySelectorAll('.q-card').forEach(c=>{
+    const btn = c.querySelector('.reveal-btn');
+    btn.addEventListener('click', ()=>{
+      const on = c.classList.toggle('revealed');
+      btn.textContent = on ? '收合答案' : '顯示答案';
+    });
+  });
+}
+
+document.getElementById('revealAll').addEventListener('click', ()=>{
+  document.querySelectorAll('.q-card').forEach(c=>{ c.classList.add('revealed'); c.querySelector('.reveal-btn').textContent='收合答案'; });
+});
+document.getElementById('hideAll').addEventListener('click', ()=>{
+  document.querySelectorAll('.q-card').forEach(c=>{ c.classList.remove('revealed'); c.querySelector('.reveal-btn').textContent='顯示答案'; });
+});
+['search','fStage','fSubject','fType','fDiff'].forEach(id=>
+  document.getElementById(id).addEventListener(id==='search'?'input':'change', render));
+render();
+</script>
+</body>
+</html>

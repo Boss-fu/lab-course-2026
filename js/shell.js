@@ -13,6 +13,9 @@
       { key:'courses',  href:'courses.html', ico:'🎒', label:'課程目錄' },
       { key:'planner',  href:'#',            ico:'🛠', label:'課程規劃器', soon:true },
     ]},
+    { group:'評量', items:[
+      { key:'quiz',     href:'quiz.html',   ico:'📚', label:'題庫系統' },
+    ]},
     { group:'工具', items:[
       { key:'materials', href:'materials.html', ico:'🧰', label:'器材管理' },
       { key:'generator', href:'generator.html', ico:'📝', label:'講義生成器' },
