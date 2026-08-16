@@ -73,4 +73,4 @@ const PROGRAM_STATUS_META = {
   '已完課': { cls:'st-draft' },
   '規劃中': { cls:'st-planned' },
 };
-const ACCENT_HEX = { gold:'#C8A84B', red:'#850103', blue:'#3E6FB0', green:'#2E8B57' };
+const ACCENT_HEX = { gold:'#e6e4de', red:'#e6e4de', blue:'#e6e4de', green:'#e6e4de' };

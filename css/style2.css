@@ -1,7 +1,7 @@
 /* ============================================================
    茲茲文教 · 實驗課設計系統  (Tzu Tzu design system)
-   Brand: tzu-red #850103 (primary) · tzu-orange #f9a12c ·
-          gold #C8A84B (logo) · warm-cream surfaces · slate text
+   Brand: tzu-red #850103 (primary) · tzu-orange #6f6353 ·
+          gold #6f6353 (logo) · warm-cream surfaces · slate text
    All legacy class/variable names are preserved so every page
    adopts this look automatically.
    ============================================================ */
@@ -12,11 +12,11 @@
   --tzu-red-dark:  #5f0002;
   --tzu-red-mid:   #a01418;
   --tzu-red-soft:  #FBECEB;
-  --tzu-orange:    #f9a12c;
-  --tzu-orange-soft:#FFF3E0;
-  --tzu-gold:      #C8A84B;
-  --tzu-gold-dark: #8A6D22;
-  --tzu-gold-soft: #FBF3DF;
+  --tzu-orange:    #6f6353;
+  --tzu-orange-soft:#f1ede6;
+  --tzu-gold:      #6f6353;
+  --tzu-gold-dark: #6f6353;
+  --tzu-gold-soft: #f1ede6;
 
   /* ── legacy names (remapped to brand) ── */
   --teal:       #850103;   /* primary accent used site-wide */
@@ -24,9 +24,9 @@
   --teal-mid:   #a01418;
   --teal-light: #FBECEB;   /* soft red tint for hovers / chips */
 
-  --red:    #C0392B;       /* danger / warnings */
-  --orange: #E07B10;
-  --green:  #2E8B57;
+  --red:    #850103;       /* danger / warnings */
+  --orange: #6f6353;
+  --green:  #6f6353;
 
   /* ── neutrals (warm slate) ── */
   --text:       #2d3038;
@@ -185,11 +185,11 @@ nav a.active {
   border-radius: 20px; font-weight: 700;
 }
 .badge-cat  { background: var(--tzu-gold-soft); color: var(--tzu-gold-dark); }
-.badge-diff { background: #EEF3FB; color: #3E6FB0; }
-.badge-risk { background: var(--tzu-orange-soft); color: #A9600A; }
-.badge-risk.high { background: #FDECEA; color: var(--red); }
-.badge-ready { background: #E7F6EE; color: #1E8A52; }
-.badge-pending { background: var(--tzu-orange-soft); color: #A9600A; }
+.badge-diff { background: #f1ede6; color: #6f6353; }
+.badge-risk { background: var(--tzu-orange-soft); color: #6f6353; }
+.badge-risk.high { background: #f1ede6; color: var(--red); }
+.badge-ready { background: var(--tzu-red-soft); color: var(--tzu-red); }
+.badge-pending { background: var(--tzu-orange-soft); color: #6f6353; }
 
 .card-experiments {
   padding: 0 1.1rem 0.75rem;
@@ -374,8 +374,13 @@ nav a.active {
   border-radius: 20px;
   font-size: 0.75rem; font-weight: 700; white-space: nowrap;
 }
-.status-ready   { background: #E7F6EE; color: #1E8A52; }
-.status-pending { background: var(--tzu-orange-soft); color: #A9600A; }
+.status-ready   { background: var(--tzu-red-soft); color: var(--tzu-red); }
+.status-pending { background: var(--tzu-orange-soft); color: #6f6353; }
+
+/* 課程狀態膠囊（全站一致：開課中=紅、其餘=中性） */
+.st-ready   { background: var(--tzu-red-soft); color: var(--tzu-red); }
+.st-draft   { background: #f1ede6; color: #6f6353; }
+.st-planned { background: #f1ede6; color: #6f6353; }
 
 /* ─── PRINT ─── */
 @media print {

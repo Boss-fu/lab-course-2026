@@ -40,7 +40,7 @@
 .mat-progress-fill { height: 100%; background: var(--teal); border-radius: 4px; transition: width 0.3s; }
 .mat-section-title { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.05em; padding: 0.4rem 0; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; text-transform: uppercase; }
 .mat-by-fuda { color: var(--teal-dark); }
-.mat-by-zhou { color: #5588CC; }
+.mat-by-zhou { color: #6f6353; }
 .timeline-row { display: grid; grid-template-columns: 130px 1fr; gap: 0.8rem; align-items: start; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.86rem; }
 .timeline-row:last-child { border-bottom: none; }
 .timeline-time { color: var(--teal-dark); font-weight: 600; font-size: 0.81rem; }
@@ -88,8 +88,8 @@
       <div style="padding-top:0.4rem">
         <div class="sidebar-title" style="margin-bottom:0.5rem">選擇課程</div>
         <div class="course-toggle">
-          <button class="course-toggle-btn active" id="btn-elementary" onclick="switchCourse('elementary')">🔬 國小</button>
-          <button class="course-toggle-btn" id="btn-middle" onclick="switchCourse('middle')">🧲 國中</button>
+          <button class="course-toggle-btn active" id="btn-elementary" onclick="switchCourse('elementary')">國小</button>
+          <button class="course-toggle-btn" id="btn-middle" onclick="switchCourse('middle')">國中</button>
         </div>
         <div class="sidebar-title">選擇堂次</div>
         <div id="sidebar-sessions"></div>
@@ -98,10 +98,10 @@
 
     <div style="border-top:1px solid var(--border); padding: 0.8rem 0 0.4rem">
       <div class="sidebar-title">工具</div>
-      <button class="sidebar-btn sidebar-btn-edit" id="edit-mode-btn" onclick="toggleEditMode()">✏️ 編輯模式</button>
-      <button class="sidebar-btn" id="export-btn" onclick="exportData()" style="display:none;color:var(--teal-dark)">📥 匯出 JS 檔</button>
-      <button class="sidebar-btn" onclick="printMaterials()">🖨️ 列印</button>
-      <button class="sidebar-btn" onclick="resetChecks()">♻️ 重置勾選</button>
+      <button class="sidebar-btn sidebar-btn-edit" id="edit-mode-btn" onclick="toggleEditMode()">✏編輯模式</button>
+      <button class="sidebar-btn" id="export-btn" onclick="exportData()" style="display:none;color:var(--teal-dark)">匯出 JS 檔</button>
+      <button class="sidebar-btn" onclick="printMaterials()">列印</button>
+      <button class="sidebar-btn" onclick="resetChecks()">重置勾選</button>
     </div>
   </div>
 
@@ -194,7 +194,7 @@ function buildSidebar() {
     const btn = document.createElement('button');
     btn.className = 'sidebar-btn';
     btn.dataset.id = s.id;
-    const icon = s.status === 'ready' ? '✅' : '🔧';
+    const icon = s.status === 'ready' ? '' : '';
     btn.innerHTML = `${icon} 第 ${s.id} 堂<span class="sidebar-status">${s.dateDisplay}　${s.category}</span>`;
     btn.onclick = () => showSession(s.id);
     sidebar.appendChild(btn);
@@ -208,7 +208,7 @@ buildSidebar();
 function toggleEditMode() {
   editMode = !editMode;
   const btn = document.getElementById('edit-mode-btn');
-  btn.textContent = editMode ? '👁 預覽模式' : '✏️ 編輯模式';
+  btn.textContent = editMode ? '預覽模式' : '✏編輯模式';
   btn.classList.toggle('on', editMode);
   if (currentSession) showSession(currentSession);
 }
@@ -347,16 +347,16 @@ function renderEditView(s, id) {
 
   document.getElementById('main-panel').innerHTML = `
   <div class="edit-banner">
-    <span>✏️ 編輯模式 — 變更即時儲存至瀏覽器</span>
+    <span>✏編輯模式 — 變更即時儲存至瀏覽器</span>
     <div class="edit-banner-btns">
-      ${s.status==='pending'?`<button class="btn" style="font-size:0.81rem" onclick="applyTemplate(${id})">🪄 套用課程架構</button>`:''}
-      <button class="btn" style="font-size:0.81rem" onclick="exportData()">📥 匯出 JS 檔</button>
-      <button class="btn btn-outline" style="font-size:0.81rem" onclick="resetSession(${id})">↩️ 還原預設</button>
+      ${s.status==='pending'?`<button class="btn" style="font-size:0.81rem" onclick="applyTemplate(${id})">套用課程架構</button>`:''}
+      <button class="btn" style="font-size:0.81rem" onclick="exportData()">匯出 JS 檔</button>
+      <button class="btn btn-outline" style="font-size:0.81rem" onclick="resetSession(${id})">↩還原預設</button>
     </div>
   </div>
 
   <div class="edit-card">
-    <div class="edit-card-title">📋 基本資訊</div>
+    <div class="edit-card-title">基本資訊</div>
     <div class="edit-grid">
       <div class="edit-field" style="grid-column:1/-1">
         <label>課程名稱</label>
@@ -389,8 +389,8 @@ function renderEditView(s, id) {
       <div class="edit-field">
         <label>狀態</label>
         <select class="edit-inp" onchange="editField(${id},'status',this.value)">
-          <option value="ready" ${s.status==='ready'?'selected':''}>✅ 講義已完成</option>
-          <option value="pending" ${s.status==='pending'?'selected':''}>🔧 製作中</option>
+          <option value="ready" ${s.status==='ready'?'selected':''}>講義已完成</option>
+          <option value="pending" ${s.status==='pending'?'selected':''}>製作中</option>
         </select>
       </div>
       <div class="edit-field">
@@ -403,7 +403,7 @@ function renderEditView(s, id) {
 
   <div class="edit-card">
     <div class="edit-card-title">
-      <span>🧪 器材準備清單</span>
+      <span>器材準備清單</span>
       <span class="edit-hint">名稱 ｜ 數量 ｜ 單位 ｜ 準備人 ｜ 備註</span>
     </div>
     ${matHtml}
@@ -412,7 +412,7 @@ function renderEditView(s, id) {
 
   <div class="edit-card">
     <div class="edit-card-title">
-      <span>⏱ 課堂時間流程</span>
+      <span>課堂時間流程</span>
       <span class="edit-hint">時間 ｜ 活動 ｜ ⚠ ｜ 注意事項</span>
     </div>
     ${tlHtml}
@@ -420,13 +420,13 @@ function renderEditView(s, id) {
   </div>
 
   <div class="edit-card">
-    <div class="edit-card-title">🎯 教學目標</div>
+    <div class="edit-card-title">教學目標</div>
     ${objHtml}
     <button class="edit-add" onclick="addObj(${id})">＋ 新增目標</button>
   </div>
 
   <div class="edit-card">
-    <div class="edit-card-title">📌 助教注意事項</div>
+    <div class="edit-card-title">助教注意事項</div>
     ${astHtml}
     <button class="edit-add" onclick="addAst(${id})">＋ 新增注意事項</button>
   </div>
@@ -468,12 +468,12 @@ function renderNormalView(s, id) {
     <div>
       <h2>第 ${s.id} 堂｜${s.title}</h2>
       <div style="font-size:0.81rem;color:var(--text-light)">
-        📅 ${s.dateDisplay} ｜ ${s.category} ｜ 難度：${s.difficulty} ｜
+        ${s.dateDisplay} ｜ ${s.category} ｜ 難度：${s.difficulty} ｜
         <span style="color:${riskColor}">⚠ 風險：${riskLabel}</span>
-        ${s.takeHome&&s.takeHome!=='無'&&s.takeHome!=='—'?`｜ 🎁 帶回：${s.takeHome}`:''}
+        ${s.takeHome&&s.takeHome!=='無'&&s.takeHome!=='—'?`｜ 帶回：${s.takeHome}`:''}
       </div>
     </div>
-    <button class="btn btn-outline" onclick="window.print()">🖨️ 列印</button>
+    <button class="btn btn-outline" onclick="window.print()">列印</button>
   </div>
 
   <div class="section-title">器材準備清單</div>
@@ -519,7 +519,7 @@ function renderNormalView(s, id) {
   </div>`:''}
 
   <div class="notes-box" style="margin-top:2rem">
-    <label>📝 老師備忘（自動儲存至瀏覽器）</label>
+    <label>老師備忘（自動儲存至瀏覽器）</label>
     <textarea id="teacher-notes" placeholder="輸入備忘事項…">${getNotes(id)}</textarea>
   </div>
   `;
@@ -544,10 +544,10 @@ function showSession(id) {
   if (s.status === 'pending') {
     document.getElementById('main-panel').innerHTML = `
     <div style="text-align:center;padding:4rem 2rem;color:var(--text-light)">
-      <div style="font-size:2.5rem;margin-bottom:1rem">🔧</div>
+      <div style="font-size:2.5rem;margin-bottom:1rem"></div>
       <div style="font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.5rem">第 ${s.id} 堂｜實驗尚未確認</div>
       <div style="font-size:0.87rem;margin-bottom:1.5rem">實驗內容尚未規劃，點下方按鈕開始設定此堂次。</div>
-      <button class="btn" onclick="toggleEditMode()">✏️ 開始設定此堂次</button>
+      <button class="btn" onclick="toggleEditMode()">✏開始設定此堂次</button>
     </div>`;
     return;
   }

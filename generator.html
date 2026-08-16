@@ -116,7 +116,7 @@
 .cover-stripe-top {
   position: absolute; top: 160px; left: 0; right: 0;
   height: 10px;
-  background: linear-gradient(to right, #C8A84B 60%, transparent);
+  background: linear-gradient(to right, #6f6353 60%, transparent);
 }
 .cover-stripe-mid {
   position: absolute; top: 175px; left: 0; right: 0;
@@ -126,7 +126,7 @@
 .cover-stripe-bot {
   position: absolute; bottom: 160px; left: 0; right: 0;
   height: 10px;
-  background: linear-gradient(to right, #C8A84B 60%, transparent);
+  background: linear-gradient(to right, #6f6353 60%, transparent);
 }
 .cover-deco-bot {
   position: absolute; bottom: 145px; left: 0; right: 0;
@@ -135,8 +135,8 @@
 }
 .cover-exp-num {
   font-size: 38px; font-weight: 800;
-  color: #C8A84B;
-  -webkit-text-stroke: 2px #C8A84B;
+  color: #6f6353;
+  -webkit-text-stroke: 2px #6f6353;
   margin-top: 2rem;
   font-style: italic;
   letter-spacing: -0.02em;
@@ -156,7 +156,7 @@
 }
 .page-header-org { margin-right: auto; }
 .page-header-title {
-  background: #C8A84B; color: #fff;
+  background: #6f6353; color: #fff;
   padding: 5px 18px; font-size: 11px; font-weight: 600;
 }
 .page-header-icon {
@@ -172,7 +172,7 @@
 }
 .hs-num {
   width: 30px; height: 30px; border-radius: 50%;
-  background: #C8A84B; color: #fff;
+  background: #6f6353; color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; font-weight: 700; flex-shrink: 0;
 }
@@ -188,7 +188,7 @@
   padding: 10px 14px; margin-top: 8px;
   font-size: 12px;
 }
-.guess-box .label { font-weight: 700; font-size: 12px; color: #C8A84B; }
+.guess-box .label { font-weight: 700; font-size: 12px; color: #6f6353; }
 
 /* Materials table */
 .hs-table {
@@ -196,7 +196,7 @@
   font-size: 12px; border-radius: 8px; overflow: hidden;
 }
 .hs-table th {
-  background: #C8A84B; color: #fff;
+  background: #6f6353; color: #fff;
   padding: 6px 10px; text-align: left;
   font-weight: 600;
 }
@@ -211,7 +211,7 @@
   background: #E8F9F9; border-radius: 6px;
   padding: 10px 14px; font-size: 12px;
 }
-.task-box .remind { color: #C8A84B; font-weight: 700; }
+.task-box .remind { color: #6f6353; font-weight: 700; }
 
 /* Steps */
 .step-part { margin-bottom: 10px; }
@@ -221,7 +221,7 @@
   margin-bottom: 5px; font-size: 12px; align-items: flex-start;
 }
 .step-n {
-  color: #C8A84B; font-weight: 700; font-size: 13px;
+  color: #6f6353; font-weight: 700; font-size: 13px;
   min-width: 18px;
 }
 
@@ -231,7 +231,7 @@
   margin-bottom: 10px;
 }
 .obs-table th {
-  background: #C8A84B; color: #fff;
+  background: #6f6353; color: #fff;
   padding: 5px 8px; text-align: left;
 }
 .obs-table td {
@@ -248,7 +248,7 @@
   padding: 8px 12px; font-size: 11.5px;
   margin-top: 8px; line-height: 1.6;
 }
-.sci-note .label { color: #C8A84B; font-weight: 700; }
+.sci-note .label { color: #6f6353; font-weight: 700; }
 
 /* Q&A */
 .qa-item {
@@ -263,7 +263,7 @@
   display: flex; gap: 8px; margin-bottom: 6px;
   font-size: 12px; align-items: flex-start;
 }
-.safety-n { color: #C8A84B; font-weight: 700; min-width: 18px; }
+.safety-n { color: #6f6353; font-weight: 700; min-width: 18px; }
 
 /* ── Print ── */
 @media print {
@@ -292,12 +292,12 @@
 
   <!-- ─── FORM PANEL ─── -->
   <div class="gen-form">
-    <div style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:1rem">📝 講義生成器</div>
+    <div style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:1rem">講義生成器</div>
 
     <!-- Basic Info -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        📋 基本資訊 <span class="toggle">▲</span>
+        基本資訊 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div class="form-row">
@@ -332,7 +332,7 @@
     <!-- Intro -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        1️⃣ 今天我們要探索什麼？ <span class="toggle">▲</span>
+        1⃣ 今天我們要探索什麼？ <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div class="form-group">
@@ -349,7 +349,7 @@
     <!-- Materials -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        2️⃣ 我的材料 <span class="toggle">▲</span>
+        2⃣ 我的材料 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="mat-rows"></div>
@@ -360,7 +360,7 @@
     <!-- Tasks -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        3️⃣ 科學家任務 <span class="toggle">▲</span>
+        3⃣ 科學家任務 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="task-rows"></div>
@@ -375,7 +375,7 @@
     <!-- Steps -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        4️⃣ 實驗步驟 <span class="toggle">▲</span>
+        4⃣ 實驗步驟 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="parts-container"></div>
@@ -386,7 +386,7 @@
     <!-- Observations -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        5️⃣ 觀察紀錄 <span class="toggle">▲</span>
+        5⃣ 觀察紀錄 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="obs-container"></div>
@@ -408,7 +408,7 @@
     <!-- Q&A -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        6️⃣ 動動腦 <span class="toggle">▲</span>
+        6⃣ 動動腦 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="qa-rows"></div>
@@ -419,7 +419,7 @@
     <!-- Safety -->
     <div class="form-section">
       <div class="form-section-header" onclick="toggleSection(this)">
-        7️⃣ 注意事項 <span class="toggle">▲</span>
+        7⃣ 注意事項 <span class="toggle">▲</span>
       </div>
       <div class="form-section-body">
         <div id="safety-rows"></div>
@@ -428,9 +428,9 @@
     </div>
 
     <div style="display:flex;gap:0.6rem;margin-top:0.5rem">
-      <button class="btn btn-primary" onclick="window.print()">🖨️ 列印 / 儲存為 PDF</button>
-      <button class="btn btn-outline" onclick="saveData()">💾 儲存草稿</button>
-      <button class="btn btn-outline" onclick="loadData()">📂 載入草稿</button>
+      <button class="btn btn-primary" onclick="window.print()">列印 / 儲存為 PDF</button>
+      <button class="btn btn-outline" onclick="saveData()">儲存草稿</button>
+      <button class="btn btn-outline" onclick="loadData()">載入草稿</button>
     </div>
     <div style="font-size:0.75rem;color:var(--text-light);margin-top:0.5rem">
       列印時選「另存為 PDF」即可產生講義檔
@@ -581,9 +581,9 @@ function render() {
     return `
     <div class="page-header">
       <span class="page-header-org">${pageNum} &nbsp; 茲茲文教 ${grade}</span>
-      <div class="page-header-icon">🧪</div>
+      <div class="page-header-icon"></div>
       <div class="page-header-title">${title}</div>
-      <div class="page-header-icon">🧪</div>
+      <div class="page-header-icon"></div>
     </div>`;
   }
 

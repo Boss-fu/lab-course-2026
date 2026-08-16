@@ -73,8 +73,8 @@ c.sessions.forEach(s => {
   const isPending = s.status === 'pending';
 
   const handoutBtn = s.handout
-    ? `<a href="${s.handout}" target="_blank">📄 開啟講義</a>`
-    : `<span class="no-handout">⏳ ${isPending && !s.title.includes('確認') ? '講義製作中' : '實驗尚未確認'}</span>`;
+    ? `<a href="${s.handout}" target="_blank">開啟講義</a>`
+    : `<span class="no-handout">${isPending && !s.title.includes('確認') ? '講義製作中' : '實驗尚未確認'}</span>`;
 
   const riskLabel   = s.riskLevel ? ['', '低', '中', '中高', '高'][s.riskLevel] : '—';
   const riskBadgeClass = s.riskLevel >= 3 ? 'high' : '';
@@ -91,7 +91,7 @@ c.sessions.forEach(s => {
       <div class="session-num">${s.id}</div>
       <div class="card-title">
         <h3>${s.title}</h3>
-        <div class="date">📅 ${s.dateDisplay}</div>
+        <div class="date">${s.dateDisplay}</div>
       </div>
     </div>
     <div class="card-badges">
@@ -99,15 +99,15 @@ c.sessions.forEach(s => {
       <span class="badge badge-diff">難度：${diffBadge}</span>
       <span class="badge badge-risk ${riskBadgeClass}">風險：${riskLabel}</span>
       <span class="badge ${s.status === 'ready' ? 'badge-ready' : 'badge-pending'}">
-        ${s.status === 'ready' ? '✅ 講義完成' : '🔧 製作中'}
+        ${s.status === 'ready' ? '講義完成' : '製作中'}
       </span>
     </div>
     <div class="card-experiments">
-      ${s.experiments.map(e => `<span class="exp-chip">⚗️ ${e}</span>`).join('')}
+      ${s.experiments.map(e => `<span class="exp-chip">${e}</span>`).join('')}
     </div>
     <div class="card-footer">
       ${handoutBtn}
-      <span class="take-home">🎁 ${takeHomeStr}</span>
+      <span class="take-home">${takeHomeStr}</span>
     </div>
   </div>`;
 });
@@ -115,8 +115,8 @@ c.sessions.forEach(s => {
 const tbody = document.getElementById('progress-body');
 c.sessions.forEach(s => {
   const statusHtml = s.status === 'ready'
-    ? '<span class="progress-status status-ready">✅ 已完成</span>'
-    : '<span class="progress-status status-pending">🔧 製作中</span>';
+    ? '<span class="progress-status status-ready">已完成</span>'
+    : '<span class="progress-status status-pending">製作中</span>';
   const deadline = s.status === 'ready' ? '—' : (s.handoutDeadline || '待定');
   tbody.innerHTML += `
   <tr>

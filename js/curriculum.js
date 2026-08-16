@@ -110,9 +110,9 @@ const CURRICULUM = [
 
 /* 科目顏色 */
 const SUBJECT_COLOR = {
-  '生物':     { bg:'#E7F6EE', fg:'#1E8A52' },
-  '理化':     { bg:'#FBECEB', fg:'#A0201C' },
-  '物理':     { bg:'#EEF3FB', fg:'#3E6FB0' },
-  '化學':     { bg:'#FFF3E0', fg:'#A9600A' },
-  '地球科學': { bg:'#EAF4F2', fg:'#2A7C74' },
+  '生物':     { bg:'#f1ede6', fg:'#6f6353' },
+  '理化':     { bg:'#f1ede6', fg:'#6f6353' },
+  '物理':     { bg:'#f1ede6', fg:'#6f6353' },
+  '化學':     { bg:'#f1ede6', fg:'#6f6353' },
+  '地球科學': { bg:'#f1ede6', fg:'#6f6353' },
 };

@@ -17,9 +17,9 @@
 .prog-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow); }
 .pc-type{ display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
 .type-tag{ font-size:0.72rem; font-weight:800; padding:0.16rem 0.6rem; border-radius:20px; background:var(--tzu-red-soft); color:var(--tzu-red); }
-.type-tag.帶狀週課{ background:#EAF4F2; color:#2A7C74; }
+.type-tag.帶狀週課{ background:#f1ede6; color:#6f6353; }
 .type-tag.短期營隊{ background:var(--tzu-gold-soft); color:var(--tzu-gold-dark); }
-.type-tag.主題工作坊{ background:#EEF3FB; color:#3E6FB0; }
+.type-tag.主題工作坊{ background:#f1ede6; color:#6f6353; }
 .pc-name{ font-size:1.15rem; font-weight:800; color:var(--text); line-height:1.3; }
 .pc-aud{ font-size:0.84rem; color:var(--text-light); }
 .pc-meta{ display:flex; gap:0.45rem; flex-wrap:wrap; margin-top:0.2rem; }
@@ -30,7 +30,7 @@
 .pc-link:hover{ background:var(--tzu-red-dark); }
 .pc-soon{ font-size:0.78rem; color:var(--text-light); }
 .st{ font-size:0.72rem; font-weight:700; padding:0.16rem 0.55rem; border-radius:20px; margin-left:auto; }
-.st-ready{ background:#E7F6EE; color:#1E8A52; } .st-draft{ background:#EEF3FB; color:#3E6FB0; } .st-planned{ background:var(--tzu-orange-soft); color:#A9600A; }
+.st-ready{ background:var(--tzu-red-soft); color:var(--tzu-red); } .st-draft{ background:#f1ede6; color:#6f6353; } .st-planned{ background:var(--tzu-orange-soft); color:#6f6353; }
 .plan-hint{ background:#FFFBEB; border:1.5px solid #FCD34D; color:#92400E; border-radius:10px; padding:0.7rem 1rem; font-size:0.83rem; margin-bottom:1.2rem; line-height:1.7; }
 </style>
 </head>
@@ -40,12 +40,12 @@
 
 <main class="app-main">
   <div class="page-head">
-    <h1>🎒 課程目錄</h1>
+    <h1>課程目錄</h1>
     <p>所有課程方案 — 帶狀班、營隊、主題工作坊。2026 暑期只是其中兩套</p>
   </div>
   <div class="page-body">
     <div class="plan-hint">
-      🛠 每一套課程都是從<strong>實驗庫</strong>挑實驗組成堂次。之後的「課程規劃器」會讓你直接在網頁上挑實驗、排堂、設定客群，馬上生出一套新課程。
+      每一套課程都是從<strong>實驗庫</strong>挑實驗組成堂次。之後的「課程規劃器」會讓你直接在網頁上挑實驗、排堂、設定客群，馬上生出一套新課程。
     </div>
 
     <div class="filter-bar">
@@ -69,12 +69,12 @@ function render(){
     const st=(PROGRAM_STATUS_META[p.status]||{}).cls||'st-planned';
     const foot = p.detail
       ? `<a class="pc-link" href="${p.detail}">查看課程 →</a>`
-      : `<span class="pc-soon">📋 待規劃器排課</span>`;
+      : `<span class="pc-soon">待規劃器排課</span>`;
     return `<div class="prog-card" style="border-top-color:${accent}">
       <div class="pc-type"><span class="type-tag ${p.type}">${p.type}</span>
         <span class="pc-chip">${p.subjectFocus}</span></div>
       <div class="pc-name">${p.name}</div>
-      <div class="pc-aud">👥 ${p.audience}</div>
+      <div class="pc-aud">${p.audience}</div>
       <div class="pc-meta">
         <span class="pc-chip">${p.sessions?p.sessions+' 堂':'堂數待定'}</span>
         <span class="pc-chip">每堂 ${p.minutesPer} 分</span>
